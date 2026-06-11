@@ -118,10 +118,10 @@ class Agent:
             self.agvPosition = state_msg['agvPosition']
 
         if 'lastNodeId' in state_msg and state_msg['lastNodeId']:
-            self.current_node = state_msg['lastNodeId']#更新
+            self.current_node = state_msg['lastNodeId']#更新agv当前位置
         
         nodes_empty =len(state_msg.get('nodeStates', [])) == 0
-        edges_empty =len(state_msg.get('edgeStates', [])) == 0#判断是否完成
+        edges_empty =len(state_msg.get('edgeStates', [])) == 0#判断任务是否完成
         actions_finished = True
         for action in state_msg.get('actionStates', []):
             if action.get('actionStatus') != 'FINISHED':

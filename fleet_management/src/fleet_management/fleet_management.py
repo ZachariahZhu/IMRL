@@ -160,7 +160,10 @@ class FleetManagement:
                 time.sleep(0.5)
             
             min_dist = float('inf')
+            nearest_node = None
+            agv_pos_tuple = (agent.agvPosition['x'], agent.agvPosition['y'])
             
+
 
 
 
