@@ -28,3 +28,12 @@ Thumbs.db
 
 # Logs
 *.log
+# 排除 Miniconda 安装脚本
+Miniconda3.sh
+
+# 排除所有的 dist 文件夹（通常是打包生成的）
+**/dist/
+
+# 排除编译生成的仿真可执行文件
+run_simulation
+**/run_simulation

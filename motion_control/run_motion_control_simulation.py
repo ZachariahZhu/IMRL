@@ -8,7 +8,7 @@ exe_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "src", "mobi
 
 # parameters
 # change the task number to run different tasks, available tasks are 1, 2, 3
-args = ["--task", "1", 
+args = ["--task", "3", 
         "--data_root", str(data_root)]
 
 result = subprocess.run([exe_path] + args, capture_output=True, text=True)

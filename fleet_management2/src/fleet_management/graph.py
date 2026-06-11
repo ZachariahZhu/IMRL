@@ -16,7 +16,7 @@ class Graph:
 
     # ── Task 4 ────────────────────────────────────────────────────────────────
 
-    def get_nodes(self, lif_data) -> dict:#提取点
+    def get_nodes(self, lif_data) -> dict:
         """
         Read all nodes from the LIF file.
 
@@ -28,17 +28,10 @@ class Graph:
         Hint: nodes are listed under lif_data['layouts'][0]['nodes'].
               Each node has a 'nodeId' and 'nodePosition' with 'x' and 'y'.
         """
-        nodes= {}
-        for n in lif_data['layouts'][0]['nodes']:
-            node_id = n['nodeId']
-            nodes[node_id] = {
-                'nodeId': node_id,
-                'pos': (n['nodePosition']['x'], n['nodePosition']['y']),
-                'vehicleTypeNodeProperties': n.get('vehicleTypeNodeProperties', {})
-            }
-        return nodes
+        # TODO Task 4: Implement this method.
+        pass
 
-    def get_edges(self, lif_data) -> dict:#提取边
+    def get_edges(self, lif_data) -> dict:
         """
         Read all edges from the LIF file.
 
@@ -56,21 +49,10 @@ class Graph:
         Hint: edges are listed under lif_data['layouts'][0]['edges'].
               Use self.nodes[nodeId]['pos'] to look up node positions.
         """
-        edges = {}
-        for e in lif_data['layouts'][0]['edges']:
-            edgeId = e['edgeId']
-            start_id = e['startNodeId']
-            end_id = e['endNodeId']
-            edges[edgeId] = {
-                'edgeId': edgeId,
-                'startNodeId': start_id,
-                'endNodeId': end_id,
-                'startNodePos': self.nodes[start_id]['pos'],
-                'endNodePos': self.nodes[end_id]['pos']
-            }
-        return edges
+        # TODO Task 4: Implement this method.
+        pass
 
-    def get_stations(self, lif_data) -> dict:#提取站点
+    def get_stations(self, lif_data) -> dict:
         """
         Read all stations (pick/drop/process locations) from the LIF file.
 
@@ -88,15 +70,8 @@ class Graph:
               Include only stations with stationDescription 'TRANSFER' or 'PROCESS'.
               Stations with stationDescription 'CHARGING' are dwelling nodes (see below).
         """
-        stations = {}
-        for s in lif_data['layouts'][0]['stations']:
-            desc = s.get('stationDescription', '')
-            if desc in ['TRANSFER', 'PROCESS']:
-                stations[s['stationId']] = {
-                    'interactionNodeIds': s.get('interactionNodeIds', []),
-                    'stationDescription': desc
-                }
-        return stations
+        # TODO Task 4: Implement this method.
+        pass
 
     def get_dwelling_nodes(self, lif_data) -> list:
         """
@@ -108,12 +83,8 @@ class Graph:
 
         Hint: same station list as get_stations(), just filter for 'CHARGING'.
         """
-        dwelling = []
-        for s in lif_data['layouts'][0]['stations']:
-            desc = s.get('stationDescription', '')
-            if desc == 'CHARGING':
-                dwelling.extend(s.get('interactionNodeIds', []))
-        return dwelling
+        # TODO Task 4: Implement this method.
+        pass
 
     # ── Helper methods (needed for Task 6 – A*) ──────────────────────────────
 
@@ -124,13 +95,8 @@ class Graph:
 
         Required by the A* algorithm to explore neighbors.
         """
-        connected = []
-        for e in self.edges.values():
-            if e['startNodeId'] == node_id:
-                connected.append(e['endNodeId'])
-            elif e['endNodeId'] == node_id:
-                connected.append(e['startNodeId'])    
-        return connected
+        # TODO Task 4: Implement this method.
+        pass
 
     def get_connected_edge(self, startNodeId, endNodeId) -> str:
         """
@@ -139,8 +105,5 @@ class Graph:
 
         Required by the A* algorithm to build path_edges from a found path (list of node IDs).
         """
-        for e in self.edges.values():
-            if (e['startNodeId'] == startNodeId and e['endNodeId'] == endNodeId) or \
-               (e['startNodeId'] == endNodeId and e['endNodeId'] == startNodeId):
-                return e['edgeId']
-        return None 
+        # TODO Task 4: Implement this method.
+        pass

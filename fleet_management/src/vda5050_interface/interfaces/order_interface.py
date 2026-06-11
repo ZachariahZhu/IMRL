@@ -1,5 +1,6 @@
 import json
 import os
+import datetime
 from vda5050_interface.mqtt_clients.mqtt_publisher import MQTTPublisher
 
 _FLEET_MANAGEMENT_DIR = os.path.normpath(
@@ -18,20 +19,50 @@ class OrderInterface:
 
     def generate_order_message(self, agent: object, orderId: str, order_updateId: int,
                                nodes: list, edges: list) -> None:
-        # TODO Task 3: Generate the VDA5050 order message automatically based on the passed parameters.
-        #
-        # Suggested steps:
-        #   1. Build nodes_msg: for each node in 'nodes', create a dict with nodeId, sequenceId,
-        #      released, nodePosition (x, y, mapId, and theta only if not None), and actions.
-        #   2. Build edges_msg: for each edge in 'edges', create a dict with edgeId, sequenceId,
-        #      released, startNodeId, endNodeId, and actions (empty list).
-        #   3. Assemble order_msg with headerId, timestamp (ISO 8601), version, manufacturer,
-        #      serialNumber, orderId, orderUpdateId, nodes_msg, and edges_msg.
-        #   4. Publish via self.mqtt_publisher.publish(order_msg, qos=0).
-        #   5. Increment agent.agents.order_header_id.
-        #
-        # For now, the hardcoded example order message is published instead:
-        order_msg_path = os.path.join(_FLEET_MANAGEMENT_DIR, "data", "input_files", "orderMessage_Example.json")
-        with open(order_msg_path, 'r') as order_msg_file:
-            order_msg = json.load(order_msg_file)
+        #1.组装nodes
+        nodes_msg = []
+        for i, node in enumerate(nodes):
+            n = {
+                "nodeId": node["nodeId"],
+                "sequenceId": i * 2,    # 节点必定是偶数 0, 2, 4...
+                "released": True,
+                "nodePosition": {
+                    "x": node["x"],
+                    "y": node["y"],
+                    "mapId": "Map_1"
+                },
+                "actions": node.get("actions", [])
+            }
+            #如果theta不为None，则添加到nodePosition中
+            if node.get("theta") is not None:
+                n["nodePosition"]["theta"] = node["theta"]
+            nodes_msg.append(n)
+        #2.组装edges(odd)
+        edges_msg = []
+        for i, edge in enumerate(edges):
+            e = {
+                "edgeId": edge["edgeId"],
+                "sequenceId": i * 2 + 1,    # 边必定是奇数 1, 3, 5...
+                "released": True,
+                "startNodeId": edge["startNodeId"],
+                "endNodeId": edge["endNodeId"],
+                "actions": edge.get("actions", [])
+            }
+            edges_msg.append(e)
+        #3.组装VDA5050字典
+        order_msg = {
+            "headerId": agent.agents.order_header_id,
+            "timestamp": datetime.datetime.now(datetime.UTC).isoformat().replace("+00:00", "Z"),
+            "version": "2.0.0",
+            "manufacturer": "IMRL",
+            "serialNumber": self.agentId,
+            "orderId": orderId,
+            "orderUpdateId": order_updateId,
+            "nodes": nodes_msg,
+            "edges": edges_msg
+        }
+        #4.发布消息
         self.mqtt_publisher.publish(order_msg, qos=0)
+        #5.更新headerId
+        agent.agents.order_header_id += 1
+        

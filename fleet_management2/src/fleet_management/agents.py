@@ -30,8 +30,7 @@ class Agents:
               Each entry contains 'agentId', 'stateTopic', 'orderTopic',
               'agentPosition' (x, y, theta), 'agentVelocity', etc.
         """
-        
-        # Task 5: Extend this to pass all attributes your Agent class needs.
+        # TODO Task 5: Extend this to pass all attributes your Agent class needs.
         # You may also add any additional attributes to the Agent constructor as needed
         # in the folowing tasks.
         agents = [
@@ -82,8 +81,14 @@ class Agent:
         # ── Task & path ───────────────────────────────────────────────────────
         self.loaded = False              # True while carrying a load
 
-        self.current_node ="N5"
-        self.current_task = None
+        # TODO Task 5: Add any additional attributes needed for your implementation.
+        #
+        # Examples (not exhaustive — choose what your implementation requires):
+        #   self.current_node  = None   # current node ID (needed by A* in Task 6)
+        #   self.current_task  = None   # task dict from task_management.task_list
+        # TODO Task 5: Add any additional attributes needed for your implementation.
+        pass
+
     def state_callback(self, client, userdata, msg) -> None:
         """
         Called automatically whenever the simulation publishes a state message.
@@ -112,23 +117,5 @@ class Agent:
             f"Client {self.mqtt_subscriber_state.client_id} received message "
             f"`{msg.payload.decode()}` from topic `{msg.topic}`.")
 
-        state_msg = json.loads(msg.payload.decode('utf-8'))#解码
-
-        if 'agvPosition' in state_msg:
-            self.agvPosition = state_msg['agvPosition']
-
-        if 'lastNodeId' in state_msg and state_msg['lastNodeId']:
-            self.current_node = state_msg['lastNodeId']#更新
-        
-        nodes_empty =len(state_msg.get('nodeStates', [])) == 0
-        edges_empty =len(state_msg.get('edgeStates', [])) == 0#判断是否完成
-        actions_finished = True
-        for action in state_msg.get('actionStates', []):
-            if action.get('actionStatus') != 'FINISHED':
-                actions_finished = False
-                break
-        if self.agent_state == 'EXECUTING' and nodes_empty and edges_empty and actions_finished:
-            if self.current_task is not None:
-                self.current_task['task_completed'] = True
-            self.agent_state = 'IDLE'
-            
+        # TODO Task 8: Parse the state message and update agent attributes.
+        pass

@@ -25,8 +25,31 @@ class Robot:
         # for node in nodes:
         #     print(f"Node ID: {node['nodeId']} at ({node['x']}, {node['y']})")
         """
-        # TODO: Implement order parsing and printing logic here
-        pass
+        payload_str = msg.payload.decode("utf-8")
+        order_data = json.loads(payload_str) #二进制解码成字符串，然后解析成python字典
+
+        #保存路径的列表
+        route = []
+
+        #遍历节点
+        nodes = order_data.get("nodes", [])#提取节点列表
+
+        for node in nodes:
+            if node.get('released')==True:#检查节点是否释放
+
+                x= node['nodePosition']['x']#提取x坐标
+                y= node['nodePosition']['y']#提取y坐标
+
+                route.append((x,y))#将坐标添加到路径列表
+                
+        #打印
+        print("Received order successfully")
+        print(f"A total of {len(route)} released nodes were extracted.")
+        for index, pos in enumerate(route):
+            print(f"Node {index}: x=({pos[0]}, {pos[1]})")
+        print("...\n")
+
+
 
 def on_connect(client, userdata, flags, rc):
     client.subscribe(userdata["topic_order"])

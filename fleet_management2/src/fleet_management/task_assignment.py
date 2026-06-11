@@ -1,6 +1,5 @@
 import time
 import threading
-import math
 
 
 class TaskAssignment:
@@ -21,6 +20,8 @@ class TaskAssignment:
         self.task_management = task_management
         self.simulation_start_time = simulation_start_time
 
+        # TODO Task 9: Uncomment the line below once task_assignment_manager()
+        #              is implemented and tested.
         # threading.Thread(target=self.task_assignment_manager, daemon=True).start()
 
     def task_assignment_manager(self) -> None:
@@ -51,36 +52,5 @@ class TaskAssignment:
             6. Sleep briefly before the next check to avoid busy-waiting:
                    time.sleep(0.5)
         """
-        while any(not t['task_assigned'] for t in self.task_management.task_list):
-            
-            idle_agents = [a for a in self.agents.agents if a.agent_state == "IDLE"]
-            unassigned_tasks = [t for t in self.task_management.task_list if not t['task_assigned']]
-            
-            while idle_agents and unassigned_tasks:
-                task = unassigned_tasks.pop(0)
-                
-                first_station_node = task['stations'][0]['nodeId']
-                first_station_pos = self.graph.nodes[first_station_node]['pos']
-                
-                best_agent = None
-                min_dist = float('inf')
-                
-                for agent in idle_agents:
-                    if agent.current_node:
-                        agent_pos = self.graph.nodes[agent.current_node]['pos']
-                        dist = math.dist(agent_pos, first_station_pos)
-                        if dist < min_dist:
-                            min_dist = dist
-                            best_agent = agent
-                            
-                if not best_agent:
-                    best_agent = idle_agents[0]
-                    
-                idle_agents.remove(best_agent)
-                
-                task['task_assigned'] = True
-                task['agent_id'] = best_agent.agentId
-                best_agent.agent_state = "EXECUTING"
-                best_agent.current_task = task
-                
-            time.sleep(0.5)
+        # TODO Task 9: Implement this method.
+        pass
