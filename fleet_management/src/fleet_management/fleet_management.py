@@ -120,40 +120,52 @@ class FleetManagement:
         # )
 
 
-        import time
-        while any(not t['task_assigned'] for t in self.task_management.task_list):
+        # while any(not t['task_assigned'] for t in self.task_management.task_list):
             
-            # Find all idle agents
-            idle_agents = [a for a in self.agents.agents if a.agent_state == "IDLE"]
+        #     #找车
+        #     idle_agents = [a for a in self.agents.agents if a.agent_state == "IDLE"]
             
-            if not idle_agents:
+        #     if not idle_agents:
+        #         time.sleep(0.5)
+        #         continue
+                
+        
+        #     agent = idle_agents[0]
+                
+        #     try:
+        #         task = next(t for t in self.task_management.task_list if not t['task_assigned'])
+        #     except StopIteration:
+        #         break
+                
+        #     path_nodes, path_edges = self.build_path_for_task(task, agent.current_node)
+        #     nodes = self.build_order_nodes(path_nodes, task)
+        #     edges = self.build_order_edges(path_nodes, path_edges)
+            
+        #     task['task_assigned'] = True
+        #     agent.agent_state = 'EXECUTING'
+        #     agent.current_task = task
+            
+        #     agent.order_interface.generate_order_message(
+        #         agent=agent,
+        #         orderId=str(self.agents.order_header_id),
+        #         order_updateId=0,
+        #         nodes=nodes,
+        #         edges=edges
+        #     )
+        #     time.sleep(0.5)
+
+
+        for agent in self.agents.agents:
+            while not agent.agvPosition:
                 time.sleep(0.5)
-                continue
-                
-            # Pick the first idle agent
-            agent = idle_agents[0]
-                
-            try:
-                task = next(t for t in self.task_management.task_list if not t['task_assigned'])
-            except StopIteration:
-                break
-                
-            path_nodes, path_edges = self.build_path_for_task(task, agent.current_node)
-            nodes = self.build_order_nodes(path_nodes, task)
-            edges = self.build_order_edges(path_nodes, path_edges)
             
-            task['task_assigned'] = True
-            agent.agent_state = 'EXECUTING'
-            agent.current_task = task
+            min_dist = float('inf')
             
-            agent.order_interface.generate_order_message(
-                agent=agent,
-                orderId=str(self.agents.order_header_id),
-                order_updateId=0,
-                nodes=nodes,
-                edges=edges
-            )
-            time.sleep(0.5)
+
+
+
+
+
 
     def build_path_for_task(self, task: dict, start_node: str) -> tuple:
         """
@@ -193,7 +205,7 @@ class FleetManagement:
             if not combined_nodes:
                 combined_nodes.extend(nodes)
             else:
-                combined_nodes.extend(nodes[1:])#跳过第一个节点，避免重复
+                combined_nodes.extend(nodes[1:])#跳过第一个节点（它是上个路段的最后一个点），避免重复
             combined_edges.extend(edges)
             current= target_node
 
@@ -263,14 +275,14 @@ class FleetManagement:
                     actions.append({
                         "actionType": st['actionType'],
                         "actionId": str(uuid.uuid4()),
-                        "blockingType": "HARD"
+                        "blockingType": "HARD"#动作完成后才能继续下一个点
                     })
-                elif st['actionType'] == 'process':
+                elif st['actionType'] == 'process':#加工站点
                     actions.append({
                         "actionType": "process",
                         "actionId": str(uuid.uuid4()),
                         "blockingType": "HARD",
-                        "processingTime": st['processingTime']
+                        "processingTime": st['processingTime']#加工时长
                     })#如果是站点，添加相应的动作
 
             if i+1<len(path_nodes):
@@ -383,8 +395,8 @@ class PathPlanning:
                 while current_node in came_from:
                     current_node = came_from[current_node]
                     path_nodes.append(current_node)
-                    #翻转列表
-                path_nodes.reverse()
+                    
+                path_nodes.reverse()#翻转列表（因为是从终点倒推到起点的）
                 #5.获取边
                 path_edges = []
                 for i in range(len(path_nodes) - 1):
@@ -416,7 +428,7 @@ class PathPlanning:
         """
         pos_current = self.graph.nodes[current_node]['pos']
         pos_goal = self.graph.nodes[goal_node]['pos']
-        return math.dist(pos_current, pos_goal)
+        return math.dist(pos_current, pos_goal)#计算欧式距离（当前坐标到终点坐标）
 
 
     def get_distance(self, start_node: str, goal_node: str) -> float:
@@ -427,4 +439,4 @@ class PathPlanning:
         """
         pos_start = self.graph.nodes[start_node]['pos']
         pos_goal = self.graph.nodes[goal_node]['pos']
-        return math.dist(pos_start, pos_goal)
+        return math.dist(pos_start, pos_goal)#计算欧式距离（起点坐标到终点坐标）
