@@ -38,6 +38,7 @@ class Agents:
             Agent(
                 agents=self,
                 agentId=entry['agentId'],
+                vehicle_type_id=entry['vehicleTypeId'],
                 agent_state='IDLE',
                 agent_order_topic=entry['orderTopic'],
                 agent_state_topic=entry['stateTopic'],
@@ -56,11 +57,12 @@ class Agent:
     via VDA 5050 state messages (received in state_callback).
     """
 
-    def __init__(self, agents, agentId, agent_state_topic, agent_order_topic,
+    def __init__(self, agents, agentId, vehicle_type_id, agent_state_topic, agent_order_topic,
                  agent_state, logging) -> None:
         # ── Core references ───────────────────────────────────────────────────
         self.agents = agents          # parent Agents container
         self.agentId = agentId
+        self.vehicle_type_id = vehicle_type_id
 
         # ── Communication ─────────────────────────────────────────────────────
         self.state_topic = agent_state_topic
