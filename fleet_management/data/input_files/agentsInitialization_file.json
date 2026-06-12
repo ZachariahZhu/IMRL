@@ -1,8 +1,8 @@
 {
     "agents": [
-         {
+        {
             "agentId": "mouse001",
-            "vehicleTypeId": "Longitudinal_Conveyor",
+            "vehicleTypeId": "Lateral_Conveyor",
             "stateTopic": "KIT/IMRL/mouse001/state",
             "orderTopic": "KIT/IMRL/mouse001/order",
             "visualizationTopic": "KIT/IMRL/mouse001/visualization",
