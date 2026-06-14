@@ -1,9 +1,8 @@
 {
-    "mapId": "Map_1",
     "agents": [
         {
             "agentId": "mouse001",
-            "vehicleTypeId": "Longitudinal_Conveyor",
+            "vehicleTypeId": "Lateral_Conveyor",
             "stateTopic": "KIT/IMRL/mouse001/state",
             "orderTopic": "KIT/IMRL/mouse001/order",
             "visualizationTopic": "KIT/IMRL/mouse001/visualization",
@@ -11,6 +10,21 @@
                 "x": 1.05,
                 "y": 0.90,
                 "theta": 1.57
+            },
+            "agentVelocity": 1.5,
+            "agentRotationVelocity": 3,
+            "agentPositiveDirectionPreffered": true
+        },
+        {
+            "agentId": "cat001",
+            "vehicleTypeId": "Longitudinal_Conveyor",
+            "stateTopic": "KIT/IMRL/cat001/state",
+            "orderTopic": "KIT/IMRL/cat001/order",
+            "visualizationTopic": "KIT/IMRL/cat001/visualization",
+            "agentPosition": {
+                "x": 7.50,
+                "y": 0.94,
+                "theta": 0.0
             },
             "agentVelocity": 1.5,
             "agentRotationVelocity": 3,

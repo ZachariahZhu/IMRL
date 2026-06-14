@@ -120,57 +120,66 @@ class FleetManagement:
         # )
 
 
-        # while any(not t['task_assigned'] for t in self.task_management.task_list):
+        import time
+        while any(not t['task_assigned'] for t in self.task_management.task_list):
             
-        #     #找车
-        #     idle_agents = [a for a in self.agents.agents if a.agent_state == "IDLE"]
+            # Find all idle agents
+            idle_agents = [a for a in self.agents.agents if a.agent_state == "IDLE"]
             
-        #     if not idle_agents:
-        #         time.sleep(0.5)
-        #         continue
-                
-        
-        #     agent = idle_agents[0]
-                
-        #     try:
-        #         task = next(t for t in self.task_management.task_list if not t['task_assigned'])
-        #     except StopIteration:
-        #         break
-                
-        #     path_nodes, path_edges = self.build_path_for_task(task, agent.current_node)
-        #     nodes = self.build_order_nodes(path_nodes, task)
-        #     edges = self.build_order_edges(path_nodes, path_edges)
-            
-        #     task['task_assigned'] = True
-        #     agent.agent_state = 'EXECUTING'
-        #     agent.current_task = task
-            
-        #     agent.order_interface.generate_order_message(
-        #         agent=agent,
-        #         orderId=str(self.agents.order_header_id),
-        #         order_updateId=0,
-        #         nodes=nodes,
-        #         edges=edges
-        #     )
-        #     time.sleep(0.5)
-
-
-        for agent in self.agents.agents:
-            while not agent.agvPosition:
+            if not idle_agents:
                 time.sleep(0.5)
+                continue
+                
+            # Pick the first idle agent
+            agent = idle_agents[0]
+
+            # Task 2e: get the vehicle type of the selected agent
+            vehicle_type_id = agent.vehicle_type_id
+                
+            try:
+                task = next(t for t in self.task_management.task_list if not t['task_assigned'])
+            except StopIteration:
+                break
+
+            # Task 2e: pass vehicle_type_id to build_path_for_task()
+            path_nodes, path_edges = self.build_path_for_task(
+                task,
+                agent.current_node,
+                vehicle_type_id
+            )
+
+            if path_nodes is None or path_edges is None:
+                print(
+                    f"No valid path found for {agent.agentId} "
+                    f"with vehicle type {vehicle_type_id}"
+                )
+                time.sleep(0.5)
+                continue
+
+            # Task 2e: pass vehicle_type_id to build_order_nodes()
+            nodes = self.build_order_nodes(
+                path_nodes,
+                task,
+                vehicle_type_id
+            )
+
+            edges = self.build_order_edges(path_nodes, path_edges)
             
-            min_dist = float('inf')
-            nearest_node = None
-            agv_pos_tuple = (agent.agvPosition['x'], agent.agvPosition['y'])
+            task['task_assigned'] = True
+            agent.agent_state = 'EXECUTING'
+            agent.current_task = task
             
+            agent.order_interface.generate_order_message(
+                agent=agent,
+                orderId=str(self.agents.order_header_id),
+                order_updateId=0,
+                nodes=nodes,
+                edges=edges
+            )
+            time.sleep(0.5)
 
-
-
-
-
-
-
-    def build_path_for_task(self, task: dict, start_node: str) -> tuple:
+    def build_path_for_task(self, task: dict, start_node: str,
+                            vehicle_type_id: str) -> tuple:
         """
         Task 7: Chain multiple A* searches to cover all stations in a task.
 
@@ -196,19 +205,32 @@ class FleetManagement:
         self.graph.dwelling_nodes using self.graph.nodes[n]['pos'].
 
         Returns (path_nodes, path_edges).
+
+        Task 2e:
+            Pass vehicle_type_id to every astar_search() call.
         """
         combined_nodes= []
         combined_edges= []
         current= start_node
+
         #1.规划每一站的路径
         for station in task['stations']:
             target_node= station['nodeId']
-            nodes,edges= self.path_planning.astar_search(current, target_node)
+
+            nodes, edges = self.path_planning.astar_search(
+                current,
+                target_node,
+                vehicle_type_id
+            )
+
+            if nodes is None or edges is None:
+                return None, None
 
             if not combined_nodes:
                 combined_nodes.extend(nodes)
             else:
-                combined_nodes.extend(nodes[1:])#跳过第一个节点（它是上个路段的最后一个点），避免重复
+                combined_nodes.extend(nodes[1:])#跳过第一个节点，避免重复
+
             combined_edges.extend(edges)
             current= target_node
 
@@ -223,12 +245,22 @@ class FleetManagement:
             if dist < min_dist:
                 min_dist= dist
                 nearest_dwelling= d_node
+
         #3.规划返回休息点的路径
-        nodes, edges= self.path_planning.astar_search(current, nearest_dwelling)
+        nodes, edges = self.path_planning.astar_search(
+            current,
+            nearest_dwelling,
+            vehicle_type_id
+        )
+
+        if nodes is None or edges is None:
+            return None, None
+
         if combined_nodes:
             combined_nodes.extend(nodes[1:])#跳过第一个节点，避免重复
         else:
             combined_nodes.extend(nodes)
+
         combined_edges.extend(edges)
 
         return (combined_nodes, combined_edges)
@@ -236,7 +268,8 @@ class FleetManagement:
 
 
         
-    def build_order_nodes(self, path_nodes: list, task: dict) -> list:
+    def build_order_nodes(self, path_nodes: list, task: dict,
+                          vehicle_type_id: str) -> list:
         """
         Task 7: Assign VDA 5050 actions to each node in the combined path.
 
@@ -255,7 +288,7 @@ class FleetManagement:
         For each node, also look up:
             - x, y from self.graph.nodes[n]['pos']
             - theta from self.graph.nodes[n].get('vehicleTypeNodeProperties', [])
-              for the entry matching vehicleTypeId 'Longitudinal_Conveyor'.
+              for the entry matching the selected agent's vehicle_type_id.
               If the value is None or the string "None", use theta=None.
 
         Returns a list of node dicts:
@@ -266,32 +299,41 @@ class FleetManagement:
         To detect the 'before TRANSFER' node, look ahead:
             if i + 1 < len(path_nodes) and path_nodes[i+1] is a TRANSFER station:
                 add init_fine_positioning to path_nodes[i]
+
+        Task 2e:
+            Use vehicle_type_id instead of hardcoded 'Longitudinal_Conveyor'.
         """
         nodes_result= []
 
         station_lookup= {s['nodeId']: s for s in task['stations']}
+
         for i, n_id in enumerate(path_nodes):
             actions= []
+
             if n_id in station_lookup:
                 st = station_lookup[n_id]
+
                 if st['actionType'] in ['pick', 'drop']:
                     actions.append({
                         "actionType": st['actionType'],
                         "actionId": str(uuid.uuid4()),
-                        "blockingType": "HARD"#动作完成后才能继续下一个点
+                        "blockingType": "HARD"
                     })
-                elif st['actionType'] == 'process':#加工站点
+
+                elif st['actionType'] == 'process':
                     actions.append({
                         "actionType": "process",
                         "actionId": str(uuid.uuid4()),
                         "blockingType": "HARD",
-                        "processingTime": st['processingTime']#加工时长
+                        "processingTime": st['processingTime']
                     })#如果是站点，添加相应的动作
 
             if i+1<len(path_nodes):
                 next_node = path_nodes[i+1]
+
                 if next_node in station_lookup:
                     next_st=station_lookup[next_node]
+
                     if next_st['actionType'] in ['pick', 'drop']:
                         actions.append({
                             "actionType": "init_fine_positioning",
@@ -301,12 +343,16 @@ class FleetManagement:
 
             node_props=self.graph.nodes[n_id].get('vehicleTypeNodeProperties', [])
             theta= None
-            if node_props:
-                for prop in node_props:
-                    if prop['vehicleTypeId'] == 'Longitudinal_Conveyor':
-                        val=prop.get('theta')
-                        if val is not None and val != "None":
-                            theta= float(val)
+
+            for prop in node_props:
+                if prop.get('vehicleTypeId') == vehicle_type_id:
+                    val=prop.get('theta')
+
+                    if val is not None and val != "None":
+                        theta= float(val)
+
+                    break
+
             nodes_result.append({
                 "nodeId": n_id,
                 "x": self.graph.nodes[n_id]['pos'][0],
@@ -314,6 +360,7 @@ class FleetManagement:
                 "theta": theta,
                 "actions": actions
             })
+
         return nodes_result
     
 
@@ -344,102 +391,137 @@ class PathPlanning:
     """
     A* shortest-path search over the graph.
 
-    Task 6: Implement all three methods.
-    Graph interfaces you will likely need:
-        self.graph.get_connected_nodes(node_id)  -> list of neighbour node IDs
-        self.graph.get_connected_edge(a, b)       -> edge ID connecting a and b
-        self.graph.nodes[node_id]['pos']           -> (x, y) position tuple
+    Task 6: Implement A*.
+    Task 2d: Make A* vehicle-type-aware.
     """
 
     def __init__(self, config_data, graph) -> None:
         self.config_data = config_data
         self.graph = graph
 
-    def astar_search(self, start_node: str, goal_node: str) -> tuple:
+    def astar_search(self, start_node: str, goal_node: str,
+                     vehicle_type_id: str) -> tuple:
         """
         Find the shortest path from start_node to goal_node using A*.
 
+        Task 2d update:
+        The search now receives vehicle_type_id and only expands edges
+        compatible with that vehicle type.
+
         Returns:
             (path_nodes, path_edges)
-            path_nodes : ordered list of node IDs,  e.g. ["N5", "N1", "N7", "N2"]
-            path_edges : ordered list of edge IDs,  e.g. ["E21", "E1", "E2"]
-            len(path_edges) == len(path_nodes) - 1
 
-        Returns (None, None) if no path exists.
+        Example:
+            path_nodes = ["N7", "N8", "N2"]
+            path_edges = ["E7", "E8"]
 
-        Task 6 hints:
-            - Handle the edge case start_node == goal_node first:
-                  return ([start_node], [])
-            - Use a min-heap (heapq) ordered by f = g + h:
-                  import heapq
-                  open_set = []
-                  heapq.heappush(open_set, (f, node_id))
-            - g(n) = accumulated travel cost from start to n.
-                  Increment it with self.get_distance(current, neighbour).
-            - h(n) = self.get_h(n, goal_node)  -- Euclidean, never overestimates.
-            - Keep a came_from dict to reconstruct the path on success.
-            - Build path_edges by calling self.graph.get_connected_edge(a, b)
-              for each consecutive pair in the reconstructed path_nodes.
+        Returns:
+            (None, None) if no path exists.
         """
+
+        # 1. If start and goal are same, no movement is needed.
         if start_node == goal_node:
-            return ([start_node], [])#1.起点即终点情况
-        
-        #2.初始化
+            return ([start_node], [])
+
+        # 2. Priority queue for A*
         open_set = []
-        heapq.heappush(open_set, (0, start_node))
+        heapq.heappush(open_set, (0.0, start_node))
+
+        # 3. Stores best previous node for path reconstruction
         came_from = {}
-        g_score = {start_node: 0.0}
+
+        # 4. Cost from start node to each node
+        g_score = {
+            node_id: float("inf")
+            for node_id in self.graph.nodes
+        }
+        g_score[start_node] = 0.0
+
+        # 5. Estimated total cost: g + h
+        f_score = {
+            node_id: float("inf")
+            for node_id in self.graph.nodes
+        }
+        f_score[start_node] = self.get_h(start_node, goal_node)
+
+        # 6. Closed/visited set
+        visited = set()
 
         while open_set:
-            current_f, current_node = heapq.heappop(open_set)#3.取出f值最小的节点
-            #4.找到终点，并回溯
+            current_f, current_node = heapq.heappop(open_set)
+
+            if current_node in visited:
+                continue
+
+            visited.add(current_node)
+
+            # 7. Goal reached: reconstruct path
             if current_node == goal_node:
                 path_nodes = [current_node]
+
                 while current_node in came_from:
                     current_node = came_from[current_node]
                     path_nodes.append(current_node)
-                    
-                path_nodes.reverse()#翻转列表（因为是从终点倒推到起点的）
-                #5.获取边
-                path_edges = []
-                for i in range(len(path_nodes) - 1):
-                    edge = self.graph.get_connected_edge(path_nodes[i], path_nodes[i + 1])
-                    path_edges.append(edge)
-                return (path_nodes, path_edges)
-            #6.遍历邻居节点
-            for neighbour in self.graph.get_connected_nodes(current_node):
-                tentative_g_score = g_score[current_node]+self.get_distance(current_node, neighbour)
 
-                if neighbour not in g_score or tentative_g_score < g_score[neighbour]:
+                path_nodes.reverse()
+
+                # 8. Convert node path into edge path
+                path_edges = []
+
+                for i in range(len(path_nodes) - 1):
+                    edge = self.graph.get_connected_edge(
+                        path_nodes[i],
+                        path_nodes[i + 1],
+                        vehicle_type_id
+                    )
+
+                    if edge is None:
+                        return (None, None)
+
+                    path_edges.append(edge)
+
+                return (path_nodes, path_edges)
+
+            # 9. Explore neighbours, but only vehicle-compatible neighbours
+            for neighbour in self.graph.get_connected_nodes(
+                current_node,
+                vehicle_type_id
+            ):
+                tentative_g_score = (
+                    g_score[current_node]
+                    + self.get_distance(current_node, neighbour)
+                )
+
+                if tentative_g_score < g_score[neighbour]:
                     came_from[neighbour] = current_node
                     g_score[neighbour] = tentative_g_score
-                    #f= g+h
-                    f= tentative_g_score + self.get_h(neighbour, goal_node)
-                    heapq.heappush(open_set, (f, neighbour))
+
+                    f_score[neighbour] = (
+                        tentative_g_score
+                        + self.get_h(neighbour, goal_node)
+                    )
+
+                    heapq.heappush(
+                        open_set,
+                        (f_score[neighbour], neighbour)
+                    )
+
         return (None, None)
-                
-                       
-        
 
     def get_h(self, current_node: str, goal_node: str) -> float:
         """
-        Heuristic -- Euclidean distance from current_node to goal_node.
-
-        Task 6: Use self.graph.nodes[node_id]['pos'] for (x, y) coordinates,
-        then return math.dist(pos_current, pos_goal).
-        This heuristic is admissible (straight-line <= actual path length).
+        Heuristic: Euclidean distance from current_node to goal_node.
         """
-        pos_current = self.graph.nodes[current_node]['pos']
-        pos_goal = self.graph.nodes[goal_node]['pos']
-        return math.dist(pos_current, pos_goal)#计算欧式距离（当前坐标到终点坐标）
+        pos_current = self.graph.nodes[current_node]["pos"]
+        pos_goal = self.graph.nodes[goal_node]["pos"]
 
+        return math.dist(pos_current, pos_goal)
 
     def get_distance(self, start_node: str, goal_node: str) -> float:
         """
-        Actual edge cost -- Euclidean distance between two adjacent nodes.
-
-        Task 6: Same formula as get_h(); used as the g-score increment per step.
+        Actual edge cost: Euclidean distance between two adjacent nodes.
         """
-        pos_start = self.graph.nodes[start_node]['pos']
-        pos_goal = self.graph.nodes[goal_node]['pos']
-        return math.dist(pos_start, pos_goal)#计算欧式距离（起点坐标到终点坐标）
+        pos_start = self.graph.nodes[start_node]["pos"]
+        pos_goal = self.graph.nodes[goal_node]["pos"]
+
+        return math.dist(pos_start, pos_goal)
