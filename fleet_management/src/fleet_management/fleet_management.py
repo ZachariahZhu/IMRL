@@ -4,6 +4,66 @@ import time
 import threading
 import heapq
 
+
+edgeCosts = {
+    "E1": 3,
+    "E2":4,
+    "E3":5,
+    "E4": 3,
+    "E5":4.6,
+    "E6":5.9,
+    "E7": 3.4,
+    "E8":7,
+    "E9":5,
+    "E10": 3.4,
+    "E11":4.8,
+    "E12":5.4,
+    "E13": 3.8,
+    "E14":4.4,
+    "E15":5,
+    "E16": 3,
+    "E17":4,
+    "E18":5,
+    "E19": 3,
+    "E20":4,
+    "E21":5,
+}
+actionCosts = {
+    "init_fine_positioning": 5,
+    "pick": 4,
+    "drop": 4
+}
+nodeCosts = {
+    "N1": 0.5,
+    "N2": 0.5,
+    "N3": 0.5,
+    "N4": 0.5,
+    "N5": 0.5,
+    "N6": 0.5,
+    "N7": 0.5,
+    "N8": 0.5,
+    "N9": 0.5,
+    "N10": 0.5,
+    "N11": 0.5,
+    "N12": 0.5,
+    "N13": 0.5,
+    "N14": 0.5,
+    "N15": 0.5,
+    "N16": 0.5,
+    "N17": 0.5,
+    "N18": 0.5,
+    "N19": 0.5,
+    "N20": 0.5,
+    "N21": 0.5,
+    "N22": 0.5,
+    "N23": 0.5,
+    "N24": 0.5,
+    "N25": 0.5
+}
+
+
+
+
 class FleetManagement:
     """
     Manages the fleet: computes paths and sends VDA 5050 orders to agents.
@@ -141,6 +201,33 @@ class FleetManagement:
             path_nodes, path_edges = self.build_path_for_task(task, agent.current_node)
             nodes = self.build_order_nodes(path_nodes, task)
             edges = self.build_order_edges(path_nodes, path_edges)
+            edgeList = []
+            edgeCostsList = []
+            nodeName = []
+            nodesAndActions = []
+            with open("output.txt", "w") as f: 
+                print("New run", file=f)
+            for i in range(len(nodes)):
+                nodeName.append(nodes[i].get("nodeId"))
+                #actionList.append(nodes[i].get("actions"))
+                if len(nodes[i].get("actions"))>0:
+                    nodesAndActions.append((nodes[i].get("nodeId"),nodes[i].get("actions"),i))
+                else:
+                    pass
+            
+            for i in range(len(edges)):
+                edgeList.append(edges[i].get("edgeId"))
+
+            for e in edgeList:
+                edgeCostsList.append(edgeCosts.get(e))
+                   
+            with open("output.txt", "a") as f: 
+                #print("test")
+                #print(nodeName,file=f)
+                #print(actionList,file=f)
+                print(nodesAndActions,file=f)
+                print(edgeList,file=f)
+                print(edgeCostsList,file=f)
             
             task['task_assigned'] = True
             agent.agent_state = 'EXECUTING'
