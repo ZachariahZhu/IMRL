@@ -84,7 +84,7 @@ class Agent:
         # ── Task & path ───────────────────────────────────────────────────────
         self.loaded = False              # True while carrying a load
 
-        self.current_node ="N5"
+        self.current_node ="N5" # ?
         self.current_task = None
     def state_callback(self, client, userdata, msg) -> None:
         """
