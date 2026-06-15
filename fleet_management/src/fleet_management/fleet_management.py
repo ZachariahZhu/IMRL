@@ -239,6 +239,7 @@ class FleetManagement:
                 nodes=nodes,
                 edges=edges
             )
+            self.agents.order_header_id += 1
             time.sleep(0.5)
 
     def build_path_for_task(self, task: dict, start_node: str,
