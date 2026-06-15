@@ -183,16 +183,26 @@ class FleetManagement:
                 time.sleep(0.5)
                 continue
                 
-            # Pick the first idle agent
-            agent = idle_agents[0]
-
-            # Task 2e: get the vehicle type of the selected agent
-            vehicle_type_id = agent.vehicle_type_id
-                
             try:
                 task = next(t for t in self.task_management.task_list if not t['task_assigned'])
             except StopIteration:
                 break
+
+            # Find the best agent based on distance to the first station
+            first_station_node = task['stations'][0]['nodeId']
+            first_station_pos = self.graph.nodes[first_station_node]['pos']
+            
+            agent = idle_agents[0]
+            min_dist = float('inf')
+            for a in idle_agents:
+                if a.current_node:
+                    agent_pos = self.graph.nodes[a.current_node]['pos']
+                    dist = math.dist(agent_pos, first_station_pos)
+                    if dist < min_dist:
+                        min_dist = dist
+                        agent = a
+
+            vehicle_type_id = agent.vehicle_type_id
 
             # Task 2e: pass vehicle_type_id to build_path_for_task()
             path_nodes, path_edges = self.build_path_for_task(

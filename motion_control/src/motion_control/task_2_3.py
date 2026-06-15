@@ -40,7 +40,7 @@ class Robot:
         self.filtered_x = None
         self.filtered_y = None
         self.filtered_theta = None
-        self.alpha = 0.3 #滤波系数，越小越平滑但响应越慢
+        self.alpha = 0.8 #滤波系数，越小越平滑但响应越慢
 
         self.last_linear_vel = 0.0
         self.last_angular_vel = 0.0
@@ -86,8 +86,9 @@ class Robot:
         self.order_update_id = order_data.get('orderUpdateId', 0)
 
         self.trajectory = []  
-        nodes = order_data.get("nodes", [])
-        for node in nodes:
+        self.nodes = order_data.get("nodes", [])
+        self.edges = order_data.get("edges", [])
+        for node in self.nodes:
             if node.get('released') == True:
                 x= node['nodePosition']['x']
                 y= node['nodePosition']['y']
@@ -110,8 +111,8 @@ class Robot:
             #将刚刚的节点ID报告回去
             "lastNodeId": self.last_node_id if self.last_node_id else "",
             "lastNodeSequenceId": 0,
-            "nodeStates": [],
-            "edgeStates": [],
+            "nodeStates": self.nodes[self.current_index:],
+            "edgeStates": self.edges[self.current_index:] if hasattr(self, 'edges') and self.current_index < len(self.edges) else [],
             "agvPosition": {
                 "x": self.x,
                 "y": self.y,
@@ -167,7 +168,7 @@ def follow_trajectory(robot: Robot):
             target_angular_vel = 2.0 * angle_diff #z转弯速度与角度差成正比
         else: 
             #微调角度向前
-            target_linear_vel = min(5.0 * distance, 10.0)  # 提高基础速度和上限
+            target_linear_vel = min(0.5 * distance, 2.0)  # 提高基础速度和上限
             target_angular_vel = 3.0 * angle_diff         # 提高转弯速度
 
         #4.加速度限制
