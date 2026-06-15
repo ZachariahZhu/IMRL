@@ -104,25 +104,78 @@ class FleetManagement:
             4. Pass the results to generate_order_message() below.
             5. Mark task['task_assigned'] = True and agent.agent_state = 'EXECUTING'.
         """
-        # task= next(t for t in self.task_management.task_list if not t['task_assigned'])#1.找到第一个未分配的任务
-        # agent= self.agents.agents[0]#2.找到一个空闲车
+        # task= next(t for t in self.task_management.task_list if not t['task_assigned']) # 1. Find first unassigned task
+        # agent= self.agents.agents[0] # 2. Find an idle agent
         # path_nodes,path_edges = self.build_path_for_task(task, agent.current_node)
         # nodes= self.build_order_nodes(path_nodes, task)
-        # edges= self.build_order_edges(path_nodes, path_edges)#3.自动路径
+        # edges= self.build_order_edges(path_nodes, path_edges) # 3. Generate automatic path
         # task['task_assigned'] = True
-        # agent.agent_state = 'EXECUTING'#4.锁定车和任务
+        # agent.agent_state = 'EXECUTING' # 4. Lock agent and task
         # agent.order_interface.generate_order_message(
         #     agent=agent,
         #     orderId=str(self.agents.order_header_id),
         #     order_updateId=0,
         #     nodes=nodes,
-        #     edges=edges#发送订单
+        #     edges=edges # Send order
         # )
 
 
-        import time
+       
+#initialize
+        for agent in self.agents.agents:
+            while not agent.agvPosition:
+                time.sleep(0.5)
+
+            min_dist = float('inf')
+            nearest_node = None
+            agv_pos_tuple = (agent.agvPosition['x'], agent.agvPosition['y'])
+            
+            for node_id, node_data in self.graph.nodes.items():
+                dist = math.dist(agv_pos_tuple, node_data['pos'])
+                if dist < min_dist:
+                    min_dist = dist
+                    nearest_node = node_id
+            
+            agent.current_node = nearest_node
+
+            if nearest_node not in self.graph.dwelling_nodes:
+                min_dwell_dist = float('inf')
+                best_dwell = self.graph.dwelling_nodes[0]
+                for dwell_id in self.graph.dwelling_nodes:
+                    dist = math.dist(self.graph.nodes[nearest_node]['pos'], self.graph.nodes[dwell_id]['pos'])
+                    if dist < min_dwell_dist:
+                        min_dwell_dist = dist
+                        best_dwell = dwell_id
+                
+                path_nodes, path_edges = self.path_planning.astar_search(
+                    nearest_node, best_dwell, agent.vehicle_type_id
+                )
+                
+                nodes = self.build_order_nodes(path_nodes, {"stations": []}, agent.vehicle_type_id)
+                edges = self.build_order_edges(path_nodes, path_edges)
+                
+                agent.agent_state = 'EXECUTING'
+                agent.order_interface.generate_order_message(
+                    agent=agent,
+                    orderId=str(self.agents.order_header_id),
+                    order_updateId=0,
+                    nodes=nodes,
+                    edges=edges
+                )
+                self.agents.order_header_id += 1
+                
+                while agent.agent_state != 'IDLE':
+                    time.sleep(0.5)
+
+
+
         while any(not t['task_assigned'] for t in self.task_management.task_list):
             
+
+            if any(a.agent_state == "EXECUTING" for a in self.agents.agents):
+                time.sleep(0.5)
+                continue
+                
             # Find all idle agents
             idle_agents = [a for a in self.agents.agents if a.agent_state == "IDLE"]
             
@@ -130,16 +183,26 @@ class FleetManagement:
                 time.sleep(0.5)
                 continue
                 
-            # Pick the first idle agent
-            agent = idle_agents[0]
-
-            # Task 2e: get the vehicle type of the selected agent
-            vehicle_type_id = agent.vehicle_type_id
-                
             try:
                 task = next(t for t in self.task_management.task_list if not t['task_assigned'])
             except StopIteration:
                 break
+
+            # Find the best agent based on distance to the first station
+            first_station_node = task['stations'][0]['nodeId']
+            first_station_pos = self.graph.nodes[first_station_node]['pos']
+            
+            agent = idle_agents[0]
+            min_dist = float('inf')
+            for a in idle_agents:
+                if a.current_node:
+                    agent_pos = self.graph.nodes[a.current_node]['pos']
+                    dist = math.dist(agent_pos, first_station_pos)
+                    if dist < min_dist:
+                        min_dist = dist
+                        agent = a
+
+            vehicle_type_id = agent.vehicle_type_id
 
             # Task 2e: pass vehicle_type_id to build_path_for_task()
             path_nodes, path_edges = self.build_path_for_task(
@@ -176,6 +239,7 @@ class FleetManagement:
                 nodes=nodes,
                 edges=edges
             )
+            self.agents.order_header_id += 1
             time.sleep(0.5)
 
     def build_path_for_task(self, task: dict, start_node: str,
@@ -213,7 +277,7 @@ class FleetManagement:
         combined_edges= []
         current= start_node
 
-        #1.规划每一站的路径
+        # 1. Plan path for each station
         for station in task['stations']:
             target_node= station['nodeId']
 
@@ -229,12 +293,12 @@ class FleetManagement:
             if not combined_nodes:
                 combined_nodes.extend(nodes)
             else:
-                combined_nodes.extend(nodes[1:])#跳过第一个节点，避免重复
+                combined_nodes.extend(nodes[1:]) # Skip first node to avoid duplication
 
             combined_edges.extend(edges)
             current= target_node
 
-        #2.找到最近的休息点
+        # 2. Find nearest dwelling node
         nearest_dwelling= None
         min_dist = float('inf')
         pos_current = self.graph.nodes[current]['pos']
@@ -246,7 +310,7 @@ class FleetManagement:
                 min_dist= dist
                 nearest_dwelling= d_node
 
-        #3.规划返回休息点的路径
+        # 3. Plan path back to dwelling node
         nodes, edges = self.path_planning.astar_search(
             current,
             nearest_dwelling,
@@ -257,7 +321,7 @@ class FleetManagement:
             return None, None
 
         if combined_nodes:
-            combined_nodes.extend(nodes[1:])#跳过第一个节点，避免重复
+            combined_nodes.extend(nodes[1:]) # Skip first node to avoid duplication
         else:
             combined_nodes.extend(nodes)
 
@@ -326,7 +390,7 @@ class FleetManagement:
                         "actionId": str(uuid.uuid4()),
                         "blockingType": "HARD",
                         "processingTime": st['processingTime']
-                    })#如果是站点，添加相应的动作
+                    }) # Add action if it's a station
 
             if i+1<len(path_nodes):
                 next_node = path_nodes[i+1]
@@ -339,7 +403,7 @@ class FleetManagement:
                             "actionType": "init_fine_positioning",
                             "actionId": str(uuid.uuid4()),
                             "blockingType": "HARD"
-                        })#如果下一个节点是转运站，当前节点需定位
+                        }) # Fine positioning if next is transfer station
 
             node_props=self.graph.nodes[n_id].get('vehicleTypeNodeProperties', [])
             theta= None
