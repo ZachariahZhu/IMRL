@@ -1,6 +1,7 @@
 import json
 from vda5050_interface.mqtt_clients.mqtt_subscriber import MQTTSubscriber
 from vda5050_interface.interfaces.order_interface import OrderInterface
+import math
 
 
 class Agents:
@@ -42,7 +43,10 @@ class Agents:
                 agent_state='IDLE',
                 agent_order_topic=entry['orderTopic'],
                 agent_state_topic=entry['stateTopic'],
-                logging=self.logging
+                logging=self.logging,
+                x=entry['agentPosition']['x'],
+                y=entry['agentPosition']['y'],
+                extGraph=self.graph
             )
             for entry in agents_initialization_data['agents']
         ]
@@ -58,7 +62,7 @@ class Agent:
     """
 
     def __init__(self, agents, agentId, vehicle_type_id, agent_state_topic, agent_order_topic,
-                 agent_state, logging) -> None:
+                 agent_state, logging,x,y,extGraph) -> None:
         # ── Core references ───────────────────────────────────────────────────
         self.agents = agents          # parent Agents container
         self.agentId = agentId
@@ -85,7 +89,39 @@ class Agent:
         self.loaded = False              # True while carrying a load
 
         self.current_node ="N5" # ?
+        self.agvPosition = {}
+        tempNodes = extGraph.nodes
+        shortest = None
+        position = None
+        #with open("debug.txt","w") as ff:
+        #print("TEMPNODES",(x,y),file=ff)
+        #print(tempNodes,file=ff)
+        for tempNode in tempNodes.values():
+            #print(tempNode.get("pos"),tempNode.get("nodeId"),file=ff)
+            dist = math.dist(tempNode.get("pos"),(x,y))
+            if shortest == None:                    
+                shortest = dist
+                position = tempNode.get("nodeId")
+            elif dist < shortest:
+                shortest = dist
+                position = tempNode.get("nodeId")
+        #print(position,file=ff)
+        #print(shortest,file=ff)
+
+
+            #print("TEMPNODE")
+            #print(tempNode)
+        #    dist = math.dist((tempNode.get("nodePosition").get("x"),tempNode.get("nodePosition").get("y")),(x,y))
+        #    if shortest == None:
+        #        shortest = dist
+         #       position = tempNode.get("nodeId")
+        #    elif dist < shortest:
+        #        shortest = dist
+         #       position = tempNode.get("nodeId")
+            
+        self.current_node= position
         self.current_task = None
+        self.current_path_nodes = []
     def state_callback(self, client, userdata, msg) -> None:
         """
         Called automatically whenever the simulation publishes a state message.
@@ -120,10 +156,15 @@ class Agent:
             self.agvPosition = state_msg['agvPosition']
 
         if 'lastNodeId' in state_msg and state_msg['lastNodeId']:
-            self.current_node = state_msg['lastNodeId']#更新agv当前位置
-        
+            self.current_node = state_msg['lastNodeId']
+
+        # Task 4 Collision Avoidance: Track the remaining path nodes
+        self.current_path_nodes = [n['nodeId'] for n in state_msg.get('nodeStates', [])]
+        if self.current_node:
+            self.current_path_nodes.append(self.current_node)
+
         nodes_empty =len(state_msg.get('nodeStates', [])) == 0
-        edges_empty =len(state_msg.get('edgeStates', [])) == 0#判断任务是否完成
+        edges_empty =len(state_msg.get('edgeStates', [])) == 0#判断是否完成
         actions_finished = True
         for action in state_msg.get('actionStates', []):
             if action.get('actionStatus') != 'FINISHED':

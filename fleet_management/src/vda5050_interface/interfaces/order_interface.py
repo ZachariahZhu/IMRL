@@ -25,7 +25,7 @@ class OrderInterface:
             n = {
                 "nodeId": node["nodeId"],
                 "sequenceId": i * 2,    # 节点必定是偶数 0, 2, 4...
-                "released": True,
+                "released": node.get("released", True),
                 "nodePosition": {
                     "x": node["x"],
                     "y": node["y"],
@@ -43,7 +43,7 @@ class OrderInterface:
             e = {
                 "edgeId": edge["edgeId"],
                 "sequenceId": i * 2 + 1,    # 边必定是奇数 1, 3, 5...
-                "released": True,
+                "released": edge.get("released", True),
                 "startNodeId": edge["startNodeId"],
                 "endNodeId": edge["endNodeId"],
                 "actions": edge.get("actions", [])

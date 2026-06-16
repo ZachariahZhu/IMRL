@@ -133,10 +133,6 @@ class Graph:
     def get_connected_nodes(self, node_id, vehicle_type_id=None) -> list:
         """
         Return directly connected node IDs.
-
-        Task 2c update:
-        If vehicle_type_id is given, only return neighbours reachable through
-        compatible edges.
         """
         connected = []
 

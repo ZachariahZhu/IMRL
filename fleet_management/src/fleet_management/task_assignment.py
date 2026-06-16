@@ -52,14 +52,14 @@ class TaskAssignment:
                    time.sleep(0.5)
         """
         while any(not t['task_assigned'] for t in self.task_management.task_list):
-            #找到空闲的AGV
+            
             idle_agents = [a for a in self.agents.agents if a.agent_state == "IDLE"]
-            unassigned_tasks = [t for t in self.task_management.task_list if not t['task_assigned']]#找出没接单的任务
+            unassigned_tasks = [t for t in self.task_management.task_list if not t['task_assigned']]
             
             while idle_agents and unassigned_tasks:
                 task = unassigned_tasks.pop(0)
                 
-                first_station_node = task['stations'][0]['nodeId']#就近派单
+                first_station_node = task['stations'][0]['nodeId']
                 first_station_pos = self.graph.nodes[first_station_node]['pos']
                 
                 best_agent = None

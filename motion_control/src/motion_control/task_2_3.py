@@ -40,12 +40,14 @@ class Robot:
         self.filtered_x = None
         self.filtered_y = None
         self.filtered_theta = None
-        self.alpha = 0.8 #滤波系数，越小越平滑但响应越慢
+        self.alpha = 0.3 #滤波系数，越小越平滑但响应越慢
 
         self.last_linear_vel = 0.0
         self.last_angular_vel = 0.0
         self.max_linear_accel = 1.0  # 加大线加速度
         self.max_angular_accel = 0.5  # 加大角加速度
+        
+        self.other_robots = {}  # Track other robots for collision avoidance
 
 
     def update_pose(self, msg):
@@ -82,7 +84,10 @@ class Robot:
         payload_str = msg.payload.decode("utf-8")
         order_data = json.loads(payload_str)
 
-        self.order_id = order_data.get('orderId', '')
+        new_order_id = order_data.get('orderId', '')
+        is_update = hasattr(self, 'order_id') and self.order_id == new_order_id and len(self.trajectory) > 0
+        
+        self.order_id = new_order_id
         self.order_update_id = order_data.get('orderUpdateId', 0)
 
         self.trajectory = []  
@@ -95,7 +100,8 @@ class Robot:
                 node_id = node['nodeId']#额外提取节点ID
                 self.trajectory.append((x,y,node_id)) # 坐标和节点ID一起存储
     
-        self.current_index = 0     # Reset index
+        if not is_update:
+            self.current_index = 0     # Reset index only for NEW orders
         self.last_node_id = None
         self.status_update_needed = True  # Order receipt triggers a status update
 
@@ -111,7 +117,7 @@ class Robot:
             #将刚刚的节点ID报告回去
             "lastNodeId": self.last_node_id if self.last_node_id else "",
             "lastNodeSequenceId": 0,
-            "nodeStates": self.nodes[self.current_index:],
+            "nodeStates": self.nodes[self.current_index:] if hasattr(self, 'nodes') else [],
             "edgeStates": self.edges[self.current_index:] if hasattr(self, 'edges') and self.current_index < len(self.edges) else [],
             "agvPosition": {
                 "x": self.x,
@@ -162,13 +168,33 @@ def follow_trajectory(robot: Robot):
         while angle_diff > math.pi: angle_diff -= 2 * math.pi
         while angle_diff < -math.pi: angle_diff += 2 * math.pi
 
+        # 💡 碰撞检测与优先级让行 (Collision Avoidance Yielding)
+        too_close = False
+        for other_name, (ox, oy) in robot.other_robots.items():
+            if other_name != robot.name:
+                dist_to_other = math.hypot(robot.x - ox, robot.y - oy)
+                if dist_to_other < 1.0:
+                    # 冲突！由于路网已经被我们设置为单向化，此时只可能发生追尾或在节点相遇！
+                    # 优先级低的停车让行 (cat001 < mouse001，cat优先级高)
+                    if robot.name > other_name:
+                        too_close = True
+                        break
+        
+        if too_close:
+            robot.last_linear_vel = 0.0
+            robot.last_angular_vel = 0.0
+            return {
+                "linear": {"x": 0.0, "y": 0.0, "z": 0.0},
+                "angular": {"x": 0.0, "y": 0.0, "z": 0.0}
+            }
+
         #3.速度控制
         if abs(angle_diff) > 0.1: #如果角度误差较大，优先转向
             target_linear_vel = 0.0
             target_angular_vel = 2.0 * angle_diff #z转弯速度与角度差成正比
         else: 
             #微调角度向前
-            target_linear_vel = min(0.5 * distance, 2.0)  # 提高基础速度和上限
+            target_linear_vel = min(5.0 * distance, 10.0)  # 提高基础速度和上限
             target_angular_vel = 3.0 * angle_diff         # 提高转弯速度
 
         #4.加速度限制
@@ -222,16 +248,25 @@ def main(robot_name):
     topic_pose = f"KIT/IMRL/{robot_name}/pose"
     topic_order = f"KIT/IMRL/{robot_name}/order"
     topic_state = f"KIT/IMRL/{robot_name}/state"
+    topic_other_state = "KIT/IMRL/+/state"
 
     def on_connect(client, userdata, flags, rc): # Called when the client connects to the broker
         client.subscribe(topic_pose)
         client.subscribe(topic_order)
+        client.subscribe(topic_other_state)
 
     def on_message(client, userdata, msg): # Called when a message is received
         if msg.topic == topic_pose:
             robot.update_pose(msg)
         elif msg.topic == topic_order:
             robot.receive_order(msg)
+        elif msg.topic.endswith("/state") and robot.name not in msg.topic:
+            try:
+                state_data = json.loads(msg.payload.decode("utf-8"))
+                pos = state_data.get("agvPosition", {})
+                robot.other_robots[state_data.get("serialNumber")] = (pos.get("x", 0.0), pos.get("y", 0.0))
+            except Exception:
+                pass
 
     client = mqtt.Client() # Create a new MQTT client instance
     client.on_connect = on_connect # Set the on_connect callback
