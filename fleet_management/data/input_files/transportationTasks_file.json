@@ -13,7 +13,7 @@
             "stations": [
                 {"nodeId": "N4", "actionType": "pick"},
                 {"nodeId": "N3", "actionType": "process", "processingTime": 2.0},
-                {"nodeId": "N1", "actionType": "process", "processingTime": 1.0},
+                {"nodeId": "N1A", "actionType": "process", "processingTime": 1.0},
                 {"nodeId": "N2", "actionType": "drop"}
             ]
         },
@@ -21,9 +21,9 @@
             "transportationTaskId": "T3",
             "stations": [
                 {"nodeId": "N2", "actionType": "pick"},
-                {"nodeId": "N1", "actionType": "process", "processingTime": 2.0},
+                {"nodeId": "N1A", "actionType": "process", "processingTime": 2.0},
                 {"nodeId": "N3", "actionType": "process", "processingTime": 1.0},
-                {"nodeId": "N1", "actionType": "process", "processingTime": 2.0},
+                {"nodeId": "N1A", "actionType": "process", "processingTime": 2.0},
                 {"nodeId": "N2", "actionType": "drop"}
             ]
         },
@@ -32,7 +32,7 @@
             "stations": [
                 {"nodeId": "N4", "actionType": "pick"},
                 {"nodeId": "N3", "actionType": "process", "processingTime": 2.0},
-                {"nodeId": "N1", "actionType": "process", "processingTime": 1.0},
+                {"nodeId": "N1A", "actionType": "process", "processingTime": 1.0},
                 {"nodeId": "N2", "actionType": "drop"}
             ]
         },

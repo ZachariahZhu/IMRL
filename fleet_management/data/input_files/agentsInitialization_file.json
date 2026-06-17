@@ -8,8 +8,8 @@
             "orderTopic": "KIT/IMRL/mouse001/order",
             "visualizationTopic": "KIT/IMRL/mouse001/visualization",
             "agentPosition": {
-                "x": 1.05,
-                "y": 0.90,
+                "x": 1.00,
+                "y": 4.71,
                 "theta": 1.57
             },
             "agentVelocity": 1.5,

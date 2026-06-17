@@ -47,14 +47,33 @@ class TrafficController:
                         agent_physical[a].add(a.full_nodes[i]['nodeId'])
                     
                     # Path tracking for intent checks
-                    # Limit to next 3 nodes to avoid looking past stations and causing false positive traps
+                    # Dynamic lookahead: look ahead until the next node with an action (a station).
+                    # This prevents head-on deadlocks in long corridors without causing false positive traps.
                     path_slice = []
                     if getattr(a, 'current_node', None):
                         path_slice.append(a.current_node)
-                    for i in range(current_idx, min(len(a.full_nodes), current_idx + 3)):
-                        if a.full_nodes[i]['nodeId'] not in path_slice: # Keep first occurrence
-                            path_slice.append(a.full_nodes[i]['nodeId'])
-                            agent_intent[a].add(a.full_nodes[i]['nodeId'])
+                    
+                    found_action = False
+                    for i in range(current_idx, len(a.full_nodes)):
+                        node_id = a.full_nodes[i]['nodeId']
+                        if node_id not in path_slice: # Keep first occurrence
+                            path_slice.append(node_id)
+                            agent_intent[a].add(node_id)
+                        
+                        # Stop extending intent if this node has an action (i.e., it's a station)
+                        if a.full_nodes[i].get('actions'):
+                            found_action = True
+                            break
+                    
+                    # If no actions found but path continues, limit to a reasonable number to avoid full-path locking
+                    if not found_action:
+                        # Ensure we have at least 5 nodes lookahead for long corridors
+                        for i in range(current_idx, min(len(a.full_nodes), current_idx + 5)):
+                            node_id = a.full_nodes[i]['nodeId']
+                            if node_id not in path_slice:
+                                path_slice.append(node_id)
+                                agent_intent[a].add(node_id)
+                    
                     setattr(a, 'tracked_path', path_slice)
 
             # 2. Try to release MORE nodes for executing agents
@@ -80,10 +99,10 @@ class TrafficController:
                                 
                             # Rule B: Simple Deadlock Avoidance
                             if next_node_id in agent_intent[other]:
-                                if a.agentId < other.agentId:
+                                if priority_a > priority_other:  # Lower tuple = higher priority, so '>' means lower priority
                                     # I am lower priority. I yield.
                                     if agent_physical[a].intersection(agent_intent[other]):
-                                        pass # Escape clause
+                                        pass # Escape clause: I am in your way, so I must move forward
                                     else:
                                         is_blocked = True
                                         break

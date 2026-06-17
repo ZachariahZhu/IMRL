@@ -13,19 +13,25 @@
             "layoutName": "Layout_1",
             "nodes": [
                 {
-                    "nodeId": "N1",
+                    "nodeId": "N1A",
                     "mapId": "IMRL_TestArea",
                     "nodePosition": {
-                        "x": 2.46,
-                        "y": 0.79
+                        "x": 5.61,
+                        "y": 4.73
                     },
                     "vehicleTypeNodeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "theta": -1.57,
+                            "theta": 0,
                             "actions": [
                                 {
-                                    "actionType": "process",
+                                    "actionType": "pick",
+                                    "requirementType": "CONDITIONAL",
+                                    "blockingType": "HARD",
+                                    "actionParameters": {}
+                                },
+                                {
+                                    "actionType": "drop",
                                     "requirementType": "CONDITIONAL",
                                     "blockingType": "HARD",
                                     "actionParameters": {}
@@ -34,10 +40,62 @@
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "theta": -1.57,
+                            "theta": 1.57,
                             "actions": [
                                 {
-                                    "actionType": "process",
+                                    "actionType": "pick",
+                                    "requirementType": "CONDITIONAL",
+                                    "blockingType": "HARD",
+                                    "actionParameters": {}
+                                },
+                                {
+                                    "actionType": "drop",
+                                    "requirementType": "CONDITIONAL",
+                                    "blockingType": "HARD",
+                                    "actionParameters": {}
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "nodeId": "N1B",
+                    "mapId": "IMRL_TestArea",
+                    "nodePosition": {
+                        "x": 6.97,
+                        "y": 4.73
+                    },
+                    "vehicleTypeNodeProperties": [
+                        {
+                            "vehicleTypeId": "Longitudinal_Conveyor",
+                            "theta": 3.14,
+                            "actions": [
+                                {
+                                    "actionType": "pick",
+                                    "requirementType": "CONDITIONAL",
+                                    "blockingType": "HARD",
+                                    "actionParameters": {}
+                                },
+                                {
+                                    "actionType": "drop",
+                                    "requirementType": "CONDITIONAL",
+                                    "blockingType": "HARD",
+                                    "actionParameters": {}
+                                }
+                            ]
+                        },
+                        {
+                            "vehicleTypeId": "Lateral_Conveyor",
+                            "theta": 1.57,
+                            "actions": [
+                                {
+                                    "actionType": "pick",
+                                    "requirementType": "CONDITIONAL",
+                                    "blockingType": "HARD",
+                                    "actionParameters": {}
+                                },
+                                {
+                                    "actionType": "drop",
                                     "requirementType": "CONDITIONAL",
                                     "blockingType": "HARD",
                                     "actionParameters": {}
@@ -50,13 +108,13 @@
                     "nodeId": "N2",
                     "mapId": "IMRL_TestArea",
                     "nodePosition": {
-                        "x": 2.46,
-                        "y": 3.70
+                        "x": 2.33,
+                        "y": 1.42
                     },
                     "vehicleTypeNodeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "theta": 1.57,
+                            "theta": -1.57,
                             "actions": [
                                 {
                                     "actionType": "pick",
@@ -96,30 +154,30 @@
                     "nodeId": "N3",
                     "mapId": "IMRL_TestArea",
                     "nodePosition": {
-                        "x": 5.45,
-                        "y": 2.25
+                        "x": 5.82,
+                        "y": 0.94
                     },
                     "vehicleTypeNodeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "theta": "None"
+                            "theta": -1.57,
+                            "actions": [
+                                {
+                                    "actionType": "pick",
+                                    "requirementType": "CONDITIONAL",
+                                    "blockingType": "HARD",
+                                    "actionParameters": {}
+                                },
+                                {
+                                    "actionType": "drop",
+                                    "requirementType": "CONDITIONAL",
+                                    "blockingType": "HARD",
+                                    "actionParameters": {}
+                                }
+                            ]
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "theta": "None"
-                        }
-                    ]
-                },
-                {
-                    "nodeId": "N4",
-                    "mapId": "IMRL_TestArea",
-                    "nodePosition": {
-                        "x": 5.55,
-                        "y": 4.75
-                    },
-                    "vehicleTypeNodeProperties": [
-                        {
-                            "vehicleTypeId": "Longitudinal_Conveyor",
                             "theta": 0,
                             "actions": [
                                 {
@@ -135,19 +193,35 @@
                                     "actionParameters": {}
                                 }
                             ]
-                        },
+                        }
+                    ]
+                },
+                {
+                    "nodeId": "N4",
+                    "mapId": "IMRL_TestArea",
+                    "nodePosition": {
+                        "x": 0.75,
+                        "y": 0.75
+                    },
+                    "vehicleTypeNodeProperties": [
                         {
-                            "vehicleTypeId": "Lateral_Conveyor",
-                            "theta": 1.57,
+                            "vehicleTypeId": "Longitudinal_Conveyor",
+                            "theta": "None",
                             "actions": [
                                 {
-                                    "actionType": "pick",
+                                    "actionType": "process",
                                     "requirementType": "CONDITIONAL",
                                     "blockingType": "HARD",
                                     "actionParameters": {}
-                                },
+                                }
+                            ]
+                        },
+                        {
+                            "vehicleTypeId": "Lateral_Conveyor",
+                            "theta": "None",
+                            "actions": [
                                 {
-                                    "actionType": "drop",
+                                    "actionType": "process",
                                     "requirementType": "CONDITIONAL",
                                     "blockingType": "HARD",
                                     "actionParameters": {}
@@ -160,17 +234,33 @@
                     "nodeId": "N5",
                     "mapId": "IMRL_TestArea",
                     "nodePosition": {
-                        "x": 1.05,
-                        "y": 0.90
+                        "x": 2.33,
+                        "y": 4.71
                     },
                     "vehicleTypeNodeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "theta": "None"
+                            "theta": "None",
+                            "actions": [
+                                {
+                                    "actionType": "process",
+                                    "requirementType": "CONDITIONAL",
+                                    "blockingType": "HARD",
+                                    "actionParameters": {}
+                                }
+                            ]
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "theta": "None"
+                            "theta": "None",
+                            "actions": [
+                                {
+                                    "actionType": "process",
+                                    "requirementType": "CONDITIONAL",
+                                    "blockingType": "HARD",
+                                    "actionParameters": {}
+                                }
+                            ]
                         }
                     ]
                 },
@@ -178,17 +268,33 @@
                     "nodeId": "N6",
                     "mapId": "IMRL_TestArea",
                     "nodePosition": {
-                        "x": 1.05,
+                        "x": 7.90,
                         "y": 2.25
                     },
                     "vehicleTypeNodeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "theta": "None"
+                            "theta": "None",
+                            "actions": [
+                                {
+                                    "actionType": "process",
+                                    "requirementType": "CONDITIONAL",
+                                    "blockingType": "HARD",
+                                    "actionParameters": {}
+                                }
+                            ]
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "theta": "None"
+                            "theta": "None",
+                            "actions": [
+                                {
+                                    "actionType": "process",
+                                    "requirementType": "CONDITIONAL",
+                                    "blockingType": "HARD",
+                                    "actionParameters": {}
+                                }
+                            ]
                         }
                     ]
                 },
@@ -196,8 +302,8 @@
                     "nodeId": "N7",
                     "mapId": "IMRL_TestArea",
                     "nodePosition": {
-                        "x": 2.46,
-                        "y": 2.25
+                        "x": 1.00,
+                        "y": 4.71
                     },
                     "vehicleTypeNodeProperties": [
                         {
@@ -214,8 +320,8 @@
                     "nodeId": "N8",
                     "mapId": "IMRL_TestArea",
                     "nodePosition": {
-                        "x": 4.00,
-                        "y": 2.25
+                        "x": 1.00,
+                        "y": 3.45
                     },
                     "vehicleTypeNodeProperties": [
                         {
@@ -224,7 +330,40 @@
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "theta": "None"
+                            "theta": "None",
+                            "actions": [
+                                {
+                                    "actionType": "init_fine_positioning",
+                                    "requirementType": "CONDITIONAL",
+                                    "blockingType": "HARD",
+                                    "actionParameters": [
+                                        {
+                                            "key": "init_fine_pos_name",
+                                            "value": "station002_A"
+                                        },
+                                        {
+                                            "key": "init_fine_pos_x",
+                                            "value": 2.33
+                                        },
+                                        {
+                                            "key": "init_fine_pos_y",
+                                            "value": 1.42
+                                        },
+                                        {
+                                            "key": "fine_pos_control_x",
+                                            "value": 0.08
+                                        },
+                                        {
+                                            "key": "fine_pos_control_y",
+                                            "value": 0.0
+                                        },
+                                        {
+                                            "key": "fine_pos_control_theta",
+                                            "value": 1.57
+                                        }
+                                    ]
+                                }
+                            ]
                         }
                     ]
                 },
@@ -232,13 +371,46 @@
                     "nodeId": "N9",
                     "mapId": "IMRL_TestArea",
                     "nodePosition": {
-                        "x": 4.70,
-                        "y": 0.80
+                        "x": 2.33,
+                        "y": 3.45
                     },
                     "vehicleTypeNodeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "theta": "None"
+                            "theta": "None",
+                            "actions": [
+                                {
+                                    "actionType": "init_fine_positioning",
+                                    "requirementType": "CONDITIONAL",
+                                    "blockingType": "HARD",
+                                    "actionParameters": [
+                                        {
+                                            "key": "init_fine_pos_name",
+                                            "value": "station002_A"
+                                        },
+                                        {
+                                            "key": "init_fine_pos_x",
+                                            "value": 2.33
+                                        },
+                                        {
+                                            "key": "init_fine_pos_y",
+                                            "value": 1.42
+                                        },
+                                        {
+                                            "key": "fine_pos_control_x",
+                                            "value": 0.02
+                                        },
+                                        {
+                                            "key": "fine_pos_control_y",
+                                            "value": 0.0
+                                        },
+                                        {
+                                            "key": "fine_pos_control_theta",
+                                            "value": 0.0
+                                        }
+                                    ]
+                                }
+                            ]
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
@@ -250,17 +422,83 @@
                     "nodeId": "N10",
                     "mapId": "IMRL_TestArea",
                     "nodePosition": {
-                        "x": 6.80,
-                        "y": 0.80
+                        "x": 4.83,
+                        "y": 3.60
                     },
                     "vehicleTypeNodeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "theta": "None"
+                            "theta": "None",
+                            "actions": [
+                                {
+                                    "actionType": "init_fine_positioning",
+                                    "requirementType": "CONDITIONAL",
+                                    "blockingType": "HARD",
+                                    "actionParameters": [
+                                        {
+                                            "key": "init_fine_pos_name",
+                                            "value": "station001_A"
+                                        },
+                                        {
+                                            "key": "init_fine_pos_x",
+                                            "value": 5.61
+                                        },
+                                        {
+                                            "key": "init_fine_pos_y",
+                                            "value": 4.73
+                                        },
+                                        {
+                                            "key": "fine_pos_control_x",
+                                            "value": 0.02
+                                        },
+                                        {
+                                            "key": "fine_pos_control_y",
+                                            "value": 0.0
+                                        },
+                                        {
+                                            "key": "fine_pos_control_theta",
+                                            "value": 0.0
+                                        }
+                                    ]
+                                }
+                            ]
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "theta": "None"
+                            "theta": "None",
+                            "actions": [
+                                {
+                                    "actionType": "init_fine_positioning",
+                                    "requirementType": "CONDITIONAL",
+                                    "blockingType": "HARD",
+                                    "actionParameters": [
+                                        {
+                                            "key": "init_fine_pos_name",
+                                            "value": "station001_A"
+                                        },
+                                        {
+                                            "key": "init_fine_pos_x",
+                                            "value": 5.61
+                                        },
+                                        {
+                                            "key": "init_fine_pos_y",
+                                            "value": 4.73
+                                        },
+                                        {
+                                            "key": "fine_pos_control_x",
+                                            "value": 0.08
+                                        },
+                                        {
+                                            "key": "fine_pos_control_y",
+                                            "value": 0.0
+                                        },
+                                        {
+                                            "key": "fine_pos_control_theta",
+                                            "value": 1.57
+                                        }
+                                    ]
+                                }
+                            ]
                         }
                     ]
                 },
@@ -268,8 +506,8 @@
                     "nodeId": "N11",
                     "mapId": "IMRL_TestArea",
                     "nodePosition": {
-                        "x": 6.80,
-                        "y": 2.25
+                        "x": 4.50,
+                        "y": 2.20
                     },
                     "vehicleTypeNodeProperties": [
                         {
@@ -278,7 +516,40 @@
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "theta": "None"
+                            "theta": "None",
+                            "actions": [
+                                {
+                                    "actionType": "init_fine_positioning",
+                                    "requirementType": "CONDITIONAL",
+                                    "blockingType": "HARD",
+                                    "actionParameters": [
+                                        {
+                                            "key": "init_fine_pos_name",
+                                            "value": "station003_A"
+                                        },
+                                        {
+                                            "key": "init_fine_pos_x",
+                                            "value": 5.82
+                                        },
+                                        {
+                                            "key": "init_fine_pos_y",
+                                            "value": 0.94
+                                        },
+                                        {
+                                            "key": "fine_pos_control_x",
+                                            "value": 0.08
+                                        },
+                                        {
+                                            "key": "fine_pos_control_y",
+                                            "value": 0.0
+                                        },
+                                        {
+                                            "key": "fine_pos_control_theta",
+                                            "value": 1.57
+                                        }
+                                    ]
+                                }
+                            ]
                         }
                     ]
                 },
@@ -286,8 +557,8 @@
                     "nodeId": "N12",
                     "mapId": "IMRL_TestArea",
                     "nodePosition": {
-                        "x": 4.00,
-                        "y": 3.50
+                        "x": 7.50,
+                        "y": 0.94
                     },
                     "vehicleTypeNodeProperties": [
                         {
@@ -304,8 +575,8 @@
                     "nodeId": "N13",
                     "mapId": "IMRL_TestArea",
                     "nodePosition": {
-                        "x": 5.55,
-                        "y": 3.50
+                        "x": 3.58,
+                        "y": 3.45
                     },
                     "vehicleTypeNodeProperties": [
                         {
@@ -322,17 +593,134 @@
                     "nodeId": "N14",
                     "mapId": "IMRL_TestArea",
                     "nodePosition": {
-                        "x": 6.80,
-                        "y": 3.50
+                        "x": 5.82,
+                        "y": 2.20
                     },
                     "vehicleTypeNodeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "theta": "None"
+                            "theta": "None",
+                            "actions": [
+                                {
+                                    "actionType": "init_fine_positioning",
+                                    "requirementType": "CONDITIONAL",
+                                    "blockingType": "HARD",
+                                    "actionParameters": [
+                                        {
+                                            "key": "init_fine_pos_name",
+                                            "value": "station003_A"
+                                        },
+                                        {
+                                            "key": "init_fine_pos_x",
+                                            "value": 5.82
+                                        },
+                                        {
+                                            "key": "init_fine_pos_y",
+                                            "value": 0.94
+                                        },
+                                        {
+                                            "key": "fine_pos_control_x",
+                                            "value": 0.02
+                                        },
+                                        {
+                                            "key": "fine_pos_control_y",
+                                            "value": 0.0
+                                        },
+                                        {
+                                            "key": "fine_pos_control_theta",
+                                            "value": 0.0
+                                        }
+                                    ]
+                                }
+                            ]
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
                             "theta": "None"
+                        }
+                    ]
+                },
+                {
+                    "nodeId": "N15",
+                    "mapId": "IMRL_TestArea",
+                    "nodePosition": {
+                        "x": 7.75,
+                        "y": 3.60
+                    },
+                    "vehicleTypeNodeProperties": [
+                        {
+                            "vehicleTypeId": "Longitudinal_Conveyor",
+                            "theta": "None",
+                            "actions": [
+                                {
+                                    "actionType": "init_fine_positioning",
+                                    "requirementType": "CONDITIONAL",
+                                    "blockingType": "HARD",
+                                    "actionParameters": [
+                                        {
+                                            "key": "init_fine_pos_name",
+                                            "value": "station001_B"
+                                        },
+                                        {
+                                            "key": "init_fine_pos_x",
+                                            "value": 6.97
+                                        },
+                                        {
+                                            "key": "init_fine_pos_y",
+                                            "value": 4.73
+                                        },
+                                        {
+                                            "key": "fine_pos_control_x",
+                                            "value": 0.02
+                                        },
+                                        {
+                                            "key": "fine_pos_control_y",
+                                            "value": 0.0
+                                        },
+                                        {
+                                            "key": "fine_pos_control_theta",
+                                            "value": 0.0
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "vehicleTypeId": "Lateral_Conveyor",
+                            "theta": "None",
+                            "actions": [
+                                {
+                                    "actionType": "init_fine_positioning",
+                                    "requirementType": "CONDITIONAL",
+                                    "blockingType": "HARD",
+                                    "actionParameters": [
+                                        {
+                                            "key": "init_fine_pos_name",
+                                            "value": "station001_B"
+                                        },
+                                        {
+                                            "key": "init_fine_pos_x",
+                                            "value": 6.97
+                                        },
+                                        {
+                                            "key": "init_fine_pos_y",
+                                            "value": 4.73
+                                        },
+                                        {
+                                            "key": "fine_pos_control_x",
+                                            "value": 0.08
+                                        },
+                                        {
+                                            "key": "fine_pos_control_y",
+                                            "value": 0.0
+                                        },
+                                        {
+                                            "key": "fine_pos_control_theta",
+                                            "value": -1.57
+                                        }
+                                    ]
+                                }
+                            ]
                         }
                     ]
                 }
@@ -340,26 +728,7 @@
             "edges": [
                 {
                     "edgeId": "E1",
-                    "startNodeId": "N7",
-                    "endNodeId": "N1",
-                    "vehicleTypeEdgeProperties": [
-                        {
-                            "vehicleTypeId": "Longitudinal_Conveyor",
-                            "vehicleOrientation": 0.0,
-                            "orientationType": "TANGENTIAL",
-                            "rotationAllowed": false
-                        },
-                        {
-                            "vehicleTypeId": "Lateral_Conveyor",
-                            "vehicleOrientation": 0.0,
-                            "orientationType": "TANGENTIAL",
-                            "rotationAllowed": false
-                        }
-                    ]
-                },
-                {
-                    "edgeId": "E2",
-                    "startNodeId": "N7",
+                    "startNodeId": "N9",
                     "endNodeId": "N2",
                     "vehicleTypeEdgeProperties": [
                         {
@@ -371,9 +740,24 @@
                     ]
                 },
                 {
+                    "edgeId": "E2",
+                    "startNodeId": "N9",
+                    "endNodeId": "N5",
+                    "vehicleTypeEdgeProperties": [
+                        {
+                            "vehicleTypeId": "Longitudinal_Conveyor",
+                            "rotationAllowed": false
+                        },
+                        {
+                            "vehicleTypeId": "Lateral_Conveyor",
+                            "rotationAllowed": false
+                        }
+                    ]
+                },
+                {
                     "edgeId": "E3",
-                    "startNodeId": "N7",
-                    "endNodeId": "N8",
+                    "startNodeId": "N9",
+                    "endNodeId": "N13",
                     "vehicleTypeEdgeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
@@ -387,8 +771,8 @@
                 },
                 {
                     "edgeId": "E4",
-                    "startNodeId": "N8",
-                    "endNodeId": "N9",
+                    "startNodeId": "N10",
+                    "endNodeId": "N13",
                     "vehicleTypeEdgeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
@@ -402,66 +786,19 @@
                 },
                 {
                     "edgeId": "E5",
-                    "startNodeId": "N3",
-                    "endNodeId": "N8",
+                    "startNodeId": "N11",
+                    "endNodeId": "N3",
                     "vehicleTypeEdgeProperties": [
                         {
-                            "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
-                        },
-                        {
                             "vehicleTypeId": "Lateral_Conveyor",
+                            "vehicleOrientation": 0.0,
+                            "orientationType": "TANGENTIAL",
                             "rotationAllowed": false
                         }
                     ]
                 },
                 {
                     "edgeId": "E6",
-                    "startNodeId": "N3",
-                    "endNodeId": "N9",
-                    "vehicleTypeEdgeProperties": [
-                        {
-                            "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
-                        },
-                        {
-                            "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
-                        }
-                    ]
-                },
-                {
-                    "edgeId": "E7",
-                    "startNodeId": "N3",
-                    "endNodeId": "N11",
-                    "vehicleTypeEdgeProperties": [
-                        {
-                            "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
-                        },
-                        {
-                            "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
-                        }
-                    ]
-                },
-                {
-                    "edgeId": "E8",
-                    "startNodeId": "N9",
-                    "endNodeId": "N10",
-                    "vehicleTypeEdgeProperties": [
-                        {
-                            "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
-                        },
-                        {
-                            "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
-                        }
-                    ]
-                },
-                {
-                    "edgeId": "E9",
                     "startNodeId": "N10",
                     "endNodeId": "N11",
                     "vehicleTypeEdgeProperties": [
@@ -476,7 +813,193 @@
                     ]
                 },
                 {
+                    "edgeId": "E7",
+                    "startNodeId": "N8",
+                    "endNodeId": "N9",
+                    "vehicleTypeEdgeProperties": [
+                        {
+                            "vehicleTypeId": "Longitudinal_Conveyor",
+                            "rotationAllowed": false
+                        },
+                        {
+                            "vehicleTypeId": "Lateral_Conveyor",
+                            "rotationAllowed": false
+                        }
+                    ]
+                },
+                {
+                    "edgeId": "E8",
+                    "startNodeId": "N8",
+                    "endNodeId": "N2",
+                    "vehicleTypeEdgeProperties": [
+                        {
+                            "vehicleTypeId": "Lateral_Conveyor",
+                            "vehicleOrientation": 0.0,
+                            "orientationType": "TANGENTIAL",
+                            "rotationAllowed": false
+                        }
+                    ]
+                },
+                {
+                    "edgeId": "E9",
+                    "startNodeId": "N10",
+                    "endNodeId": "N15",
+                    "vehicleTypeEdgeProperties": [
+                        {
+                            "vehicleTypeId": "Longitudinal_Conveyor",
+                            "rotationAllowed": false
+                        },
+                        {
+                            "vehicleTypeId": "Lateral_Conveyor",
+                            "rotationAllowed": false
+                        }
+                    ]
+                },
+                {
                     "edgeId": "E10",
+                    "startNodeId": "N10",
+                    "endNodeId": "N14",
+                    "vehicleTypeEdgeProperties": [
+                        {
+                            "vehicleTypeId": "Longitudinal_Conveyor",
+                            "rotationAllowed": false
+                        },
+                        {
+                            "vehicleTypeId": "Lateral_Conveyor",
+                            "rotationAllowed": false
+                        }
+                    ]
+                },
+                {
+                    "edgeId": "E11",
+                    "startNodeId": "N10",
+                    "endNodeId": "N1A",
+                    "vehicleTypeEdgeProperties": [
+                        {
+                            "vehicleTypeId": "Lateral_Conveyor",
+                            "vehicleOrientation": 0.0,
+                            "orientationType": "TANGENTIAL",
+                            "rotationAllowed": false
+                        },
+                        {
+                            "vehicleTypeId": "Longitudinal_Conveyor",
+                            "vehicleOrientation": 0.0,
+                            "orientationType": "TANGENTIAL",
+                            "rotationAllowed": false
+                        }
+                    ]
+                },
+                {
+                    "edgeId": "E12",
+                    "startNodeId": "N7",
+                    "endNodeId": "N8",
+                    "vehicleTypeEdgeProperties": [
+                        {
+                            "vehicleTypeId": "Longitudinal_Conveyor",
+                            "rotationAllowed": false
+                        },
+                        {
+                            "vehicleTypeId": "Lateral_Conveyor",
+                            "rotationAllowed": false
+                        }
+                    ]
+                },
+                {
+                    "edgeId": "E13",
+                    "startNodeId": "N7",
+                    "endNodeId": "N5",
+                    "vehicleTypeEdgeProperties": [
+                        {
+                            "vehicleTypeId": "Longitudinal_Conveyor",
+                            "rotationAllowed": false
+                        },
+                        {
+                            "vehicleTypeId": "Lateral_Conveyor",
+                            "rotationAllowed": false
+                        }
+                    ]
+                },
+                {
+                    "edgeId": "E14",
+                    "startNodeId": "N12",
+                    "endNodeId": "N6",
+                    "vehicleTypeEdgeProperties": [
+                        {
+                            "vehicleTypeId": "Longitudinal_Conveyor",
+                            "rotationAllowed": false
+                        },
+                        {
+                            "vehicleTypeId": "Lateral_Conveyor",
+                            "rotationAllowed": false
+                        }
+                    ]
+                },
+                {
+                    "edgeId": "E15",
+                    "startNodeId": "N14",
+                    "endNodeId": "N6",
+                    "vehicleTypeEdgeProperties": [
+                        {
+                            "vehicleTypeId": "Longitudinal_Conveyor",
+                            "rotationAllowed": false
+                        },
+                        {
+                            "vehicleTypeId": "Lateral_Conveyor",
+                            "rotationAllowed": false
+                        }
+                    ]
+                },
+                {
+                    "edgeId": "E16",
+                    "startNodeId": "N15",
+                    "endNodeId": "N6",
+                    "vehicleTypeEdgeProperties": [
+                        {
+                            "vehicleTypeId": "Longitudinal_Conveyor",
+                            "rotationAllowed": false
+                        },
+                        {
+                            "vehicleTypeId": "Lateral_Conveyor",
+                            "rotationAllowed": false
+                        }
+                    ]
+                },
+                {
+                    "edgeId": "E17",
+                    "startNodeId": "N15",
+                    "endNodeId": "N1B",
+                    "vehicleTypeEdgeProperties": [
+                        {
+                            "vehicleTypeId": "Longitudinal_Conveyor",
+                            "vehicleOrientation": 0.0,
+                            "orientationType": "TANGENTIAL",
+                            "rotationAllowed": false
+                        },
+                        {
+                            "vehicleTypeId": "Lateral_Conveyor",
+                            "vehicleOrientation": 0.0,
+                            "orientationType": "TANGENTIAL",
+                            "rotationAllowed": false
+                        }
+                    ]
+                },
+                {
+                    "edgeId": "E18",
+                    "startNodeId": "N8",
+                    "endNodeId": "N4",
+                    "vehicleTypeEdgeProperties": [
+                        {
+                            "vehicleTypeId": "Longitudinal_Conveyor",
+                            "rotationAllowed": false
+                        },
+                        {
+                            "vehicleTypeId": "Lateral_Conveyor",
+                            "rotationAllowed": false
+                        }
+                    ]
+                },
+                {
+                    "edgeId": "E19",
                     "startNodeId": "N11",
                     "endNodeId": "N14",
                     "vehicleTypeEdgeProperties": [
@@ -491,145 +1014,9 @@
                     ]
                 },
                 {
-                    "edgeId": "E12",
-                    "startNodeId": "N13",
-                    "endNodeId": "N12",
-                    "vehicleTypeEdgeProperties": [
-                        {
-                            "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
-                        },
-                        {
-                            "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
-                        }
-                    ]
-                },
-                {
-                    "edgeId": "E13",
-                    "startNodeId": "N12",
-                    "endNodeId": "N8",
-                    "vehicleTypeEdgeProperties": [
-                        {
-                            "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
-                        },
-                        {
-                            "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
-                        }
-                    ]
-                },
-                {
-                    "edgeId": "E14",
-                    "startNodeId": "N6",
-                    "endNodeId": "N7",
-                    "vehicleTypeEdgeProperties": [
-                        {
-                            "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
-                        },
-                        {
-                            "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
-                        }
-                    ]
-                },
-                {
-                    "edgeId": "E15",
-                    "startNodeId": "N6",
-                    "endNodeId": "N2",
-                    "trajectory": {
-                        "degree": 3,
-                        "knotVector": [0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0],
-                        "controlPoints": [
-                            {"x": 1.04, "y": 2.25, "weight": 1.0},
-                            {"x": 1.04, "y": 2.9, "weight": 1.0},
-                            {"x": 1.5, "y": 3.5, "weight": 1.0},
-                            {"x": 2.0, "y": 3.7, "weight": 1.0},
-                            {"x": 2.414, "y": 3.7, "weight": 1.0}
-                        ]
-                    },
-                    "vehicleTypeEdgeProperties": [
-                        {
-                            "vehicleTypeId": "Lateral_Conveyor",
-                            "vehicleOrientation": 0.0,
-                            "orientationType": "TANGENTIAL",
-                            "rotationAllowed": false
-                        }
-                    ]
-                },
-                {
-                    "edgeId": "E16",
-                    "startNodeId": "N13",
-                    "endNodeId": "N14",
-                    "vehicleTypeEdgeProperties": [
-                        {
-                            "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
-                        },
-                        {
-                            "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
-                        }
-                    ]
-                },
-                {
-                    "edgeId": "E17",
-                    "startNodeId": "N13",
-                    "endNodeId": "N3",
-                    "vehicleTypeEdgeProperties": [
-                        {
-                            "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
-                        },
-                        {
-                            "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
-                        }
-                    ]
-                },
-                {
-                    "edgeId": "E18",
-                    "startNodeId": "N13",
-                    "endNodeId": "N4",
-                    "vehicleTypeEdgeProperties": [
-                        {
-                            "vehicleTypeId": "Lateral_Conveyor",
-                            "vehicleOrientation": 0.0,
-                            "orientationType": "TANGENTIAL",
-                            "rotationAllowed": false
-                        }
-                    ]
-                },
-                {
-                    "edgeId": "E19",
-                    "startNodeId": "N12",
-                    "endNodeId": "N4",
-                    "trajectory": {
-                        "degree": 3,
-                        "knotVector": [0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0],
-                        "controlPoints": [
-                            {"x": 4.00, "y": 3.50, "weight": 1.0},
-                            {"x": 4.20, "y": 4.10, "weight": 1.0},
-                            {"x": 4.70, "y": 4.60, "weight": 1.0},
-                            {"x": 5.20, "y": 4.75, "weight": 1.0},
-                            {"x": 5.55, "y": 4.75, "weight": 1.0}
-                        ]
-                    },
-                    "vehicleTypeEdgeProperties": [
-                        {
-                            "vehicleTypeId": "Longitudinal_Conveyor",
-                            "vehicleOrientation": 0.0,
-                            "orientationType": "TANGENTIAL",
-                            "rotationAllowed": false
-                        }
-                    ]
-                },
-                {
                     "edgeId": "E20",
-                    "startNodeId": "N5",
-                    "endNodeId": "N6",
+                    "startNodeId": "N13",
+                    "endNodeId": "N11",
                     "vehicleTypeEdgeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
@@ -643,8 +1030,36 @@
                 },
                 {
                     "edgeId": "E21",
-                    "startNodeId": "N5",
-                    "endNodeId": "N1",
+                    "startNodeId": "N14",
+                    "endNodeId": "N3",
+                    "vehicleTypeEdgeProperties": [
+                        {
+                            "vehicleTypeId": "Longitudinal_Conveyor",
+                            "vehicleOrientation": 0.0,
+                            "orientationType": "TANGENTIAL",
+                            "rotationAllowed": false
+                        }
+                    ]
+                },
+                {
+                    "edgeId": "E22",
+                    "startNodeId": "N14",
+                    "endNodeId": "N12",
+                    "vehicleTypeEdgeProperties": [
+                        {
+                            "vehicleTypeId": "Longitudinal_Conveyor",
+                            "rotationAllowed": false
+                        },
+                        {
+                            "vehicleTypeId": "Lateral_Conveyor",
+                            "rotationAllowed": false
+                        }
+                    ]
+                },
+                {
+                    "edgeId": "E23",
+                    "startNodeId": "N14",
+                    "endNodeId": "N15",
                     "vehicleTypeEdgeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
@@ -660,61 +1075,95 @@
             "stations": [
                 {
                     "stationId": "S1",
-                    "interactionNodeIds": ["N1"],
-                    "stationName": "Process_Station_1",
-                    "stationDescription": "PROCESS",
+                    "interactionNodeIds": [
+                        "N1A",
+                        "N1B"
+                    ],
+                    "stationName": "Transfer_Station_1",
+                    "stationDescription": "TRANSFER",
                     "stationPosition": {
-                        "x": 2.46,
-                        "y": 0.79,
+                        "x": 6.29,
+                        "y": 4.73,
                         "theta": 0
                     }
                 },
                 {
                     "stationId": "S2",
-                    "interactionNodeIds": ["N2"],
-                    "stationName": "Transfer_Station_1",
+                    "interactionNodeIds": [
+                        "N2"
+                    ],
+                    "stationName": "Transfer_Station_2",
                     "stationDescription": "TRANSFER",
                     "stationPosition": {
-                        "x": 2.46,
-                        "y": 4.65,
+                        "x": 2.33,
+                        "y": 0.74,
                         "theta": -1.57
                     }
                 },
                 {
                     "stationId": "S3",
-                    "interactionNodeIds": ["N3"],
-                    "stationName": "Process_Station_2",
-                    "stationDescription": "PROCESS"
+                    "interactionNodeIds": [
+                        "N3"
+                    ],
+                    "stationName": "Transfer_Station_3",
+                    "stationDescription": "TRANSFER",
+                    "stationPosition": {
+                        "x": 5.82,
+                        "y": 0.30,
+                        "theta": -1.57
+                    }
                 },
                 {
                     "stationId": "S4",
-                    "interactionNodeIds": ["N4"],
-                    "stationName": "Transfer_Station_2",
-                    "stationDescription": "TRANSFER",
+                    "interactionNodeIds": [
+                        "N4"
+                    ],
+                    "stationName": "Process_Station_1",
+                    "stationDescription": "PROCESS",
                     "stationPosition": {
-                        "x": 6.50,
-                        "y": 4.75,
+                        "x": 0.75,
+                        "y": 0.75,
+                        "theta": 0
+                    }
+                },
+                {
+                    "stationId": "S5",
+                    "interactionNodeIds": [
+                        "N5"
+                    ],
+                    "stationName": "Process_Station_2",
+                    "stationDescription": "PROCESS",
+                    "stationPosition": {
+                        "x": 2.33,
+                        "y": 4.71,
+                        "theta": 0
+                    }
+                },
+                {
+                    "stationId": "S6",
+                    "interactionNodeIds": [
+                        "N6"
+                    ],
+                    "stationName": "Process_Station_3",
+                    "stationDescription": "PROCESS",
+                    "stationPosition": {
+                        "x": 7.90,
+                        "y": 2.25,
                         "theta": 0
                     }
                 },
                 {
                     "stationId": "C1",
-                    "interactionNodeIds": ["N9"],
+                    "interactionNodeIds": [
+                        "N7"
+                    ],
                     "stationDescription": "CHARGING"
                 },
                 {
                     "stationId": "C2",
-                    "interactionNodeIds": ["N10"],
-                    "stationDescription": "CHARGING"
-                },
-                {
-                    "stationId": "C3",
-                    "interactionNodeIds": ["N14"],
-                    "stationDescription": "CHARGING"
-                },
-                {
-                    "stationId": "C4",
-                    "interactionNodeIds": ["N5"],
+                    "interactionNodeIds": [
+                        "N12"
+                    ],
                     "stationDescription": "CHARGING"
                 }
             ]
