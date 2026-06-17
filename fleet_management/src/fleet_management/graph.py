@@ -67,7 +67,8 @@ class Graph:
                 "endNodeId": end_id,
                 "startNodePos": self.nodes[start_id]["pos"],
                 "endNodePos": self.nodes[end_id]["pos"],
-                "allowedVehicleTypes": allowed_vehicle_types
+                "allowedVehicleTypes": allowed_vehicle_types,
+                "trajectory": e.get("trajectory")
             }
 
         return edges

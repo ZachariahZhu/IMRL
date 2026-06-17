@@ -3,6 +3,7 @@ import uuid
 import time
 import threading
 import heapq
+from fleet_management.traffic_controller import TrafficController
 
 class FleetManagement:
     """
@@ -26,6 +27,7 @@ class FleetManagement:
         self.task_management = task_management
         self.path_planning = PathPlanning(config_data=self.config_data,
                                          graph=self.graph)
+        self.traffic_controller = TrafficController(self)
         threading.Thread(target=self.fleet_manager, daemon=True).start()
         
 
@@ -124,17 +126,7 @@ class FleetManagement:
             while not agent.agvPosition:
                 time.sleep(0.5)
 
-            min_dist = float('inf')
-            nearest_node = None
-            agv_pos_tuple = (agent.agvPosition['x'], agent.agvPosition['y'])
-
-            for node_id, node_data in self.graph.nodes.items():
-                dist = math.dist(agv_pos_tuple, node_data['pos'])
-                if dist < min_dist:
-                    min_dist = dist
-                    nearest_node = node_id  
-                
-            agent.current_node = nearest_node
+            nearest_node = agent.current_node
 
             if nearest_node not in self.graph.dwelling_nodes:
                 min_dwell_dist = float('inf')
@@ -154,23 +146,33 @@ class FleetManagement:
                 edges = self.build_order_edges(path_nodes, path_edges)
 
                 agent.agent_state = 'EXECUTING'
+                
+                for n in nodes:
+                    n['released'] = False
+                for e in edges:
+                    e['released'] = False
+                if nodes:
+                    nodes[0]['released'] = True
+
+                agent.full_nodes = nodes
+                agent.full_edges = edges
+                agent.released_index = 1
+                agent.tracked_current_idx = 0
+                agent.order_update_id = 0
+                agent.current_order_id = str(self.agents.order_header_id)
+
                 agent.order_interface.generate_order_message(
                     agent=agent,
-                    orderId=str(self.agents.order_header_id),
-                    order_updateId=0,
-                    nodes=nodes,
-                    edges=edges
+                    orderId=agent.current_order_id,
+                    order_updateId=agent.order_update_id,
+                    nodes=agent.full_nodes,
+                    edges=agent.full_edges
                 )
                 self.agents.order_header_id += 1
 
                 while agent.agent_state != 'IDLE':
                     time.sleep(0.5)
 
-        while any(not t['task_assigned'] for t in self.task_management.task_list):
-
-
-            
-        import time
         while any(not t['task_assigned'] for t in self.task_management.task_list):
             
             # Find all idle agents
@@ -219,13 +221,29 @@ class FleetManagement:
             agent.agent_state = 'EXECUTING'
             agent.current_task = task
             
+            # Start of Dynamic Zone Control integration
+            for n in nodes:
+                n['released'] = False
+            for e in edges:
+                e['released'] = False
+            if nodes:
+                nodes[0]['released'] = True
+
+            agent.full_nodes = nodes
+            agent.full_edges = edges
+            agent.released_index = 1
+            agent.tracked_current_idx = 0
+            agent.order_update_id = 0
+            agent.current_order_id = str(self.agents.order_header_id)
+            
             agent.order_interface.generate_order_message(
                 agent=agent,
-                orderId=str(self.agents.order_header_id),
-                order_updateId=0,
-                nodes=nodes,
-                edges=edges
+                orderId=agent.current_order_id,
+                order_updateId=agent.order_update_id,
+                nodes=agent.full_nodes,
+                edges=agent.full_edges
             )
+            self.agents.order_header_id += 1
             time.sleep(0.5)
 
     def build_path_for_task(self, task: dict, start_node: str,
@@ -417,22 +435,18 @@ class FleetManagement:
     def build_order_edges(self, path_nodes: list, path_edges: list) -> list:
         """
         Task 7: Build the edges input list for generate_order_message().
-
-        Returns:
-            [{
-              "edgeId": path_edges[i],
-              "startNodeId": path_nodes[i],
-              "endNodeId": path_nodes[i+1],
-              "actions": []}]
         """
         edges_result= []
         for i,e_id in enumerate(path_edges):
-            edges_result.append({
+            edge_dict = {
                 "edgeId": e_id,
                 "startNodeId": path_nodes[i],
                 "endNodeId": path_nodes[i+1],
                 "actions": []
-            })
+            }
+            if self.graph.edges[e_id].get("trajectory"):
+                edge_dict["trajectory"] = self.graph.edges[e_id]["trajectory"]
+            edges_result.append(edge_dict)
         return edges_result
     
 

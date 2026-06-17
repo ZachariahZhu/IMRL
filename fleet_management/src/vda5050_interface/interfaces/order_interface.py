@@ -48,6 +48,8 @@ class OrderInterface:
                 "endNodeId": edge["endNodeId"],
                 "actions": edge.get("actions", [])
             }
+            if "trajectory" in edge:
+                e["trajectory"] = edge["trajectory"]
             edges_msg.append(e)
         #3.组装VDA5050字典
         order_msg = {
