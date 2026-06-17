@@ -1,5 +1,0 @@
-New run
-[('N6', [{'actionType': 'init_fine_positioning', 'actionId': '805488d2-0168-4371-8a92-d84b9850d619', 'blockingType': 'HARD'}], 1), ('N2', [{'actionType': 'pick', 'actionId': '2ce43a64-5472-48d0-bd2d-bf9259ca1d2e', 'blockingType': 'HARD'}], 2), ('N12', [{'actionType': 'init_fine_positioning', 'actionId': '2b32edd7-d1c0-429d-b2e9-b757940b52ed', 'blockingType': 'HARD'}], 5), ('N4', [{'actionType': 'drop', 'actionId': 'cedf1d8a-fff1-4fe4-81b9-b19d04bc21a6', 'blockingType': 'HARD'}], 6)]
-[{'edgeId': 'E20', 'startNodeId': 'N5', 'endNodeId': 'N6', 'actions': []}, {'edgeId': 'E15', 'startNodeId': 'N6', 'endNodeId': 'N2', 'actions': []}, {'edgeId': 'E2', 'startNodeId': 'N2', 'endNodeId': 'N7', 'actions': []}, {'edgeId': 'E3', 'startNodeId': 'N7', 'endNodeId': 'N8', 'actions': []}, {'edgeId': 'E13', 'startNodeId': 'N8', 'endNodeId': 'N12', 'actions': []}, {'edgeId': 'E19', 'startNodeId': 'N12', 'endNodeId': 'N4', 'actions': []}, {'edgeId': 'E18', 'startNodeId': 'N4', 'endNodeId': 'N13', 'actions': []}, {'edgeId': 'E16', 'startNodeId': 'N13', 'endNodeId': 'N14', 'actions': []}]
-['E20', 'E15', 'E2', 'E3', 'E13', 'E19', 'E18', 'E16']
-[4, 5, 4, 5, 3.8, 3, 5, 3]

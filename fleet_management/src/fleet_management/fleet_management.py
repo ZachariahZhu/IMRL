@@ -4,7 +4,7 @@ import time
 import threading
 import heapq
 
-
+FIXED_COLUMS=16
 edgeCosts = {
     "E1": 3,
     "E2":4,
@@ -31,7 +31,8 @@ edgeCosts = {
 actionCosts = {
     "init_fine_positioning": 5,
     "pick": 4,
-    "drop": 4
+    "drop": 4,
+    "process": 4
 }
 nodeCosts = {
     "N1": 0.5,
@@ -202,6 +203,7 @@ class FleetManagement:
             nodes = self.build_order_nodes(path_nodes, task)
             edges = self.build_order_edges(path_nodes, path_edges)
             edgeList = []
+            nodeList = []
             edgeCostsList = []
             nodeName = []
             nodesAndActions = []
@@ -220,14 +222,73 @@ class FleetManagement:
 
             for e in edgeList:
                 edgeCostsList.append(edgeCosts.get(e))
-                   
+
+            #for n in nodeName:
+            #    pass
+            timeWindow = []
+            timer = 0
+            counter=0
+            for n in nodeName:
+                if counter == 0:
+                    timer = 0.5
+                else:
+                    timer = timer+ edgeCostsList[counter-1]
+                tempL=[]
+                for nAA in nodesAndActions:
+                    #tempL.append(nAA[2])
+                    if counter == nAA[2]:
+                        timer = timer+ actionCosts[nAA[1][0].get("actionType")]
+                        pass    
+
+
+                counter=counter +1
+                timeWindow.append((n,timer))   
+
+
+            matrix = []
+            # Build rows where, at each time step, the current and next two
+            # upcoming nodes (3-node sliding window) are marked as 1.
+            # Ensure timeWindow is sorted by activation time.
+            timeWindow_sorted = sorted(timeWindow, key=lambda x: x[1])
+            step = 0.0
+            if timeWindow_sorted:
+                last_time = timeWindow_sorted[-1][1]
+            else:
+                last_time = 0.0
+
+            while step < last_time:
+                newRow = [0] * FIXED_COLUMS
+                # upcoming nodes whose activation time is at or after current step
+                upcoming = [tW for tW in timeWindow_sorted if tW[1] >= step]
+                for tW in upcoming[:3]:
+                    try:
+                        idx = int(tW[0][1:])
+                    except Exception:
+                        continue
+                    if 0 <= idx < FIXED_COLUMS:
+                        newRow[idx] = 1
+                matrix.append(newRow)
+                step += 0.5
+
+
             with open("output.txt", "a") as f: 
                 #print("test")
                 #print(nodeName,file=f)
                 #print(actionList,file=f)
                 print(nodesAndActions,file=f)
+                for i in range(len(nodesAndActions)):
+                    print(nodesAndActions[i][0],nodesAndActions[i][1][0].get("actionType"),actionCosts[nodesAndActions[i][1][0].get("actionType")],file=f)
                 print(edgeList,file=f)
                 print(edgeCostsList,file=f)
+                print(nodeName,file=f)
+                print(timeWindow,file=f)
+                print(matrix,file=f)
+                for row in matrix:
+                    for item in row:
+                        print(item,end=" ",file=f)
+                    print(file=f)
+
+            
             
             task['task_assigned'] = True
             agent.agent_state = 'EXECUTING'
