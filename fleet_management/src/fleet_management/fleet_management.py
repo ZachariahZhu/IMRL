@@ -5,6 +5,9 @@ import threading
 import heapq
 from fleet_management.traffic_controller import TrafficController
 
+            
+import time
+
 class FleetManagement:
     """
     Manages the fleet: computes paths and sends VDA 5050 orders to agents.
