@@ -90,8 +90,183 @@ class FleetManagement:
         threading.Thread(target=self.fleet_manager, daemon=True).start()
         
 
+    def getOccupancyMatrix(self,pNodes,pEdges,stepSize):
+        edgeList = []
+        nodeList = []
+        edgeCostsList = []
+        nodeName = []
+        nodesAndActions = []
+        with open("output.txt", "w") as f: 
+           print("New run", file=f)
+        for i in range(len(pNodes)):
+            nodeName.append(pNodes[i].get("nodeId"))
+            #actionList.append(nodes[i].get("actions"))
+            if len(pNodes[i].get("actions"))>0:
+                   nodesAndActions.append((pNodes[i].get("nodeId"),pNodes[i].get("actions"),i))
+            else:
+                pass
+            
+        for i in range(len(pEdges)):
+            edgeList.append(pEdges[i].get("edgeId"))
+        for e in edgeList:
+            edgeCostsList.append(edgeCosts.get(e))
+
+            #for n in nodeName:
+            #    pass
+        timeWindow = []
+        timer = 0
+        counter=0
+        for n in nodeName:
+            if counter == 0:
+               timer = 0.5
+            else:
+                timer = timer+ edgeCostsList[counter-1]
+            tempL=[]
+            for nAA in nodesAndActions:
+                #tempL.append(nAA[2])
+               if counter == nAA[2]:    
+                    timer = timer+ actionCosts[nAA[1][0].get("actionType")]
+                    pass    
+
+
+            counter=counter +1
+            timeWindow.append((n,timer))   
+
+
+        matrix = []
+            # Build rows where, at each time step, the current and next two
+            # upcoming nodes (3-node sliding window) are marked as 1.
+            # Ensure timeWindow is sorted by activation time.
+        timeWindow_sorted = sorted(timeWindow, key=lambda x: x[1])
+        step = 0.0
+        if timeWindow_sorted:
+            last_time = timeWindow_sorted[-1][1]
+        else:
+            last_time = 0.0
+
+        while step < last_time:
+            newRow = [0] * FIXED_COLUMS
+            # upcoming nodes whose activation time is at or after current step
+            upcoming = [tW for tW in timeWindow_sorted if tW[1] >= step]
+            for tW in upcoming[:3]:
+                try:
+                    idx = int(tW[0][1:])
+                except Exception:
+                    continue
+                if 0 <= idx < FIXED_COLUMS:
+                    newRow[idx] = 1
+            matrix.append(newRow)
+            step += stepSize
+
+        return matrix
+
+
+    def fuzzyfy(self,inputMatrix,grace,stepSize,initialWidth,witdhIncreasePerSecond):
+        """Fuzzyfy matrix edges with a trapezoidal transition around 0/1 boundaries.
+
+        Args:
+            inputMatrix: list of rows with binary values (0 or 1).
+            grace: seconds before any fuzzyfication starts.
+            stepSize: seconds per row increment.
+            initialWidth: starting width of the fuzzy transition zone in seconds.
+            witdhIncreasePerSecond: linear growth rate of the fuzzy zone width.
+
+        Returns:
+            A matrix of floats in [0, 1] with fuzzy transitions applied.
+        """
+        if stepSize <= 0:
+            raise ValueError("stepSize must be positive")
+
+        rows = len(inputMatrix)
+        if rows == 0:
+            return []
+
+        cols = len(inputMatrix[0])
+        # Convert current matrix to floats and preserve original values
+        fuzzy_matrix = [[float(value) for value in row] for row in inputMatrix]
+
+        def time_for_index(idx):
+            return idx * stepSize
+
+        def width_for_time(edge_time):
+            if edge_time <= grace:
+                return initialWidth
+            return initialWidth + (edge_time - grace) * witdhIncreasePerSecond
+
+        for col in range(cols):
+            col_values = [inputMatrix[row][col] for row in range(rows)]
+            row_idx = 0
+            while row_idx < rows:
+                if col_values[row_idx] != 1:
+                    row_idx += 1
+                    continue
+
+                start_idx = row_idx
+                while row_idx < rows and col_values[row_idx] == 1:
+                    row_idx += 1
+                end_idx = row_idx
+
+                start_time = time_for_index(start_idx)
+                end_time = time_for_index(end_idx)
+
+                left_width = width_for_time(start_time)
+                right_width = width_for_time(end_time)
+
+                left_start = start_time - left_width
+                right_end = end_time + right_width
+
+                for r in range(rows):
+                    t = time_for_index(r)
+                    if t < grace:
+                        continue
+
+                    if left_start <= t < start_time and left_width > 0:
+                        ratio = (t - left_start) / left_width
+                        fuzzy_value = max(0.0, min(1.0, ratio))
+                    elif start_time <= t < end_time:
+                        fuzzy_value = 1.0
+                    elif end_time <= t <= right_end and right_width > 0:
+                        ratio = 1.0 - ((t - end_time) / right_width)
+                        fuzzy_value = max(0.0, min(1.0, ratio))
+                    else:
+                        continue
+
+                    fuzzy_matrix[r][col] = max(fuzzy_matrix[r][col], round(fuzzy_value,2))
+
+        return fuzzy_matrix
+    
+    def multiplyMatrixes(self,matrix1,matrix2):
+        """Multiply two matrices over their overlapping region.
+
+        If one matrix is shorter in rows or columns, the result includes only
+        the overlapping portion.
+        """
+        if matrix1 is None or matrix2 is None:
+            return []
+
+        rows1 = len(matrix1)
+        rows2 = len(matrix2)
+        if rows1 == 0 or rows2 == 0:
+            return []
+
+        cols1 = len(matrix1[0]) if rows1 else 0
+        cols2 = len(matrix2[0]) if rows2 else 0
+        if cols1 == 0 or cols2 == 0:
+            return []
+
+        rows = min(rows1, rows2)
+        cols = min(cols1, cols2)
+
+        result = []
+        for r in range(rows):
+            row1 = matrix1[r]
+            row2 = matrix2[r]
+            result.append([row1[c] * row2[c] for c in range(cols)])
+
+        return result
 
     def fleet_manager(self) -> None:
+        last_matrix=None
         """
         Send a movement order to the first agent.
 
@@ -202,7 +377,8 @@ class FleetManagement:
             path_nodes, path_edges = self.build_path_for_task(task, agent.current_node)
             nodes = self.build_order_nodes(path_nodes, task)
             edges = self.build_order_edges(path_nodes, path_edges)
-            edgeList = []
+
+            """ edgeList = []
             nodeList = []
             edgeCostsList = []
             nodeName = []
@@ -286,7 +462,29 @@ class FleetManagement:
                 for row in matrix:
                     for item in row:
                         print(item,end=" ",file=f)
-                    print(file=f)
+                    print(file=f) """
+            with open("output2.txt","w") as fff:
+                print (self.getOccupancyMatrix(nodes,edges,0.2),file=fff)
+                for row in self.getOccupancyMatrix(nodes,edges,0.2):
+                    for item in row:
+                        print(item,end=" ",file=fff)
+                    print(file=fff)
+                for row in self.fuzzyfy(self.getOccupancyMatrix(nodes,edges,0.2),10,0.2,1,0.05):
+                    for item in row:
+                        print(item,end=" ",file=fff)
+                    print(file=fff)
+            combine=None
+            if last_matrix != None:
+                combine=self.multiplyMatrixes(self.fuzzyfy(self.getOccupancyMatrix(nodes,edges,0.2),10,0.2,1,0.05),last_matrix)
+            
+            last_matrix=self.fuzzyfy(self.getOccupancyMatrix(nodes,edges,0.2),10,0.2,1,0.05)
+            with open("output3.txt","w") as ffff:
+                if combine != None:
+                    print(combine,file=ffff)
+                    for row in combine:
+                            for item in row:
+                                print(item,end=" ",file=ffff)
+                            print(file=ffff)
 
             
             
