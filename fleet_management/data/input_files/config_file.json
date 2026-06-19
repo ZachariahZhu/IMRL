@@ -7,7 +7,7 @@
     "_comment3": "Frame rate of the visualisation.",
     "fleet_management_mode": "SIMULATED_AGENTS",
     "_comment4": "Mode of the fleet management. Options: SIMULATED_AGENTS or REAL_AGENTS. When set to REAL_AGENTS, real agents are controlled. An initial state message is required and the simulated agents do not send state and visualisation messages.",
-    "simulation_run_time": 6000000,
+    "simulation_run_time": 80,
     "_comment5": "Simulation run time in seconds. Value can be set high for 'infinite' simulation.",
     "agent_rotation_diameter": 1,
     "_comment6": "Diameter of the circle the agent requires to rotate around its kinematic center point in meters.",

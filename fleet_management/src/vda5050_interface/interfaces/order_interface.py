@@ -18,13 +18,13 @@ class OrderInterface:
                                             client_id=f'order_publisher_agent_{self.agentId}', logging=self.logging)
 
     def generate_order_message(self, agent: object, orderId: str, order_updateId: int,
-                               nodes: list, edges: list) -> None:
+                               nodes: list, edges: list, start_sequence_idx: int = 0) -> None:
         #1.组装nodes
         nodes_msg = []
         for i, node in enumerate(nodes):
             n = {
                 "nodeId": node["nodeId"],
-                "sequenceId": i * 2,    # 节点必定是偶数 0, 2, 4...
+                "sequenceId": (start_sequence_idx + i) * 2,    # 节点必定是偶数 0, 2, 4...
                 "released": node.get("released", True),
                 "nodePosition": {
                     "x": node["x"],
@@ -42,7 +42,7 @@ class OrderInterface:
         for i, edge in enumerate(edges):
             e = {
                 "edgeId": edge["edgeId"],
-                "sequenceId": i * 2 + 1,    # 边必定是奇数 1, 3, 5...
+                "sequenceId": (start_sequence_idx + i) * 2 + 1,    # 边必定是奇数 1, 3, 5...
                 "released": edge.get("released", True),
                 "startNodeId": edge["startNodeId"],
                 "endNodeId": edge["endNodeId"],
@@ -53,7 +53,7 @@ class OrderInterface:
             edges_msg.append(e)
         #3.组装VDA5050字典
         order_msg = {
-            "headerId": agent.agents.order_header_id,
+            "headerId": agent.order_header_id,
             "timestamp": datetime.datetime.now(datetime.UTC).isoformat().replace("+00:00", "Z"),
             "version": "2.0.0",
             "manufacturer": "IMRL",
@@ -66,5 +66,5 @@ class OrderInterface:
         #4.发布消息
         self.mqtt_publisher.publish(order_msg, qos=0)
         #5.更新headerId
-        agent.agents.order_header_id += 1
+        agent.order_header_id += 1
         

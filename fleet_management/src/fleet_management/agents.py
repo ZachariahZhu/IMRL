@@ -79,6 +79,8 @@ class Agent:
         self.order_interface = OrderInterface(
             config_data=self.agents.config_data, logging=logging,
             order_topic=self.order_topic, agentId=self.agentId)
+        self.order_header_id = 1
+        self.order_update_id = 1
 
         # ── State (updated by state_callback) ────────────────────────────────
         self.agent_state = agent_state   # 'IDLE' | 'EXECUTING'
@@ -157,14 +159,17 @@ class Agent:
 
         if 'lastNodeId' in state_msg and state_msg['lastNodeId']:
             self.current_node = state_msg['lastNodeId']
+            
+        self.actionStates = state_msg.get('actionStates', [])
+        self.driving = state_msg.get('driving', False)
 
         # Task 4 Collision Avoidance: Track the remaining path nodes
         self.current_path_nodes = [n['nodeId'] for n in state_msg.get('nodeStates', [])]
         if self.current_node:
             self.current_path_nodes.append(self.current_node)
 
-        nodes_empty =len(state_msg.get('nodeStates', [])) == 0
-        edges_empty =len(state_msg.get('edgeStates', [])) == 0#判断是否完成
+        nodes_empty = len(state_msg.get('nodeStates', [])) <= 1
+        edges_empty = len(state_msg.get('edgeStates', [])) == 0 #判断是否完成
         actions_finished = True
         for action in state_msg.get('actionStates', []):
             if action.get('actionStatus') != 'FINISHED':

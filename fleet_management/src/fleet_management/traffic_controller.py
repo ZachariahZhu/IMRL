@@ -14,32 +14,48 @@ class TrafficController:
 
     def loop(self):
         def get_priority(agent):
-            # Dynamic Priority: (Remaining Nodes, Agent ID)
-            # Lower tuple = HIGHER priority. 
-            # "更容易完成任务的机器人有优先权" -> fewer remaining nodes gets priority!
-            if not hasattr(agent, 'full_nodes'):
+            # Dynamic Priority: Calculate estimated time to complete task.
+            # Lower score = HIGHER priority (fastest to finish).
+            if not hasattr(agent, 'full_nodes') or not hasattr(agent, 'released_index'):
                 return (float('inf'), agent.agentId)
-            remaining = len(agent.full_nodes) - getattr(agent, 'released_index', 0)
-            return (remaining, agent.agentId)
+            
+            remaining_nodes = len(agent.full_nodes) - agent.released_index
+            remaining_actions = 0
+            for i in range(agent.released_index, len(agent.full_nodes)):
+                remaining_actions += len(agent.full_nodes[i].get('actions', []))
+            
+            # Each action takes roughly as much time as driving 3 nodes
+            score = remaining_nodes + (remaining_actions * 3)
+            return (score, agent.agentId)
 
         while self.running:
             # 1. Build registries
-            agent_physical = {} # Nodes currently occupied or explicitly released
-            agent_intent = {}   # All future nodes in the path
+            agent_physical = {a: set() for a in self.fleet_manager.agents.agents}
+            agent_intent = {a: set() for a in self.fleet_manager.agents.agents}
             
             for a in self.fleet_manager.agents.agents:
-                agent_physical[a] = set()
-                agent_intent[a] = set()
-                
                 if getattr(a, 'current_node', None):
                     agent_physical[a].add(a.current_node)
                 
                 if a.agent_state == "EXECUTING" and hasattr(a, 'full_nodes'):
                     current_idx = getattr(a, 'tracked_current_idx', 0)
-                    for i in range(current_idx, len(a.full_nodes)):
-                        if a.full_nodes[i]['nodeId'] == getattr(a, 'current_node', None):
-                            current_idx = i
-                            break
+                    if current_idx >= len(a.full_nodes):
+                        current_idx = len(a.full_nodes) - 1
+                    
+                    found = False
+                    current_node_id = getattr(a, 'current_node', None)
+                    if current_node_id:
+                        for i in range(current_idx, len(a.full_nodes)):
+                            if a.full_nodes[i]['nodeId'] == current_node_id:
+                                current_idx = i
+                                found = True
+                                break
+                                
+                        if not found:
+                            for i in range(0, current_idx):
+                                if a.full_nodes[i]['nodeId'] == current_node_id:
+                                    current_idx = i
+                                    break
                     a.tracked_current_idx = current_idx
                     
                     # Physical: current up to released
@@ -47,36 +63,22 @@ class TrafficController:
                         agent_physical[a].add(a.full_nodes[i]['nodeId'])
                     
                     # Path tracking for intent checks
-                    # Dynamic lookahead: look ahead until the next node with an action (a station).
-                    # This prevents head-on deadlocks in long corridors without causing false positive traps.
+                    # Dynamic lookahead: Look ahead all remaining nodes unconditionally.
+                    # This prevents head-on deadlocks in long corridors by fully revealing upcoming paths.
                     path_slice = []
                     if getattr(a, 'current_node', None):
                         path_slice.append(a.current_node)
+                        agent_intent[a].add(a.current_node) # Explicitly add current node to intent!
                     
-                    found_action = False
                     for i in range(current_idx, len(a.full_nodes)):
                         node_id = a.full_nodes[i]['nodeId']
-                        if node_id not in path_slice: # Keep first occurrence
-                            path_slice.append(node_id)
-                            agent_intent[a].add(node_id)
-                        
-                        # Stop extending intent if this node has an action (i.e., it's a station)
-                        if a.full_nodes[i].get('actions'):
-                            found_action = True
-                            break
-                    
-                    # If no actions found but path continues, limit to a reasonable number to avoid full-path locking
-                    if not found_action:
-                        # Ensure we have at least 5 nodes lookahead for long corridors
-                        for i in range(current_idx, min(len(a.full_nodes), current_idx + 5)):
-                            node_id = a.full_nodes[i]['nodeId']
-                            if node_id not in path_slice:
-                                path_slice.append(node_id)
-                                agent_intent[a].add(node_id)
+                        path_slice.append(node_id)
+                        agent_intent[a].add(node_id)
                     
                     setattr(a, 'tracked_path', path_slice)
 
             # 2. Try to release MORE nodes for executing agents
+            any_blocked = False
             for a in self.fleet_manager.agents.agents:
                 if a.agent_state == "EXECUTING" and hasattr(a, 'full_nodes'):
                     updated = False
@@ -88,30 +90,78 @@ class TrafficController:
                         for other in self.fleet_manager.agents.agents:
                             if other == a: continue
                             
-                            # Determine dynamic priorities
                             priority_a = get_priority(a)
                             priority_other = get_priority(other)
                             
                             # Rule A: Strict physical collision
                             if next_node_id in agent_physical[other]:
+                                print(f"[TrafficController] {a.agentId} blocked from {next_node_id} by Rule A (physical) of {other.agentId}")
                                 is_blocked = True
                                 break
                                 
-                            # Rule B: Simple Deadlock Avoidance
-                            if next_node_id in agent_intent[other]:
-                                if priority_a > priority_other:  # Lower tuple = higher priority, so '>' means lower priority
-                                    # I am lower priority. I yield.
-                                    if agent_physical[a].intersection(agent_intent[other]):
-                                        pass # Escape clause: I am in your way, so I must move forward
+                            # Rule B: Dynamic Overlap Deadlock Avoidance
+                            intent_other = agent_intent[other]
+                            if next_node_id in intent_other:
+                                overlap = agent_intent[a].intersection(intent_other)
+                                
+                                # Find if it's a head-on collision or just crossing
+                                is_head_on = False
+                                if len(overlap) >= 2:
+                                    a_overlap_nodes = [n for n in getattr(a, 'tracked_path', []) if n in overlap]
+                                    other_overlap_nodes = [n for n in getattr(other, 'tracked_path', []) if n in overlap]
+                                    if len(a_overlap_nodes) >= 2 and len(other_overlap_nodes) >= 2:
+                                        u, v = a_overlap_nodes[0], a_overlap_nodes[1]
+                                        if other_overlap_nodes.index(u) > other_overlap_nodes.index(v):
+                                            is_head_on = True
+
+                                if is_head_on:
+                                    # Corridor conflict: must yield before entering the corridor!
+                                    my_current = getattr(a, 'current_node', None)
+                                    other_current = getattr(other, 'current_node', None)
+                                    
+                                    am_i_in_overlap = my_current in overlap
+                                    is_other_in_overlap = other_current in overlap
+                                    
+                                    if is_other_in_overlap and not am_i_in_overlap:
+                                        print(f"[TrafficController] {a.agentId} blocked from {next_node_id}: {other.agentId} is already in the overlap {overlap}")
+                                        is_blocked = True
+                                        break
+                                    elif am_i_in_overlap and not is_other_in_overlap:
+                                        # I am in the overlap, I must proceed to clear it
+                                        pass
+                                    elif am_i_in_overlap and is_other_in_overlap:
+                                        # Both in! Priority decides, but this is a dangerous state.
+                                        if priority_a > priority_other: # a is lower priority
+                                            print(f"[TrafficController] {a.agentId} blocked from {next_node_id}: yielding to higher priority {other.agentId} (both in overlap)")
+                                            is_blocked = True
+                                            break
+                                        elif priority_a == priority_other and a.agentId > other.agentId:
+                                            print(f"[TrafficController] {a.agentId} blocked from {next_node_id}: yielding to tie-breaker {other.agentId} (both in overlap)")
+                                            is_blocked = True
+                                            break
                                     else:
-                                        is_blocked = True
-                                        break
+                                        # Neither in! Priority decides who enters.
+                                        if priority_a > priority_other: # a is lower priority
+                                            print(f"[TrafficController] {a.agentId} blocked from {next_node_id}: yielding to higher priority {other.agentId} for overlap {overlap}")
+                                            is_blocked = True
+                                            break
+                                        elif priority_a == priority_other:
+                                            if a.agentId > other.agentId:
+                                                print(f"[TrafficController] {a.agentId} blocked from {next_node_id}: yielding to tie-breaker {other.agentId} for overlap {overlap}")
+                                                is_blocked = True
+                                                break
                                 else:
-                                    # I am higher priority.
-                                    if agent_physical[other].intersection(agent_intent[a]) and next_node_id in agent_intent[other]:
+                                    # Simple crossing or same direction conflict
+                                    # Yield if lower priority, UNLESS I am already physically on next_node_id (which is handled by Rule A)
+                                    if priority_a > priority_other:
                                         is_blocked = True
                                         break
+                                    elif priority_a == priority_other and a.agentId > other.agentId:
+                                        is_blocked = True
+                                        break
+
                         if is_blocked:
+                            any_blocked = True
                             break
                             
                         # Look ahead limit (only release 3 nodes ahead of current position)
@@ -121,13 +171,13 @@ class TrafficController:
 
                         # Release it!
                         a.full_nodes[a.released_index]['released'] = True
-                        if a.released_index - 1 < len(getattr(a, 'full_edges', [])):
+                        if a.released_index > 0 and a.released_index - 1 < len(getattr(a, 'full_edges', [])):
                             a.full_edges[a.released_index - 1]['released'] = True
                         
                         agent_physical[a].add(next_node_id)
                         a.released_index += 1
                         updated = True
-                        
+
                     if updated:
                         a.order_update_id += 1
                         self.fleet_manager.agents.logging.info(f"[TrafficController] Sending OrderUpdate {a.order_update_id} to {a.agentId}, releasing up to index {a.released_index}")
@@ -138,4 +188,10 @@ class TrafficController:
                             nodes=a.full_nodes,
                             edges=getattr(a, 'full_edges', [])
                         )
+            
+            if any_blocked:
+                for ag in self.fleet_manager.agents.agents:
+                    actions = [a.get('actionStatus') for a in getattr(ag, 'actionStates', [])]
+                    print(f"[STATUS-{ag.agentId}] state={ag.agent_state}, curr_node={getattr(ag, 'current_node', None)}, pos={getattr(ag, 'agvPosition', None)}, released_idx={getattr(ag, 'released_index', None)}, actions={actions}")
+            
             time.sleep(0.5)

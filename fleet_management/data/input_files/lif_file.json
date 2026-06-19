@@ -735,7 +735,7 @@
                             "vehicleTypeId": "Longitudinal_Conveyor",
                             "vehicleOrientation": 0.0,
                             "orientationType": "TANGENTIAL",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -746,11 +746,11 @@
                     "vehicleTypeEdgeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -761,11 +761,11 @@
                     "vehicleTypeEdgeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -776,11 +776,11 @@
                     "vehicleTypeEdgeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -793,7 +793,7 @@
                             "vehicleTypeId": "Lateral_Conveyor",
                             "vehicleOrientation": 0.0,
                             "orientationType": "TANGENTIAL",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -804,11 +804,11 @@
                     "vehicleTypeEdgeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -819,11 +819,11 @@
                     "vehicleTypeEdgeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -836,7 +836,7 @@
                             "vehicleTypeId": "Lateral_Conveyor",
                             "vehicleOrientation": 0.0,
                             "orientationType": "TANGENTIAL",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -847,11 +847,11 @@
                     "vehicleTypeEdgeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -862,11 +862,11 @@
                     "vehicleTypeEdgeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -879,13 +879,13 @@
                             "vehicleTypeId": "Lateral_Conveyor",
                             "vehicleOrientation": 0.0,
                             "orientationType": "TANGENTIAL",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         },
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
                             "vehicleOrientation": 0.0,
                             "orientationType": "TANGENTIAL",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -896,11 +896,11 @@
                     "vehicleTypeEdgeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -911,11 +911,11 @@
                     "vehicleTypeEdgeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -926,11 +926,11 @@
                     "vehicleTypeEdgeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -941,11 +941,11 @@
                     "vehicleTypeEdgeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -956,11 +956,11 @@
                     "vehicleTypeEdgeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -973,13 +973,13 @@
                             "vehicleTypeId": "Longitudinal_Conveyor",
                             "vehicleOrientation": 0.0,
                             "orientationType": "TANGENTIAL",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
                             "vehicleOrientation": 0.0,
                             "orientationType": "TANGENTIAL",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -990,11 +990,11 @@
                     "vehicleTypeEdgeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -1005,11 +1005,11 @@
                     "vehicleTypeEdgeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -1020,11 +1020,11 @@
                     "vehicleTypeEdgeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -1037,7 +1037,7 @@
                             "vehicleTypeId": "Longitudinal_Conveyor",
                             "vehicleOrientation": 0.0,
                             "orientationType": "TANGENTIAL",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -1048,11 +1048,11 @@
                     "vehicleTypeEdgeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 },
@@ -1063,11 +1063,11 @@
                     "vehicleTypeEdgeProperties": [
                         {
                             "vehicleTypeId": "Longitudinal_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         },
                         {
                             "vehicleTypeId": "Lateral_Conveyor",
-                            "rotationAllowed": false
+                            "rotationAllowed": true
                         }
                     ]
                 }

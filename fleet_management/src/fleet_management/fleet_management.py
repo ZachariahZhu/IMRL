@@ -554,9 +554,14 @@ class PathPlanning:
                 current_node,
                 vehicle_type_id
             ):
+                penalty = 0.0
+                if neighbour == 'N11' and goal_node != 'N3':
+                    penalty = 5.0
+                    
                 tentative_g_score = (
                     g_score[current_node]
                     + self.get_distance(current_node, neighbour)
+                    + penalty
                 )
 
                 if tentative_g_score < g_score[neighbour]:
