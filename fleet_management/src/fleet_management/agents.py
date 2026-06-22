@@ -46,6 +46,7 @@ class Agents:
                 logging=self.logging,
                 x=entry['agentPosition']['x'],
                 y=entry['agentPosition']['y'],
+                theta=entry['agentPosition']['theta'],
                 extGraph=self.graph
             )
             for entry in agents_initialization_data['agents']
@@ -62,7 +63,7 @@ class Agent:
     """
 
     def __init__(self, agents, agentId, vehicle_type_id, agent_state_topic, agent_order_topic,
-                 agent_state, logging,x,y,extGraph) -> None:
+                 agent_state, logging,x,y,theta,extGraph) -> None:
         # ── Core references ───────────────────────────────────────────────────
         self.agents = agents          # parent Agents container
         self.agentId = agentId
@@ -84,14 +85,17 @@ class Agent:
 
         # ── State (updated by state_callback) ────────────────────────────────
         self.agent_state = agent_state   # 'IDLE' | 'EXECUTING'
-        self.agvPosition = {}            # last known position from state message
+        self.agvPosition = {
+            "x": x,
+            "y": y,
+            "theta": theta
+        }            # last known position from state message
         self.safetyState = {}
 
         # ── Task & path ───────────────────────────────────────────────────────
         self.loaded = False              # True while carrying a load
-
+        self.nodesInitialized= False
         self.current_node ="N5" # ?
-        self.agvPosition = {}
         tempNodes = extGraph.nodes
         shortest = None
         position = None
@@ -153,10 +157,12 @@ class Agent:
             f"`{msg.payload.decode()}` from topic `{msg.topic}`.")
 
         state_msg = json.loads(msg.payload.decode('utf-8'))#解码
-
+        
         if 'agvPosition' in state_msg:
             self.agvPosition = state_msg['agvPosition']
-
+        if not self.nodesInitialized:
+            self.agvPosition = state_msg['agvPosition']
+            self.nodesInitialized=True
         if 'lastNodeId' in state_msg and state_msg['lastNodeId']:
             self.current_node = state_msg['lastNodeId']
             
