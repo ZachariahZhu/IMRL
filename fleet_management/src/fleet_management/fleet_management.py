@@ -202,7 +202,8 @@ class FleetManagement:
             path_nodes, path_edges = self.build_path_for_task(
                 task,
                 agent.current_node,
-                vehicle_type_id
+                vehicle_type_id,
+                agent=agent,
             )
 
             if path_nodes is None or path_edges is None:
@@ -254,7 +255,8 @@ class FleetManagement:
             time.sleep(0.5)
 
     def build_path_for_task(self, task: dict, start_node: str,
-                            vehicle_type_id: str) -> tuple:
+                            vehicle_type_id: str,
+                            agent=None) -> tuple:
         """
         Task 7: Chain multiple A* searches to cover all stations in a task.
 
@@ -309,17 +311,35 @@ class FleetManagement:
             combined_edges.extend(edges)
             current= target_node
 
-        #2.找到最近的休息点
-        nearest_dwelling= None
+        #2.找到最近的休息点，不要选中正在被其他车辆使用的休息节点。
+        reserved_dwelling_nodes = set()
+        for other in self.agents.agents:
+            if agent is not None and other == agent:
+                continue
+            for node_dict in getattr(other, 'full_nodes', []):
+                node_id = node_dict.get('nodeId')
+                if node_id:
+                    reserved_dwelling_nodes.add(node_id)
+
+        candidate_dwellings = [
+            d_node
+            for d_node in self.graph.dwelling_nodes
+            if d_node not in reserved_dwelling_nodes
+        ]
+
+        if not candidate_dwellings:
+            candidate_dwellings = list(self.graph.dwelling_nodes)
+
+        nearest_dwelling = None
         min_dist = float('inf')
         pos_current = self.graph.nodes[current]['pos']
-        
-        for d_node in self.graph.dwelling_nodes:
-            pos_d=self.graph.nodes[d_node]['pos']
-            dist= math.dist(pos_current, pos_d)
+
+        for d_node in candidate_dwellings:
+            pos_d = self.graph.nodes[d_node]['pos']
+            dist = math.dist(pos_current, pos_d)
             if dist < min_dist:
-                min_dist= dist
-                nearest_dwelling= d_node
+                min_dist = dist
+                nearest_dwelling = d_node
 
         #3.规划返回休息点的路径
         nodes, edges = self.path_planning.astar_search(
