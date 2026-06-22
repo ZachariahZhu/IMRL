@@ -163,7 +163,6 @@ class FleetManagement:
                 agent.tracked_current_idx = 0
                 agent.order_update_id = 0
                 agent.current_order_id = str(self.agents.order_header_id)
-                agent.initial_order_sent = False
 
                 agent.order_interface.generate_order_message(
                     agent=agent,
@@ -172,7 +171,6 @@ class FleetManagement:
                     nodes=agent.full_nodes,
                     edges=agent.full_edges
                 )
-                agent.initial_order_sent = True
                 self.agents.order_header_id += 1
 
                 while agent.agent_state != 'IDLE':
@@ -240,7 +238,6 @@ class FleetManagement:
             agent.tracked_current_idx = 0
             agent.order_update_id = 0
             agent.current_order_id = str(self.agents.order_header_id)
-            agent.initial_order_sent = False
             
             agent.order_interface.generate_order_message(
                 agent=agent,
@@ -249,7 +246,6 @@ class FleetManagement:
                 nodes=agent.full_nodes,
                 edges=agent.full_edges
             )
-            agent.initial_order_sent = True
             self.agents.order_header_id += 1
             time.sleep(0.5)
 
