@@ -264,6 +264,217 @@ class FleetManagement:
             result.append([row1[c] * row2[c] for c in range(cols)])
 
         return result
+    
+    def vectorize(self, matrix):
+        """Sum all elements of each row into a vector.
+        
+        Args:
+            matrix: list of lists representing the matrix
+            
+        Returns:
+            vector (list) where each element is the sum of the corresponding row
+        """
+        if matrix is None or len(matrix) == 0:
+            return []
+        
+        return [float(sum(row)) for row in matrix]
+        
+    def limsumVec(self,vec):
+        rV = []
+        for v in vec:
+            if float(v) < 1.:
+                rV.append(float(v))
+            else:
+                rV.append(1.)
+        
+
+
+        return rV
+    def visualizeVector(self, vec, timestep):
+        """Visualize a vector as colors from white (0) to red (1).
+
+        Uses `limsumVec` to cap values to 1. The `timestep` argument is used
+        to attenuate the intensity over time (simple linear decay).
+
+        Args:
+            vec: iterable of numeric values (0..inf)
+            timestep: numeric time (seconds) used to attenuate intensity
+
+        Returns:
+            List of hex color strings (e.g. '#ff7f7f') corresponding to
+            each element in `vec` where 0 -> white, 1 -> red.
+        """
+        if vec is None:
+            return []
+
+        # Cap values to maximum 1 using existing helper
+        capped = self.limsumVec(vec)
+
+        # Temporal attenuation: larger timesteps reduce intensity slightly.
+        # Choose a small decay rate so timestep affects but does not remove
+        # signal immediately. Clamp between 0 and 1.
+        decay_rate = 0.02
+        time_factor = max(0.0, 1.0 - float(timestep) * decay_rate) if timestep is not None else 1.0
+
+        colors = []
+        for v in capped:
+            intensity = max(0.0, min(1.0, v * time_factor))
+
+            # Interpolate between white (1,1,1) and red (1,0,0):
+            # R stays 1, G and B become (1 - intensity)
+            r = 1.0
+            g = 1.0 - intensity
+            b = 1.0 - intensity
+
+            # Convert to 0-255 ints and format hex
+            ri = int(round(r * 255))
+            gi = int(round(g * 255))
+            bi = int(round(b * 255))
+            colors.append('#{:02x}{:02x}{:02x}'.format(ri, gi, bi))
+
+        return colors
+    def visualizeVectorGUI(self, vec, timestep, title="Vector Visualization",
+                           auto_update=False, get_vector=None, update_interval=500,
+                           snapshot_dir="data/snapshots"):
+        """Display the vector as colored bars in a Tkinter GUI, with optional
+        auto-update and snapshot saving.
+
+        Args:
+            vec: initial vector to display
+            timestep: initial timestep value
+            title: window title
+            auto_update: if True, periodically call `get_vector` to obtain
+                (vec, timestep) updates and refresh the display when changed
+            get_vector: callable returning either `vec` or `(vec, timestep)`
+            update_interval: milliseconds between polls when auto_update True
+            snapshot_dir: directory where snapshot images are saved
+        """
+        try:
+            import tkinter as tk
+        except Exception:
+            colors = self.visualizeVector(vec, timestep)
+            print("Colors:", colors)
+            return
+
+        import os
+        from datetime import datetime
+
+        # prepare snapshot directory
+        try:
+            os.makedirs(snapshot_dir, exist_ok=True)
+        except Exception:
+            pass
+
+        colors = self.visualizeVector(vec, timestep)
+        n = len(colors)
+        if n == 0:
+            print("visualizeVectorGUI: empty vector")
+            return
+
+        # Dimensions
+        bar_width = max(10, int(800 / n))
+        width = bar_width * n
+        height = 160
+
+        root = tk.Tk()
+        root.title(title)
+
+        canvas = tk.Canvas(root, width=width, height=height, bg='white')
+        canvas.pack()
+
+        label_var = tk.StringVar()
+        label_var.set(f"timestep: {timestep}")
+        lbl = tk.Label(root, textvariable=label_var)
+        lbl.pack()
+
+        def draw(colors_list):
+            canvas.delete('all')
+            for i, col in enumerate(colors_list):
+                x0 = i * bar_width
+                x1 = x0 + bar_width
+                canvas.create_rectangle(x0, 0, x1, height - 40, fill=col, outline='black')
+                canvas.create_text(x0 + bar_width / 2, height - 20, text=f"{i}", font=(None, 8))
+
+        def save_snapshot(colors_list, ts):
+            # Try Pillow first for PNG, fall back to postscript
+            filename_base = datetime.utcnow().strftime("%Y%m%dT%H%M%S.%fZ")
+            try:
+                from PIL import Image, ImageDraw
+                img = Image.new('RGB', (width, height), color='white')
+                draw_img = ImageDraw.Draw(img)
+                for i, col in enumerate(colors_list):
+                    x0 = i * bar_width
+                    x1 = x0 + bar_width
+                    draw_img.rectangle([x0, 0, x1, height - 40], fill=col, outline='black')
+                # Draw timestep text at bottom
+                draw_img.text((4, height - 38), f"timestep: {ts}", fill='black')
+                out_path = os.path.join(snapshot_dir, f"snapshot_{filename_base}.png")
+                img.save(out_path)
+            except Exception:
+                try:
+                    ps_path = os.path.join(snapshot_dir, f"snapshot_{filename_base}.ps")
+                    canvas.postscript(file=ps_path)
+                except Exception:
+                    # give up silently
+                    pass
+
+        # initial draw and snapshot
+        draw(colors)
+        save_snapshot(colors, timestep)
+
+        current_vec = list(vec)
+        current_timestep = timestep
+
+        stop_flag = {'stop': False}
+
+        def on_close():
+            stop_flag['stop'] = True
+            root.destroy()
+
+        root.protocol('WM_DELETE_WINDOW', on_close)
+
+        def poll():
+            if stop_flag['stop']:
+                return
+            updated = False
+            nonlocal current_vec, current_timestep
+            if auto_update:
+                if not callable(get_vector):
+                    # nothing to poll
+                    root.after(update_interval, poll)
+                    return
+
+                try:
+                    res = get_vector()
+                    if isinstance(res, tuple) or isinstance(res, list):
+                        v_new = list(res[0])
+                        t_new = res[1] if len(res) > 1 else current_timestep
+                    else:
+                        v_new = list(res)
+                        t_new = current_timestep
+                except Exception:
+                    root.after(update_interval, poll)
+                    return
+
+                if v_new != current_vec or t_new != current_timestep:
+                    current_vec = v_new
+                    current_timestep = t_new
+                    cols = self.visualizeVector(current_vec, current_timestep)
+                    draw(cols)
+                    label_var.set(f"timestep: {current_timestep}")
+                    save_snapshot(cols, current_timestep)
+
+            root.after(update_interval, poll)
+
+        # Start polling if requested
+        if auto_update:
+            root.after(update_interval, poll)
+
+        # Close button
+        btn = tk.Button(root, text="Close", command=on_close)
+        btn.pack(pady=4)
+
+        root.mainloop()
 
     def fleet_manager(self) -> None:
         last_matrix=None
@@ -485,6 +696,9 @@ class FleetManagement:
                             for item in row:
                                 print(item,end=" ",file=ffff)
                             print(file=ffff)
+                print(self.vectorize(combine),file=ffff)
+            if combine!= None:
+                self.visualizeVectorGUI(self.visualizeVector(self.vectorize(combine),0.2), 0.2)
 
             
             
