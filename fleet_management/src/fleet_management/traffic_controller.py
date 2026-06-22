@@ -63,8 +63,8 @@ class TrafficController:
                         agent_physical[a].add(a.full_nodes[i]['nodeId'])
                     
                     # Path tracking for intent checks
-                    # Dynamic lookahead: Look ahead all remaining nodes unconditionally.
-                    # This prevents head-on deadlocks in long corridors by fully revealing upcoming paths.
+                    # Dynamic lookahead: Look ahead only up to the next pending HARD action.
+                    # This prevents agents from claiming the entire map and causing premature tie-breaker deadlocks.
                     path_slice = []
                     if getattr(a, 'current_node', None):
                         path_slice.append(a.current_node)
@@ -72,8 +72,21 @@ class TrafficController:
                     
                     for i in range(current_idx, len(a.full_nodes)):
                         node_id = a.full_nodes[i]['nodeId']
-                        path_slice.append(node_id)
-                        agent_intent[a].add(node_id)
+                        if node_id not in path_slice:
+                            path_slice.append(node_id)
+                            agent_intent[a].add(node_id)
+                            
+                        # Stop intent lookahead at first unfinished HARD action
+                        node_actions = a.full_nodes[i].get('actions', [])
+                        has_pending = False
+                        for act in node_actions:
+                            if act.get('blockingType') == 'HARD':
+                                action_status = next((a_s.get('actionStatus') for a_s in getattr(a, 'actionStates', []) if a_s.get('actionId') == act.get('actionId')), 'WAITING')
+                                if action_status != 'FINISHED':
+                                    has_pending = True
+                                    break
+                        if has_pending:
+                            break
                     
                     setattr(a, 'tracked_path', path_slice)
 
@@ -119,6 +132,15 @@ class TrafficController:
                                     my_current = getattr(a, 'current_node', None)
                                     other_current = getattr(other, 'current_node', None)
                                     
+                                    # Anti-Deadlock Rule for Bottlenecks:
+                                    # Use the node just before next_node_id in my path to see if I am entering from a safe, unshared path.
+                                    my_approach_node = a.full_nodes[a.released_index - 1]['nodeId'] if a.released_index > 0 else my_current
+                                    
+                                    if other_current in agent_intent[a] and my_approach_node not in agent_intent[other]:
+                                        print(f"[TrafficController] {a.agentId} blocked from {next_node_id}: yielding to {other.agentId} to clear bottleneck (waiting at {my_approach_node})")
+                                        is_blocked = True
+                                        break
+                                        
                                     am_i_in_overlap = my_current in overlap
                                     is_other_in_overlap = other_current in overlap
                                     
@@ -152,13 +174,10 @@ class TrafficController:
                                                 break
                                 else:
                                     # Simple crossing or same direction conflict
-                                    # Yield if lower priority, UNLESS I am already physically on next_node_id (which is handled by Rule A)
-                                    if priority_a > priority_other:
-                                        is_blocked = True
-                                        break
-                                    elif priority_a == priority_other and a.agentId > other.agentId:
-                                        is_blocked = True
-                                        break
+                                    # We DO NOT need to reserve the entire overlap!
+                                    # Rule A (physical collision prevention) will naturally handle simple crossings
+                                    # and same-direction following by ensuring a 1-node gap at runtime.
+                                    pass
 
                         if is_blocked:
                             any_blocked = True
@@ -167,6 +186,25 @@ class TrafficController:
                         # Look ahead limit (only release 3 nodes ahead of current position)
                         current_idx = getattr(a, 'tracked_current_idx', 0)
                         if a.released_index - current_idx >= 3:
+                            break
+
+                        # Do not look ahead past a node that has pending blocking actions!
+                        has_pending_actions = False
+                        for i in range(current_idx, a.released_index):
+                            node_actions = a.full_nodes[i].get('actions', [])
+                            if not node_actions: continue
+                            
+                            # Check if these actions are finished
+                            for action in node_actions:
+                                action_id = action.get('actionId')
+                                action_state = next((act for act in getattr(a, 'actionStates', []) if act.get('actionId') == action_id), None)
+                                if not action_state or action_state.get('actionStatus') != 'FINISHED':
+                                    has_pending_actions = True
+                                    break
+                            if has_pending_actions:
+                                break
+                                
+                        if has_pending_actions:
                             break
 
                         # Release it!
