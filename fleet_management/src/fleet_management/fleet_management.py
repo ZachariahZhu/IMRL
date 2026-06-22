@@ -555,7 +555,9 @@ class PathPlanning:
                 vehicle_type_id
             ):
                 penalty = 0.0
-                if neighbour == 'N11' and goal_node != 'N3':
+                if neighbour == 'N11':
+                    # Unconditionally penalize N11 to force a passing loop.
+                    # mouse001 MUST use N11 (no other path to N3), but cat001 will reroute via N10->N14.
                     penalty = 5.0
                     
                 tentative_g_score = (
