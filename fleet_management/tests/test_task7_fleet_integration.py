@@ -144,6 +144,35 @@ def test_build_path_ends_at_dwelling_node(path_result, graph):
         f"got '{path_nodes[-1]}'"
 
 
+def test_build_path_choose_alternate_dwelling_when_closest_is_occupied(fm):
+    busy_agent = MagicMock()
+    busy_agent.agent_state = "EXECUTING"
+    busy_agent.full_nodes = [
+        {"nodeId": "N5"},
+        {"nodeId": "N7"}
+    ]
+    busy_agent.tracked_current_idx = 0
+    busy_agent.released_index = 1
+    busy_agent.current_node = "N5"
+
+    original_agents = list(fm.agents.agents)
+    fm.agents.agents = original_agents + [busy_agent]
+
+    try:
+        task_no_stations = {
+            'task_id': 'T0',
+            'stations': [],
+            'task_assigned': False,
+            'task_completed': False,
+            'agent_id': None,
+        }
+        path_nodes, _ = fm.build_path_for_task(task_no_stations, "N4")
+        assert path_nodes[-1] == "N12", \
+            f"When N7 is occupied, the return leg should go to N12, got {path_nodes[-1]}"
+    finally:
+        fm.agents.agents = original_agents
+
+
 def test_build_path_nodes_connected(path_result, graph):
     path_nodes, path_edges = path_result
     for i in range(len(path_nodes) - 1):

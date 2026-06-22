@@ -132,17 +132,13 @@ class FleetManagement:
             nearest_node = agent.current_node
 
             if nearest_node not in self.graph.dwelling_nodes:
-                min_dwell_dist = float('inf')
-                best_dwell=self.graph.dwelling_nodes[0]
-                for dwell_id in self.graph.dwelling_nodes:
-                    dist=math.dist(self.graph.nodes[nearest_node]['pos'], self.graph.nodes[dwell_id]['pos'])
-                    if dist < min_dwell_dist:
-                        min_dwell_dist= dist
-                        best_dwell= dwell_id
-
+                best_dwell = self._select_nearest_available_dwelling(
+                    nearest_node,
+                    excluding_agent=agent
+                )
 
                 path_nodes, path_edges= self.path_planning.astar_search(
-                    nearest_node,best_dwell, agent.vehicle_type_id
+                    nearest_node, best_dwell, agent.vehicle_type_id
                 )
 
                 nodes = self.build_order_nodes(path_nodes,{"stations": []}, agent.vehicle_type_id)
@@ -305,17 +301,13 @@ class FleetManagement:
             combined_edges.extend(edges)
             current= target_node
 
-        #2.找到最近的休息点
-        nearest_dwelling= None
-        min_dist = float('inf')
-        pos_current = self.graph.nodes[current]['pos']
-        
-        for d_node in self.graph.dwelling_nodes:
-            pos_d=self.graph.nodes[d_node]['pos']
-            dist= math.dist(pos_current, pos_d)
-            if dist < min_dist:
-                min_dist= dist
-                nearest_dwelling= d_node
+        nearest_dwelling = self._select_nearest_available_dwelling(
+            current,
+            excluding_agent=None
+        )
+
+        if nearest_dwelling is None:
+            return None, None
 
         #3.规划返回休息点的路径
         nodes, edges = self.path_planning.astar_search(
@@ -336,6 +328,56 @@ class FleetManagement:
 
         return (combined_nodes, combined_edges)
     
+    def _is_dwelling_occupied_by_other_agent(self, dwelling_node: str,
+                                             excluding_agent=None) -> bool:
+        """
+        Return True if another executing agent's remaining path includes the
+        given dwelling node.
+        """
+        for other in self.agents.agents:
+            if other is excluding_agent:
+                continue
+            if other.agent_state != 'EXECUTING' or not hasattr(other, 'full_nodes'):
+                continue
+
+            current_idx = getattr(other, 'tracked_current_idx', 0)
+            if current_idx >= len(other.full_nodes):
+                current_idx = max(0, len(other.full_nodes) - 1)
+
+            for node in other.full_nodes[current_idx:]:
+                if node.get('nodeId') == dwelling_node:
+                    return True
+
+            if getattr(other, 'current_node', None) == dwelling_node:
+                return True
+
+        return False
+
+    def _select_nearest_available_dwelling(self, current_node: str,
+                                           excluding_agent=None) -> str | None:
+        """
+        Choose the nearest dwelling node that is not already in another agent's
+        current or planned path.
+        """
+        if not self.graph.dwelling_nodes:
+            return None
+
+        candidate_dwelling = sorted(
+            self.graph.dwelling_nodes,
+            key=lambda d: math.dist(
+                self.graph.nodes[current_node]['pos'],
+                self.graph.nodes[d]['pos']
+            )
+        )
+
+        for d_node in candidate_dwelling:
+            if not self._is_dwelling_occupied_by_other_agent(
+                d_node,
+                excluding_agent=excluding_agent
+            ):
+                return d_node
+
+        return candidate_dwelling[0]
 
 
         
