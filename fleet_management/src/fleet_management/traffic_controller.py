@@ -94,8 +94,24 @@ class TrafficController:
             any_blocked = False
             for a in self.fleet_manager.agents.agents:
                 if a.agent_state == "EXECUTING" and hasattr(a, 'full_nodes'):
+                    current_idx = getattr(a, 'tracked_current_idx', 0)
+                    last_current_idx = getattr(a, 'last_current_idx', -1)
                     updated = False
                     
+                    if current_idx > last_current_idx:
+                        a.last_current_idx = current_idx
+                        # Check if the current node has pending actions
+                        node_actions = a.full_nodes[current_idx].get('actions', [])
+                        has_pending_curr = False
+                        for act in node_actions:
+                            status = next((a_s.get('actionStatus') for a_s in getattr(a, 'actionStates', []) if a_s.get('actionId') == act.get('actionId')), 'WAITING')
+                            if status != 'FINISHED':
+                                has_pending_curr = True
+                                break
+                        # Only trigger update if no pending actions, otherwise it interrupts the simulator
+                        if not has_pending_curr:
+                            updated = True
+                        
                     while getattr(a, 'released_index', 0) < len(a.full_nodes):
                         next_node_id = a.full_nodes[a.released_index]['nodeId']
                         
@@ -108,9 +124,16 @@ class TrafficController:
                             
                             # Rule A: Strict physical collision
                             if next_node_id in agent_physical[other]:
-                                print(f"[TrafficController] {a.agentId} blocked from {next_node_id} by Rule A (physical) of {other.agentId}")
-                                is_blocked = True
-                                break
+                                # Mutual claim on the next node
+                                if next_node_id in agent_physical.get(a, set()):
+                                    if a.agentId < other.agentId:
+                                        print(f"[TrafficController] {a.agentId} blocked from {next_node_id} by Rule A tie-breaker of {other.agentId}")
+                                        is_blocked = True
+                                        break
+                                else:
+                                    print(f"[TrafficController] {a.agentId} blocked from {next_node_id} by Rule A (physical) of {other.agentId}")
+                                    is_blocked = True
+                                    break
                                 
                             # Rule B: Dynamic Overlap Deadlock Avoidance
                             intent_other = agent_intent[other]
@@ -157,7 +180,7 @@ class TrafficController:
                                             print(f"[TrafficController] {a.agentId} blocked from {next_node_id}: yielding to higher priority {other.agentId} (both in overlap)")
                                             is_blocked = True
                                             break
-                                        elif priority_a == priority_other and a.agentId > other.agentId:
+                                        elif priority_a == priority_other and a.agentId < other.agentId:
                                             print(f"[TrafficController] {a.agentId} blocked from {next_node_id}: yielding to tie-breaker {other.agentId} (both in overlap)")
                                             is_blocked = True
                                             break
@@ -168,7 +191,13 @@ class TrafficController:
                                             is_blocked = True
                                             break
                                         elif priority_a == priority_other:
-                                            if a.agentId > other.agentId:
+                                            # If someone ALREADY HAS THE NODE RELEASED, they MUST have priority!
+                                            other_released_nodes = [n['nodeId'] for n in getattr(other, 'full_nodes', [])[:getattr(other, 'released_index', 0)]]
+                                            if any(node in other_released_nodes for node in overlap):
+                                                print(f"[TrafficController] {a.agentId} blocked from {next_node_id}: {other.agentId} already has released permission for overlap {overlap}")
+                                                is_blocked = True
+                                                break
+                                            if a.agentId < other.agentId:
                                                 print(f"[TrafficController] {a.agentId} blocked from {next_node_id}: yielding to tie-breaker {other.agentId} for overlap {overlap}")
                                                 is_blocked = True
                                                 break
@@ -188,25 +217,6 @@ class TrafficController:
                         if a.released_index - current_idx >= 3:
                             break
 
-                        # Do not look ahead past a node that has pending blocking actions!
-                        has_pending_actions = False
-                        for i in range(current_idx, a.released_index):
-                            node_actions = a.full_nodes[i].get('actions', [])
-                            if not node_actions: continue
-                            
-                            # Check if these actions are finished
-                            for action in node_actions:
-                                action_id = action.get('actionId')
-                                action_state = next((act for act in getattr(a, 'actionStates', []) if act.get('actionId') == action_id), None)
-                                if not action_state or action_state.get('actionStatus') != 'FINISHED':
-                                    has_pending_actions = True
-                                    break
-                            if has_pending_actions:
-                                break
-                                
-                        if has_pending_actions:
-                            break
-
                         # Release it!
                         a.full_nodes[a.released_index]['released'] = True
                         if a.released_index > 0 and a.released_index - 1 < len(getattr(a, 'full_edges', [])):
@@ -223,8 +233,9 @@ class TrafficController:
                             agent=a,
                             orderId=getattr(a, 'current_order_id', str(self.fleet_manager.agents.order_header_id)),
                             order_updateId=a.order_update_id,
-                            nodes=a.full_nodes,
-                            edges=getattr(a, 'full_edges', [])
+                            nodes=a.full_nodes[current_idx:],
+                            edges=getattr(a, 'full_edges', [])[current_idx:],
+                            start_sequence_idx=current_idx
                         )
             
             if any_blocked:

@@ -125,7 +125,7 @@ class FleetManagement:
         # )
 
 
-        while any(not t['task_assigned'] for t in self.task_management.task_list):
+        while any(not t.get('task_completed', False) for t in self.task_management.task_list):
             
             # Find all idle agents
             idle_agents = [a for a in self.agents.agents if a.agent_state == "IDLE"]
@@ -232,40 +232,41 @@ class FleetManagement:
                     vehicle_type_id
                 )
 
-            edges = self.build_order_edges(path_nodes, path_edges)
-            
-            task['task_assigned'] = True
-            agent.agent_state = 'EXECUTING'
-            agent.current_task = task
-            
-            # Start of Dynamic Zone Control integration
-            for n in nodes:
-                n['released'] = False
-            for e in edges:
-                e['released'] = False
-            if nodes:
-                nodes[0]['released'] = True
+                edges = self.build_order_edges(path_nodes, path_edges)
+                
+                task['task_assigned'] = True
+                agent.current_task = task
+                
+                # Start of Dynamic Zone Control integration
+                for n in nodes:
+                    n['released'] = False
+                for e in edges:
+                    e['released'] = False
+                if nodes:
+                    nodes[0]['released'] = True
 
-            agent.full_nodes = nodes
-            agent.full_edges = edges
-            agent.released_index = 1
-            agent.tracked_current_idx = 0
-            agent.order_update_id = 0
-            agent.current_order_id = str(self.agents.order_header_id)
-            
-            agent.order_interface.generate_order_message(
-                agent=agent,
-                orderId=agent.current_order_id,
-                order_updateId=agent.order_update_id,
-                nodes=agent.full_nodes,
-                edges=agent.full_edges
-            )
-            
-            # Pin the task to this agent
-            task['assigned_agent'] = agent.agentId
-            self.agents.order_header_id += 1
-            task_assigned_this_cycle = True
-            break # Break out of task loop, process next idle agent in next while loop iteration
+                agent.full_nodes = nodes
+                agent.full_edges = edges
+                agent.released_index = 1
+                agent.tracked_current_idx = 0
+                agent.order_update_id = 0
+                agent.current_order_id = str(self.agents.order_header_id)
+                
+                agent.order_interface.generate_order_message(
+                    agent=agent,
+                    orderId=agent.current_order_id,
+                    order_updateId=agent.order_update_id,
+                    nodes=agent.full_nodes,
+                    edges=agent.full_edges
+                )
+                
+                agent.agent_state = 'EXECUTING'
+                
+                # Pin the task to this agent
+                task['assigned_agent'] = agent.agentId
+                self.agents.order_header_id += 1
+                task_assigned_this_cycle = True
+                break # Break out of task loop, process next idle agent in next while loop iteration
             
         if not task_assigned_this_cycle:
             time.sleep(0.5)
@@ -304,6 +305,15 @@ class FleetManagement:
         combined_edges= []
         current= start_node
 
+        def _has_init_fine_pos(node_id, v_type_id):
+            node_props = self.graph.nodes[node_id].get('vehicleTypeNodeProperties', [])
+            for prop in node_props:
+                if prop.get('vehicleTypeId') == v_type_id:
+                    for act in prop.get('actions', []):
+                        if act.get('actionType') == 'init_fine_positioning':
+                            return True
+            return False
+
         #1.规划每一站的路径
         for station in task['stations']:
             target_node= station['nodeId']
@@ -316,6 +326,11 @@ class FleetManagement:
 
             if nodes is None or edges is None:
                 return None, None
+
+            if station.get('actionType') in ['pick', 'drop'] and len(nodes) >= 2:
+                prev_node = nodes[-2]
+                if not _has_init_fine_pos(prev_node, vehicle_type_id):
+                    return None, None
 
             if not combined_nodes:
                 combined_nodes.extend(nodes)
@@ -387,13 +402,17 @@ class FleetManagement:
         if not self.graph.dwelling_nodes:
             return None
 
-        candidate_dwelling = sorted(
-            self.graph.dwelling_nodes,
-            key=lambda d: math.dist(
-                self.graph.nodes[current_node]['pos'],
-                self.graph.nodes[d]['pos']
+        if current_node not in self.graph.nodes:
+            # Fallback if current_node is a ghost node or invalid
+            candidate_dwelling = self.graph.dwelling_nodes
+        else:
+            candidate_dwelling = sorted(
+                self.graph.dwelling_nodes,
+                key=lambda d: math.dist(
+                    self.graph.nodes[current_node]['pos'],
+                    self.graph.nodes[d]['pos']
+                )
             )
-        )
 
         for d_node in candidate_dwelling:
             if not self._is_dwelling_occupied_by_other_agent(
@@ -443,6 +462,18 @@ class FleetManagement:
         """
         nodes_result= []
 
+        def _get_action_parameters(node_id, action_type):
+            node_props = self.graph.nodes[node_id].get('vehicleTypeNodeProperties', [])
+            for prop in node_props:
+                if prop.get('vehicleTypeId') == vehicle_type_id:
+                    for act in prop.get('actions', []):
+                        if act.get('actionType') == action_type:
+                            params = act.get('actionParameters', [])
+                            if isinstance(params, dict):
+                                return []
+                            return params
+            return []
+
         station_lookup= {s['nodeId']: s for s in task['stations']}
 
         for i, n_id in enumerate(path_nodes):
@@ -455,7 +486,8 @@ class FleetManagement:
                     actions.append({
                         "actionType": st['actionType'],
                         "actionId": str(uuid.uuid4()),
-                        "blockingType": "HARD"
+                        "blockingType": "HARD",
+                        "actionParameters": _get_action_parameters(n_id, st['actionType'])
                     })
 
                 elif st['actionType'] == 'process':
@@ -463,7 +495,8 @@ class FleetManagement:
                         "actionType": "process",
                         "actionId": str(uuid.uuid4()),
                         "blockingType": "HARD",
-                        "processingTime": st['processingTime']
+                        "processingTime": st['processingTime'],
+                        "actionParameters": _get_action_parameters(n_id, "process")
                     })#如果是站点，添加相应的动作
 
             if i+1<len(path_nodes):
@@ -476,7 +509,8 @@ class FleetManagement:
                         actions.append({
                             "actionType": "init_fine_positioning",
                             "actionId": str(uuid.uuid4()),
-                            "blockingType": "HARD"
+                            "blockingType": "HARD",
+                            "actionParameters": _get_action_parameters(n_id, "init_fine_positioning")
                         })#如果下一个节点是转运站，当前节点需定位
 
             node_props=self.graph.nodes[n_id].get('vehicleTypeNodeProperties', [])

@@ -181,21 +181,31 @@ class Agent:
         if self.current_node:
             self.current_path_nodes.append(self.current_node)
 
-        actions_finished = True
-        for action in state_msg.get('actionStates', []):
-            if action.get('actionStatus') != 'FINISHED':
-                actions_finished = False
-                break
-
         is_completed = False
         if hasattr(self, 'full_nodes') and self.full_nodes:
             last_seq = (len(self.full_nodes) - 1) * 2
             if state_msg.get('lastNodeSequenceId') == last_seq and state_msg.get('orderId') == getattr(self, 'current_order_id', ''):
-                if actions_finished and not self.driving:
+                last_node_actions = self.full_nodes[-1].get('actions', [])
+                last_actions_finished = True
+                for expected_act in last_node_actions:
+                    act_id = expected_act.get('actionId')
+                    status = next((a.get('actionStatus') for a in state_msg.get('actionStates', []) if a.get('actionId') == act_id), 'WAITING')
+                    if status != 'FINISHED':
+                        last_actions_finished = False
+                        break
+                        
+                if last_actions_finished and not self.driving:
                     is_completed = True
         else:
             nodes_empty = len(state_msg.get('nodeStates', [])) <= 1
             edges_empty = len(state_msg.get('edgeStates', [])) == 0
+            
+            actions_finished = True
+            for action in state_msg.get('actionStates', []):
+                if action.get('actionStatus') != 'FINISHED':
+                    actions_finished = False
+                    break
+                    
             if nodes_empty and edges_empty and actions_finished and not self.driving:
                 is_completed = True
 
