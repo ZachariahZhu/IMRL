@@ -40,7 +40,7 @@ class Agents:
                 agents=self,
                 agentId=entry['agentId'],
                 vehicle_type_id=entry['vehicleTypeId'],
-                agent_state='IDLE',
+                agent_state='WAITING_FOR_ROBOT' if self.config_data.get('fleet_management_mode') == 'REAL_AGENTS' else 'IDLE',
                 agent_order_topic=entry['orderTopic'],
                 agent_state_topic=entry['stateTopic'],
                 logging=self.logging,
@@ -162,28 +162,53 @@ class Agent:
         if 'agvPosition' in state_msg:
             self.agvPosition = state_msg['agvPosition']
         if not self.nodesInitialized:
-            self.agvPosition = state_msg['agvPosition']
+            self.agvPosition = state_msg.get('agvPosition', self.agvPosition)
             self.nodesInitialized = True
-        if 'lastNodeId' in state_msg and state_msg['lastNodeId']:
+        if 'lastNodeId' in state_msg and state_msg['lastNodeId'] and state_msg['lastNodeId'] not in ["init", ""]:
             self.current_node = state_msg['lastNodeId']
             
         self.actionStates = state_msg.get('actionStates', [])
         self.driving = state_msg.get('driving', False)
+
+        # In real agents mode, transition from WAITING_FOR_ROBOT to IDLE on first valid state
+        if self.agents.config_data.get('fleet_management_mode') == 'REAL_AGENTS' and self.agent_state == 'WAITING_FOR_ROBOT':
+            if self.current_node:
+                self.logging.info(f"Agent {self.agentId} connected at node {self.current_node}. Transitioning to IDLE.")
+                self.agent_state = 'IDLE'
 
         # Task 4 Collision Avoidance: Track the remaining path nodes
         self.current_path_nodes = [n['nodeId'] for n in state_msg.get('nodeStates', [])]
         if self.current_node:
             self.current_path_nodes.append(self.current_node)
 
-        nodes_empty = len(state_msg.get('nodeStates', [])) <= 1
-        edges_empty = len(state_msg.get('edgeStates', [])) == 0 #判断是否完成
         actions_finished = True
         for action in state_msg.get('actionStates', []):
             if action.get('actionStatus') != 'FINISHED':
                 actions_finished = False
                 break
-        if self.agent_state == 'EXECUTING' and nodes_empty and edges_empty and actions_finished:
+
+        is_completed = False
+        if hasattr(self, 'full_nodes') and self.full_nodes:
+            last_seq = (len(self.full_nodes) - 1) * 2
+            if state_msg.get('lastNodeSequenceId') == last_seq and state_msg.get('orderId') == getattr(self, 'current_order_id', ''):
+                if actions_finished and not self.driving:
+                    is_completed = True
+        else:
+            nodes_empty = len(state_msg.get('nodeStates', [])) <= 1
+            edges_empty = len(state_msg.get('edgeStates', [])) == 0
+            if nodes_empty and edges_empty and actions_finished and not self.driving:
+                is_completed = True
+
+        if self.agent_state == 'EXECUTING' and is_completed:
             if self.current_task is not None:
-                self.current_task['task_completed'] = True
+                if 'current_station_idx' in self.current_task and self.current_task['current_station_idx'] < len(self.current_task['stations']) - 1:
+                    # Task has more stations to go!
+                    self.current_task['current_station_idx'] += 1
+                    self.current_task['task_assigned'] = False
+                else:
+                    # All stations are completed!
+                    self.current_task['task_completed'] = True
+                self.current_task = None
+            self.agent_state = 'IDLE'
             self.agent_state = 'IDLE'
             

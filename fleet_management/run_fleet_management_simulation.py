@@ -59,10 +59,9 @@ class ConfigManager:
 def get_agent_simulation_path() -> str:
     exe_name = "agent_simulation.exe" if platform.system() == "Windows" else "agent_simulation"
     return os.path.join(_SCRIPT_DIR, "src", "mobile_robot_simulation", "dist", exe_name)
-
-
 def run_simulation(config_manager: ConfigManager, logging: logging.Logger):
-    # Start the agent simulation executable.
+    proc = None
+    # Start the agent simulation executable (acts as visualization)
     agent_simulation_path = get_agent_simulation_path()
     if not os.path.isfile(agent_simulation_path):
         logging.error(
@@ -72,7 +71,7 @@ def run_simulation(config_manager: ConfigManager, logging: logging.Logger):
         sys.exit(1)
 
     try:
-        proc = subprocess.Popen([agent_simulation_path])
+        proc = subprocess.Popen([agent_simulation_path], cwd=_SCRIPT_DIR)
         logging.info("Agent simulation executable started. Waiting for it to initialize...")
         # TODO: Adjust sleep time if the agent simulation takes longer to start on your system.
         time.sleep(6)
@@ -110,11 +109,12 @@ def run_simulation(config_manager: ConfigManager, logging: logging.Logger):
     except KeyboardInterrupt:
         logging.info("Simulation stopped by user (Ctrl+C).")
     finally:
-        proc.terminate()
-        try:
-            proc.wait(timeout=5)
-        except subprocess.TimeoutExpired:
-            proc.kill()
+        if proc:
+            proc.terminate()
+            try:
+                proc.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                proc.kill()
 
 
 def main():

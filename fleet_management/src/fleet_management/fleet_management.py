@@ -125,53 +125,6 @@ class FleetManagement:
         # )
 
 
-        for agent in self.agents.agents:
-            while not agent.agvPosition:
-                time.sleep(0.5)
-
-            nearest_node = agent.current_node
-
-            if nearest_node not in self.graph.dwelling_nodes:
-                best_dwell = self._select_nearest_available_dwelling(
-                    nearest_node,
-                    excluding_agent=agent
-                )
-
-                path_nodes, path_edges= self.path_planning.astar_search(
-                    nearest_node, best_dwell, agent.vehicle_type_id
-                )
-
-                nodes = self.build_order_nodes(path_nodes,{"stations": []}, agent.vehicle_type_id)
-                edges = self.build_order_edges(path_nodes, path_edges)
-
-                agent.agent_state = 'EXECUTING'
-                
-                for n in nodes:
-                    n['released'] = False
-                for e in edges:
-                    e['released'] = False
-                if nodes:
-                    nodes[0]['released'] = True
-
-                agent.full_nodes = nodes
-                agent.full_edges = edges
-                agent.released_index = 1
-                agent.tracked_current_idx = 0
-                agent.order_update_id = 0
-                agent.current_order_id = str(self.agents.order_header_id)
-
-                agent.order_interface.generate_order_message(
-                    agent=agent,
-                    orderId=agent.current_order_id,
-                    order_updateId=agent.order_update_id,
-                    nodes=agent.full_nodes,
-                    edges=agent.full_edges
-                )
-                self.agents.order_header_id += 1
-
-                while agent.agent_state != 'IDLE':
-                    time.sleep(0.5)
-
         while any(not t['task_assigned'] for t in self.task_management.task_list):
             
             # Find all idle agents
@@ -180,39 +133,104 @@ class FleetManagement:
             if not idle_agents:
                 time.sleep(0.5)
                 continue
-                
-            # Pick the first idle agent
-            agent = idle_agents[0]
 
-            # Task 2e: get the vehicle type of the selected agent
-            vehicle_type_id = agent.vehicle_type_id
-                
-            try:
-                task = next(t for t in self.task_management.task_list if not t['task_assigned'])
-            except StopIteration:
-                break
-
-            # Task 2e: pass vehicle_type_id to build_path_for_task()
-            path_nodes, path_edges = self.build_path_for_task(
-                task,
-                agent.current_node,
-                vehicle_type_id
-            )
-
-            if path_nodes is None or path_edges is None:
-                print(
-                    f"No valid path found for {agent.agentId} "
-                    f"with vehicle type {vehicle_type_id}"
-                )
-                time.sleep(0.5)
+            homing_started = False
+            for agent in idle_agents:
+                if not getattr(agent, 'has_homed', False):
+                    agent.has_homed = True
+                    if agent.current_node not in self.graph.dwelling_nodes:
+                        best_dwell = self._select_nearest_available_dwelling(
+                            agent.current_node,
+                            excluding_agent=agent
+                        )
+                        if best_dwell:
+                            path_nodes, path_edges = self.path_planning.astar_search(
+                                agent.current_node, best_dwell, agent.vehicle_type_id
+                            )
+                            if path_nodes and path_edges:
+                                nodes = self.build_order_nodes(path_nodes, {"stations": []}, agent.vehicle_type_id)
+                                edges = self.build_order_edges(path_nodes, path_edges)
+                                agent.agent_state = 'EXECUTING'
+                                for n in nodes: n['released'] = False
+                                for e in edges: e['released'] = False
+                                if nodes: nodes[0]['released'] = True
+                                agent.full_nodes, agent.full_edges = nodes, edges
+                                agent.released_index, agent.tracked_current_idx = 1, 0
+                                agent.order_update_id = 0
+                                agent.current_order_id = str(self.agents.order_header_id)
+                                self.agents.order_header_id += 1
+                                agent.order_interface.generate_order_message(
+                                    agent=agent, orderId=agent.current_order_id,
+                                    order_updateId=agent.order_update_id,
+                                    nodes=agent.full_nodes, edges=agent.full_edges
+                                )
+                                homing_started = True
+                                break
+            
+            if homing_started:
                 continue
 
-            # Task 2e: pass vehicle_type_id to build_order_nodes()
-            nodes = self.build_order_nodes(
-                path_nodes,
-                task,
-                vehicle_type_id
-            )
+            task_assigned_this_cycle = False
+            for task in self.task_management.task_list:
+                if task['task_assigned']:
+                    continue
+                    
+                assigned_agent_sn = task.get('assigned_agent')
+                suitable_agent = None
+                
+                for a in idle_agents:
+                    if assigned_agent_sn:
+                        if a.agentId == assigned_agent_sn:
+                            suitable_agent = a
+                            break
+                    else:
+                        suitable_agent = a
+                        break
+                        
+                if suitable_agent is None:
+                    print(f"[DEBUG] No suitable agent for task {task['task_id']}. assigned_agent_sn={assigned_agent_sn}, idle_agents={[a.agentId for a in idle_agents]}")
+                    continue # No idle agent for this task
+                    
+                agent = suitable_agent
+                vehicle_type_id = agent.vehicle_type_id
+                
+                # Initialize station index tracking
+                if 'current_station_idx' not in task:
+                    task['current_station_idx'] = 0
+                    
+                idx = task['current_station_idx']
+                is_last_station = (idx == len(task['stations']) - 1)
+                
+                # Create a temporary task with JUST the current station
+                temp_task = {
+                    "task_id": task["task_id"],
+                    "stations": [task["stations"][idx]]
+                }
+                
+                print(f"[DEBUG] Attempting to assign {task['task_id']} (idx={idx}) to {agent.agentId}")
+
+                # Task 2e: pass vehicle_type_id to build_path_for_task()
+                # Only append homing if it's the LAST station in the task
+                path_nodes, path_edges = self.build_path_for_task(
+                    temp_task,
+                    agent.current_node,
+                    vehicle_type_id,
+                    append_homing=is_last_station
+                )
+
+                if path_nodes is None or path_edges is None:
+                    print(
+                        f"No valid path found for {agent.agentId} "
+                        f"with vehicle type {vehicle_type_id}"
+                    )
+                    continue
+
+                # Task 2e: pass vehicle_type_id to build_order_nodes()
+                nodes = self.build_order_nodes(
+                    path_nodes,
+                    temp_task,
+                    vehicle_type_id
+                )
 
             edges = self.build_order_edges(path_nodes, path_edges)
             
@@ -242,11 +260,17 @@ class FleetManagement:
                 nodes=agent.full_nodes,
                 edges=agent.full_edges
             )
+            
+            # Pin the task to this agent
+            task['assigned_agent'] = agent.agentId
             self.agents.order_header_id += 1
+            task_assigned_this_cycle = True
+            break # Break out of task loop, process next idle agent in next while loop iteration
+            
+        if not task_assigned_this_cycle:
             time.sleep(0.5)
-
     def build_path_for_task(self, task: dict, start_node: str,
-                            vehicle_type_id: str) -> tuple:
+                            vehicle_type_id: str, append_homing: bool = True) -> tuple:
         """
         Task 7: Chain multiple A* searches to cover all stations in a task.
 
@@ -301,30 +325,31 @@ class FleetManagement:
             combined_edges.extend(edges)
             current= target_node
 
-        nearest_dwelling = self._select_nearest_available_dwelling(
-            current,
-            excluding_agent=None
-        )
+        if append_homing:
+            nearest_dwelling = self._select_nearest_available_dwelling(
+                current,
+                excluding_agent=None
+            )
 
-        if nearest_dwelling is None:
-            return None, None
+            if nearest_dwelling is None:
+                return None, None
 
-        #3.规划返回休息点的路径
-        nodes, edges = self.path_planning.astar_search(
-            current,
-            nearest_dwelling,
-            vehicle_type_id
-        )
+            #3.规划返回休息点的路径
+            nodes, edges = self.path_planning.astar_search(
+                current,
+                nearest_dwelling,
+                vehicle_type_id
+            )
 
-        if nodes is None or edges is None:
-            return None, None
+            if nodes is None or edges is None:
+                return None, None
 
-        if combined_nodes:
-            combined_nodes.extend(nodes[1:])#跳过第一个节点，避免重复
-        else:
-            combined_nodes.extend(nodes)
+            if combined_nodes:
+                combined_nodes.extend(nodes[1:])#跳过第一个节点，避免重复
+            else:
+                combined_nodes.extend(nodes)
 
-        combined_edges.extend(edges)
+            combined_edges.extend(edges)
 
         return (combined_nodes, combined_edges)
     
@@ -598,8 +623,6 @@ class PathPlanning:
             ):
                 penalty = 0.0
                 if neighbour == 'N11':
-                    # Unconditionally penalize N11 to force a passing loop.
-                    # mouse001 MUST use N11 (no other path to N3), but cat001 will reroute via N10->N14.
                     penalty = 5.0
                     
                 tentative_g_score = (
