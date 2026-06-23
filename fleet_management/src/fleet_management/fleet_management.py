@@ -237,51 +237,49 @@ class FleetManagement:
 
         return fuzzy_matrix
     
-    def create_color_visualizer(color_vector):
-        # Hauptfenster erstellen
+    def create_color_visualizer(self, color_vector, zeitschritt_ms):
+        """
+        Visualisiert einen Farbvektor ohne Schrift.
+        :param color_vector: Liste von Hex-Farbcodes
+        :param zeitschritt_ms: Zeitdauer in Millisekunden, nach der das Layout skaliert/aktualisiert wird
+        """
         root = tk.Tk()
-        root.title("Farbvektor Visualisator")
-        root.geometry("600x400")
-        root.configure(bg="#f0f0f0")
+        root.title("Farbvisualisator")
+        
+        # Standardgröße beim Start
+        root.geometry("600x200") 
+        root.configure(bg="#1a1a1a")
 
-        # Überschrift
-        label = tk.Label(root, text="Visualisierte Farbpalette", font=("Arial", 14, "bold"), bg="#f0f0f0")
-        label.pack(pady=10)
+        # Container für die Farbflächen
+        container = tk.Frame(root, bg="#1a1a1a")
+        container.pack(fill=tk.BOTH, expand=True, padx=0, pady=0)
 
-        # Container für die Farbflächen (nutzt Grid für Flexibilität)
-        container = tk.Frame(root, bg="#f0f0f0")
-        container.pack(fill=tk.BOTH, expand=True, padx=20, pady=10)
-
-        # Konfiguration der Spalten, damit sie sich gleichmäßig verteilen
         num_colors = len(color_vector)
-        for i in range(num_colors):
-            container.columnconfigure(i, weight=1)
-        container.rowconfigure(0, weight=1)
 
-        # Farbflächen dynamisch erstellen
-        for index, color in enumerate(color_vector):
-            try:
-                # Frame als Farbblock
-                color_block = tk.Frame(container, bg=color, relief=tk.RAISED, bd=2)
-                color_block.grid(row=0, column=index, sticky="nsew", padx=5, pady=5)
-                
-                # Label für den Farbcode (Textfarbe passt sich grob an)
-                # Für eine smarte GUI: Hex-Code als Text anzeigen
-                color_text = tk.Label(color_block, text=color, font=("Courier", 10, "bold"), 
-                                    bg=color, fg="#ffffff" if "00" in color.lower() else "#000000")
-                color_text.pack(expand=True)
-                
-            except tk.TclError:
-                # Falls ein Farbcode ungültig ist (z.B. Tippfehler)
-                error_block = tk.Frame(container, bg="#ffffff", relief=tk.SUNKEN, bd=2)
-                error_block.grid(row=0, column=index, sticky="nsew", padx=5, pady=5)
-                
-                error_text = tk.Label(error_block, text=f"Ungültig:\n{color}", font=("Arial", 9, "italic"), fg="red", bg="#ffffff")
-                error_text.pack(expand=True)
+        def layout_anpassen():
+            # Löscht alte Blöcke, falls vorhanden, für ein sauberes Update
+            for widget in container.winfo_children():
+                widget.destroy()
 
-        # GUI starten
+            # Grid-Konfiguration basierend auf dem Vektor
+            for i in range(num_colors):
+                container.columnconfigure(i, weight=1)
+            container.rowconfigure(0, weight=1)
+
+            # Farbblöcke zeichnen (ohne Text-Labels!)
+            for index, color in enumerate(color_vector):
+                try:
+                    color_block = tk.Frame(container, bg=color, relief=tk.FLAT)
+                    color_block.grid(row=0, column=index, sticky="nsew", padx=2, pady=2)
+                except tk.TclError:
+                    # Fallback für ungültige Farbcodes (wird schwarz dargestellt)
+                    color_block = tk.Frame(container, bg="#000000", relief=tk.FLAT)
+                    color_block.grid(row=0, column=index, sticky="nsew", padx=2, pady=2)
+
+        # Die Skalierung/Das Zeichnen wird erst nach dem gewünschten Zeitschritt getriggert
+        root.after(zeitschritt_ms, layout_anpassen)
+
         root.mainloop()
-
 
     def multiplyMatrixes(self,matrix1,matrix2):
         """Multiply two matrices over their overlapping region.
@@ -752,12 +750,13 @@ class FleetManagement:
                 #self.visualizeVectorGUI(self.visualizeVector(self.vectorize(combine),0.2), 0.2)
             with open("output5.txt","a") as fffff:
                 print("Hello",file=fffff)
-
+                print(self.visualizeVector({0,1,0,0.5},0.2),file=fffff)
                 #
                 #print(self.visualizeVector({0,1,0,0.5},0.2),file=fffff)
                 #print(self.visualizeVector(self.vectorize(combine),0.2),file=fffff)
-            temp= self.visualizeVector({0,1,0,0.5},0.2)
-            self.create_color_visualizer(temp)
+            temp= self.visualizeVector(self.vectorize(combine),0.2)
+            if combine != None:
+                self.create_color_visualizer(color_vector=temp, zeitschritt_ms=200)
             
             task['task_assigned'] = True
             agent.agent_state = 'EXECUTING'
