@@ -361,10 +361,13 @@ class FleetManagement:
         """
         if not self.graph.dwelling_nodes:
             return None
-
+        if current_node == "init":
+            current_node == ""
+                
         candidate_dwelling = sorted(
             self.graph.dwelling_nodes,
             key=lambda d: math.dist(
+                
                 self.graph.nodes[current_node]['pos'],
                 self.graph.nodes[d]['pos']
             )
