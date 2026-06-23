@@ -1,11 +1,11 @@
 {
-    "mqtt_broker_ip": "172.22.222.238",
+    "mqtt_broker_ip": "localhost",
     "_comment1": "IP address of the MQTT broker.",
     "mqtt_broker_port": 1883,
     "_comment2": "Port of the MQTT broker.",
     "pygame_fps": 30,
     "_comment3": "Frame rate of the visualisation.",
-    "fleet_management_mode": "REAL_AGENTS",
+    "fleet_management_mode": "SIMULATED_AGENTS",
     "_comment4": "Mode of the fleet management. Options: SIMULATED_AGENTS or REAL_AGENTS. When set to REAL_AGENTS, real agents are controlled. An initial state message is required and the simulated agents do not send state and visualisation messages.",
     "simulation_run_time": 300,
     "_comment5": "Simulation run time in seconds. Value can be set high for 'infinite' simulation.",
