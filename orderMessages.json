@@ -22795,4 +22795,2224 @@
             "actions": []
         }
     ]
+}{
+    "headerId": 1,
+    "timestamp": "2026-06-24T13:30:21.678175Z",
+    "version": "2.0.0",
+    "manufacturer": "IMRL",
+    "serialNumber": "cat001",
+    "orderId": "1",
+    "orderUpdateId": 0,
+    "nodes": [
+        {
+            "nodeId": "N12",
+            "sequenceId": 0,
+            "released": true,
+            "nodePosition": {
+                "x": 7.5,
+                "y": 0.94,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N14",
+            "sequenceId": 2,
+            "released": false,
+            "nodePosition": {
+                "x": 5.82,
+                "y": 2.2,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N10",
+            "sequenceId": 4,
+            "released": false,
+            "nodePosition": {
+                "x": 4.83,
+                "y": 3.6,
+                "mapId": "Map_1"
+            },
+            "actions": [
+                {
+                    "actionType": "init_fine_positioning",
+                    "actionId": "c71c191d-278b-4da2-8aeb-3c09009de6d1",
+                    "blockingType": "HARD",
+                    "actionParameters": [
+                        {
+                            "key": "init_fine_pos_name",
+                            "value": "station001_A"
+                        },
+                        {
+                            "key": "init_fine_pos_x",
+                            "value": 5.61
+                        },
+                        {
+                            "key": "init_fine_pos_y",
+                            "value": 4.73
+                        },
+                        {
+                            "key": "fine_pos_control_x",
+                            "value": 0.02
+                        },
+                        {
+                            "key": "fine_pos_control_y",
+                            "value": 0.0
+                        },
+                        {
+                            "key": "fine_pos_control_theta",
+                            "value": 0.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "nodeId": "N1A",
+            "sequenceId": 6,
+            "released": false,
+            "nodePosition": {
+                "x": 5.61,
+                "y": 4.73,
+                "mapId": "Map_1",
+                "theta": 0.0
+            },
+            "actions": [
+                {
+                    "actionType": "pick",
+                    "actionId": "34c95b2d-0b4f-4030-8f07-9bda9b7e9691",
+                    "blockingType": "HARD",
+                    "actionParameters": []
+                }
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "edgeId": "E22",
+            "sequenceId": 1,
+            "released": false,
+            "startNodeId": "N12",
+            "endNodeId": "N14",
+            "actions": []
+        },
+        {
+            "edgeId": "E10",
+            "sequenceId": 3,
+            "released": false,
+            "startNodeId": "N14",
+            "endNodeId": "N10",
+            "actions": []
+        },
+        {
+            "edgeId": "E11",
+            "sequenceId": 5,
+            "released": false,
+            "startNodeId": "N10",
+            "endNodeId": "N1A",
+            "actions": []
+        }
+    ]
+}{
+    "headerId": 2,
+    "timestamp": "2026-06-24T13:30:22.178015Z",
+    "version": "2.0.0",
+    "manufacturer": "IMRL",
+    "serialNumber": "cat001",
+    "orderId": "1",
+    "orderUpdateId": 1,
+    "nodes": [
+        {
+            "nodeId": "N12",
+            "sequenceId": 0,
+            "released": true,
+            "nodePosition": {
+                "x": 7.5,
+                "y": 0.94,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N14",
+            "sequenceId": 2,
+            "released": true,
+            "nodePosition": {
+                "x": 5.82,
+                "y": 2.2,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N10",
+            "sequenceId": 4,
+            "released": true,
+            "nodePosition": {
+                "x": 4.83,
+                "y": 3.6,
+                "mapId": "Map_1"
+            },
+            "actions": [
+                {
+                    "actionType": "init_fine_positioning",
+                    "actionId": "c71c191d-278b-4da2-8aeb-3c09009de6d1",
+                    "blockingType": "HARD",
+                    "actionParameters": [
+                        {
+                            "key": "init_fine_pos_name",
+                            "value": "station001_A"
+                        },
+                        {
+                            "key": "init_fine_pos_x",
+                            "value": 5.61
+                        },
+                        {
+                            "key": "init_fine_pos_y",
+                            "value": 4.73
+                        },
+                        {
+                            "key": "fine_pos_control_x",
+                            "value": 0.02
+                        },
+                        {
+                            "key": "fine_pos_control_y",
+                            "value": 0.0
+                        },
+                        {
+                            "key": "fine_pos_control_theta",
+                            "value": 0.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "nodeId": "N1A",
+            "sequenceId": 6,
+            "released": false,
+            "nodePosition": {
+                "x": 5.61,
+                "y": 4.73,
+                "mapId": "Map_1",
+                "theta": 0.0
+            },
+            "actions": [
+                {
+                    "actionType": "pick",
+                    "actionId": "34c95b2d-0b4f-4030-8f07-9bda9b7e9691",
+                    "blockingType": "HARD",
+                    "actionParameters": []
+                }
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "edgeId": "E22",
+            "sequenceId": 1,
+            "released": true,
+            "startNodeId": "N12",
+            "endNodeId": "N14",
+            "actions": []
+        },
+        {
+            "edgeId": "E10",
+            "sequenceId": 3,
+            "released": true,
+            "startNodeId": "N14",
+            "endNodeId": "N10",
+            "actions": []
+        },
+        {
+            "edgeId": "E11",
+            "sequenceId": 5,
+            "released": false,
+            "startNodeId": "N10",
+            "endNodeId": "N1A",
+            "actions": []
+        }
+    ]
+}{
+    "headerId": 1,
+    "timestamp": "2026-06-24T13:30:32.683012Z",
+    "version": "2.0.0",
+    "manufacturer": "IMRL",
+    "serialNumber": "mouse001",
+    "orderId": "2",
+    "orderUpdateId": 0,
+    "nodes": [
+        {
+            "nodeId": "N7",
+            "sequenceId": 0,
+            "released": true,
+            "nodePosition": {
+                "x": 1.0,
+                "y": 4.71,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N8",
+            "sequenceId": 2,
+            "released": false,
+            "nodePosition": {
+                "x": 1.0,
+                "y": 3.45,
+                "mapId": "Map_1"
+            },
+            "actions": [
+                {
+                    "actionType": "init_fine_positioning",
+                    "actionId": "207b0e8d-2b7d-47c5-8047-ea80762fbe7c",
+                    "blockingType": "HARD",
+                    "actionParameters": [
+                        {
+                            "key": "init_fine_pos_name",
+                            "value": "station002_A"
+                        },
+                        {
+                            "key": "init_fine_pos_x",
+                            "value": 2.33
+                        },
+                        {
+                            "key": "init_fine_pos_y",
+                            "value": 1.42
+                        },
+                        {
+                            "key": "fine_pos_control_x",
+                            "value": 0.08
+                        },
+                        {
+                            "key": "fine_pos_control_y",
+                            "value": 0.0
+                        },
+                        {
+                            "key": "fine_pos_control_theta",
+                            "value": 1.57
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "nodeId": "N2",
+            "sequenceId": 4,
+            "released": false,
+            "nodePosition": {
+                "x": 2.33,
+                "y": 1.42,
+                "mapId": "Map_1",
+                "theta": 0.0
+            },
+            "actions": [
+                {
+                    "actionType": "pick",
+                    "actionId": "c30ca320-31f5-43c5-b370-02f47d938b29",
+                    "blockingType": "HARD",
+                    "actionParameters": []
+                }
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "edgeId": "E12",
+            "sequenceId": 1,
+            "released": false,
+            "startNodeId": "N7",
+            "endNodeId": "N8",
+            "actions": []
+        },
+        {
+            "edgeId": "E8",
+            "sequenceId": 3,
+            "released": false,
+            "startNodeId": "N8",
+            "endNodeId": "N2",
+            "actions": []
+        }
+    ]
+}{
+    "headerId": 2,
+    "timestamp": "2026-06-24T13:30:33.183034Z",
+    "version": "2.0.0",
+    "manufacturer": "IMRL",
+    "serialNumber": "mouse001",
+    "orderId": "2",
+    "orderUpdateId": 1,
+    "nodes": [
+        {
+            "nodeId": "N7",
+            "sequenceId": 0,
+            "released": true,
+            "nodePosition": {
+                "x": 1.0,
+                "y": 4.71,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N8",
+            "sequenceId": 2,
+            "released": true,
+            "nodePosition": {
+                "x": 1.0,
+                "y": 3.45,
+                "mapId": "Map_1"
+            },
+            "actions": [
+                {
+                    "actionType": "init_fine_positioning",
+                    "actionId": "207b0e8d-2b7d-47c5-8047-ea80762fbe7c",
+                    "blockingType": "HARD",
+                    "actionParameters": [
+                        {
+                            "key": "init_fine_pos_name",
+                            "value": "station002_A"
+                        },
+                        {
+                            "key": "init_fine_pos_x",
+                            "value": 2.33
+                        },
+                        {
+                            "key": "init_fine_pos_y",
+                            "value": 1.42
+                        },
+                        {
+                            "key": "fine_pos_control_x",
+                            "value": 0.08
+                        },
+                        {
+                            "key": "fine_pos_control_y",
+                            "value": 0.0
+                        },
+                        {
+                            "key": "fine_pos_control_theta",
+                            "value": 1.57
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "nodeId": "N2",
+            "sequenceId": 4,
+            "released": true,
+            "nodePosition": {
+                "x": 2.33,
+                "y": 1.42,
+                "mapId": "Map_1",
+                "theta": 0.0
+            },
+            "actions": [
+                {
+                    "actionType": "pick",
+                    "actionId": "c30ca320-31f5-43c5-b370-02f47d938b29",
+                    "blockingType": "HARD",
+                    "actionParameters": []
+                }
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "edgeId": "E12",
+            "sequenceId": 1,
+            "released": true,
+            "startNodeId": "N7",
+            "endNodeId": "N8",
+            "actions": []
+        },
+        {
+            "edgeId": "E8",
+            "sequenceId": 3,
+            "released": true,
+            "startNodeId": "N8",
+            "endNodeId": "N2",
+            "actions": []
+        }
+    ]
+}{
+    "headerId": 3,
+    "timestamp": "2026-06-24T13:30:39.686544Z",
+    "version": "2.0.0",
+    "manufacturer": "IMRL",
+    "serialNumber": "cat001",
+    "orderId": "1",
+    "orderUpdateId": 2,
+    "nodes": [
+        {
+            "nodeId": "N14",
+            "sequenceId": 2,
+            "released": true,
+            "nodePosition": {
+                "x": 5.82,
+                "y": 2.2,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N10",
+            "sequenceId": 4,
+            "released": true,
+            "nodePosition": {
+                "x": 4.83,
+                "y": 3.6,
+                "mapId": "Map_1"
+            },
+            "actions": [
+                {
+                    "actionType": "init_fine_positioning",
+                    "actionId": "c71c191d-278b-4da2-8aeb-3c09009de6d1",
+                    "blockingType": "HARD",
+                    "actionParameters": [
+                        {
+                            "key": "init_fine_pos_name",
+                            "value": "station001_A"
+                        },
+                        {
+                            "key": "init_fine_pos_x",
+                            "value": 5.61
+                        },
+                        {
+                            "key": "init_fine_pos_y",
+                            "value": 4.73
+                        },
+                        {
+                            "key": "fine_pos_control_x",
+                            "value": 0.02
+                        },
+                        {
+                            "key": "fine_pos_control_y",
+                            "value": 0.0
+                        },
+                        {
+                            "key": "fine_pos_control_theta",
+                            "value": 0.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "nodeId": "N1A",
+            "sequenceId": 6,
+            "released": true,
+            "nodePosition": {
+                "x": 5.61,
+                "y": 4.73,
+                "mapId": "Map_1",
+                "theta": 0.0
+            },
+            "actions": [
+                {
+                    "actionType": "pick",
+                    "actionId": "34c95b2d-0b4f-4030-8f07-9bda9b7e9691",
+                    "blockingType": "HARD",
+                    "actionParameters": []
+                }
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "edgeId": "E10",
+            "sequenceId": 3,
+            "released": true,
+            "startNodeId": "N14",
+            "endNodeId": "N10",
+            "actions": []
+        },
+        {
+            "edgeId": "E11",
+            "sequenceId": 5,
+            "released": true,
+            "startNodeId": "N10",
+            "endNodeId": "N1A",
+            "actions": []
+        }
+    ]
+}{
+    "headerId": 3,
+    "timestamp": "2026-06-24T13:31:43.704254Z",
+    "version": "2.0.0",
+    "manufacturer": "IMRL",
+    "serialNumber": "mouse001",
+    "orderId": "3",
+    "orderUpdateId": 0,
+    "nodes": [
+        {
+            "nodeId": "N2",
+            "sequenceId": 0,
+            "released": true,
+            "nodePosition": {
+                "x": 2.33,
+                "y": 1.42,
+                "mapId": "Map_1",
+                "theta": 0.0
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N8",
+            "sequenceId": 2,
+            "released": false,
+            "nodePosition": {
+                "x": 1.0,
+                "y": 3.45,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N9",
+            "sequenceId": 4,
+            "released": false,
+            "nodePosition": {
+                "x": 2.33,
+                "y": 3.45,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N13",
+            "sequenceId": 6,
+            "released": false,
+            "nodePosition": {
+                "x": 3.58,
+                "y": 3.45,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N10",
+            "sequenceId": 8,
+            "released": false,
+            "nodePosition": {
+                "x": 4.83,
+                "y": 3.6,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N14",
+            "sequenceId": 10,
+            "released": false,
+            "nodePosition": {
+                "x": 5.82,
+                "y": 2.2,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N6",
+            "sequenceId": 12,
+            "released": false,
+            "nodePosition": {
+                "x": 7.9,
+                "y": 2.25,
+                "mapId": "Map_1"
+            },
+            "actions": [
+                {
+                    "actionType": "process",
+                    "actionId": "f10666be-7c74-4d20-b297-0e1137ac8460",
+                    "blockingType": "HARD",
+                    "processingTime": 2.0,
+                    "actionParameters": []
+                }
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "edgeId": "E8",
+            "sequenceId": 1,
+            "released": false,
+            "startNodeId": "N2",
+            "endNodeId": "N8",
+            "actions": []
+        },
+        {
+            "edgeId": "E7",
+            "sequenceId": 3,
+            "released": false,
+            "startNodeId": "N8",
+            "endNodeId": "N9",
+            "actions": []
+        },
+        {
+            "edgeId": "E3",
+            "sequenceId": 5,
+            "released": false,
+            "startNodeId": "N9",
+            "endNodeId": "N13",
+            "actions": []
+        },
+        {
+            "edgeId": "E4",
+            "sequenceId": 7,
+            "released": false,
+            "startNodeId": "N13",
+            "endNodeId": "N10",
+            "actions": []
+        },
+        {
+            "edgeId": "E10",
+            "sequenceId": 9,
+            "released": false,
+            "startNodeId": "N10",
+            "endNodeId": "N14",
+            "actions": []
+        },
+        {
+            "edgeId": "E15",
+            "sequenceId": 11,
+            "released": false,
+            "startNodeId": "N14",
+            "endNodeId": "N6",
+            "actions": []
+        }
+    ]
+}{
+    "headerId": 4,
+    "timestamp": "2026-06-24T13:31:43.705861Z",
+    "version": "2.0.0",
+    "manufacturer": "IMRL",
+    "serialNumber": "mouse001",
+    "orderId": "3",
+    "orderUpdateId": 1,
+    "nodes": [
+        {
+            "nodeId": "N2",
+            "sequenceId": 0,
+            "released": true,
+            "nodePosition": {
+                "x": 2.33,
+                "y": 1.42,
+                "mapId": "Map_1",
+                "theta": 0.0
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N8",
+            "sequenceId": 2,
+            "released": true,
+            "nodePosition": {
+                "x": 1.0,
+                "y": 3.45,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N9",
+            "sequenceId": 4,
+            "released": true,
+            "nodePosition": {
+                "x": 2.33,
+                "y": 3.45,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N13",
+            "sequenceId": 6,
+            "released": false,
+            "nodePosition": {
+                "x": 3.58,
+                "y": 3.45,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N10",
+            "sequenceId": 8,
+            "released": false,
+            "nodePosition": {
+                "x": 4.83,
+                "y": 3.6,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N14",
+            "sequenceId": 10,
+            "released": false,
+            "nodePosition": {
+                "x": 5.82,
+                "y": 2.2,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N6",
+            "sequenceId": 12,
+            "released": false,
+            "nodePosition": {
+                "x": 7.9,
+                "y": 2.25,
+                "mapId": "Map_1"
+            },
+            "actions": [
+                {
+                    "actionType": "process",
+                    "actionId": "f10666be-7c74-4d20-b297-0e1137ac8460",
+                    "blockingType": "HARD",
+                    "processingTime": 2.0,
+                    "actionParameters": []
+                }
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "edgeId": "E8",
+            "sequenceId": 1,
+            "released": true,
+            "startNodeId": "N2",
+            "endNodeId": "N8",
+            "actions": []
+        },
+        {
+            "edgeId": "E7",
+            "sequenceId": 3,
+            "released": true,
+            "startNodeId": "N8",
+            "endNodeId": "N9",
+            "actions": []
+        },
+        {
+            "edgeId": "E3",
+            "sequenceId": 5,
+            "released": false,
+            "startNodeId": "N9",
+            "endNodeId": "N13",
+            "actions": []
+        },
+        {
+            "edgeId": "E4",
+            "sequenceId": 7,
+            "released": false,
+            "startNodeId": "N13",
+            "endNodeId": "N10",
+            "actions": []
+        },
+        {
+            "edgeId": "E10",
+            "sequenceId": 9,
+            "released": false,
+            "startNodeId": "N10",
+            "endNodeId": "N14",
+            "actions": []
+        },
+        {
+            "edgeId": "E15",
+            "sequenceId": 11,
+            "released": false,
+            "startNodeId": "N14",
+            "endNodeId": "N6",
+            "actions": []
+        }
+    ]
+}{
+    "headerId": 5,
+    "timestamp": "2026-06-24T13:32:19.719362Z",
+    "version": "2.0.0",
+    "manufacturer": "IMRL",
+    "serialNumber": "mouse001",
+    "orderId": "3",
+    "orderUpdateId": 2,
+    "nodes": [
+        {
+            "nodeId": "N8",
+            "sequenceId": 2,
+            "released": true,
+            "nodePosition": {
+                "x": 1.0,
+                "y": 3.45,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N9",
+            "sequenceId": 4,
+            "released": true,
+            "nodePosition": {
+                "x": 2.33,
+                "y": 3.45,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N13",
+            "sequenceId": 6,
+            "released": true,
+            "nodePosition": {
+                "x": 3.58,
+                "y": 3.45,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N10",
+            "sequenceId": 8,
+            "released": false,
+            "nodePosition": {
+                "x": 4.83,
+                "y": 3.6,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N14",
+            "sequenceId": 10,
+            "released": false,
+            "nodePosition": {
+                "x": 5.82,
+                "y": 2.2,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N6",
+            "sequenceId": 12,
+            "released": false,
+            "nodePosition": {
+                "x": 7.9,
+                "y": 2.25,
+                "mapId": "Map_1"
+            },
+            "actions": [
+                {
+                    "actionType": "process",
+                    "actionId": "f10666be-7c74-4d20-b297-0e1137ac8460",
+                    "blockingType": "HARD",
+                    "processingTime": 2.0,
+                    "actionParameters": []
+                }
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "edgeId": "E7",
+            "sequenceId": 3,
+            "released": true,
+            "startNodeId": "N8",
+            "endNodeId": "N9",
+            "actions": []
+        },
+        {
+            "edgeId": "E3",
+            "sequenceId": 5,
+            "released": true,
+            "startNodeId": "N9",
+            "endNodeId": "N13",
+            "actions": []
+        },
+        {
+            "edgeId": "E4",
+            "sequenceId": 7,
+            "released": false,
+            "startNodeId": "N13",
+            "endNodeId": "N10",
+            "actions": []
+        },
+        {
+            "edgeId": "E10",
+            "sequenceId": 9,
+            "released": false,
+            "startNodeId": "N10",
+            "endNodeId": "N14",
+            "actions": []
+        },
+        {
+            "edgeId": "E15",
+            "sequenceId": 11,
+            "released": false,
+            "startNodeId": "N14",
+            "endNodeId": "N6",
+            "actions": []
+        }
+    ]
+}{
+    "headerId": 6,
+    "timestamp": "2026-06-24T13:32:27.723530Z",
+    "version": "2.0.0",
+    "manufacturer": "IMRL",
+    "serialNumber": "mouse001",
+    "orderId": "3",
+    "orderUpdateId": 3,
+    "nodes": [
+        {
+            "nodeId": "N9",
+            "sequenceId": 4,
+            "released": true,
+            "nodePosition": {
+                "x": 2.33,
+                "y": 3.45,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N13",
+            "sequenceId": 6,
+            "released": true,
+            "nodePosition": {
+                "x": 3.58,
+                "y": 3.45,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N10",
+            "sequenceId": 8,
+            "released": true,
+            "nodePosition": {
+                "x": 4.83,
+                "y": 3.6,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N14",
+            "sequenceId": 10,
+            "released": false,
+            "nodePosition": {
+                "x": 5.82,
+                "y": 2.2,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N6",
+            "sequenceId": 12,
+            "released": false,
+            "nodePosition": {
+                "x": 7.9,
+                "y": 2.25,
+                "mapId": "Map_1"
+            },
+            "actions": [
+                {
+                    "actionType": "process",
+                    "actionId": "f10666be-7c74-4d20-b297-0e1137ac8460",
+                    "blockingType": "HARD",
+                    "processingTime": 2.0,
+                    "actionParameters": []
+                }
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "edgeId": "E3",
+            "sequenceId": 5,
+            "released": true,
+            "startNodeId": "N9",
+            "endNodeId": "N13",
+            "actions": []
+        },
+        {
+            "edgeId": "E4",
+            "sequenceId": 7,
+            "released": true,
+            "startNodeId": "N13",
+            "endNodeId": "N10",
+            "actions": []
+        },
+        {
+            "edgeId": "E10",
+            "sequenceId": 9,
+            "released": false,
+            "startNodeId": "N10",
+            "endNodeId": "N14",
+            "actions": []
+        },
+        {
+            "edgeId": "E15",
+            "sequenceId": 11,
+            "released": false,
+            "startNodeId": "N14",
+            "endNodeId": "N6",
+            "actions": []
+        }
+    ]
+}{
+    "headerId": 7,
+    "timestamp": "2026-06-24T13:32:34.726994Z",
+    "version": "2.0.0",
+    "manufacturer": "IMRL",
+    "serialNumber": "mouse001",
+    "orderId": "3",
+    "orderUpdateId": 4,
+    "nodes": [
+        {
+            "nodeId": "N13",
+            "sequenceId": 6,
+            "released": true,
+            "nodePosition": {
+                "x": 3.58,
+                "y": 3.45,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N10",
+            "sequenceId": 8,
+            "released": true,
+            "nodePosition": {
+                "x": 4.83,
+                "y": 3.6,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N14",
+            "sequenceId": 10,
+            "released": true,
+            "nodePosition": {
+                "x": 5.82,
+                "y": 2.2,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N6",
+            "sequenceId": 12,
+            "released": false,
+            "nodePosition": {
+                "x": 7.9,
+                "y": 2.25,
+                "mapId": "Map_1"
+            },
+            "actions": [
+                {
+                    "actionType": "process",
+                    "actionId": "f10666be-7c74-4d20-b297-0e1137ac8460",
+                    "blockingType": "HARD",
+                    "processingTime": 2.0,
+                    "actionParameters": []
+                }
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "edgeId": "E4",
+            "sequenceId": 7,
+            "released": true,
+            "startNodeId": "N13",
+            "endNodeId": "N10",
+            "actions": []
+        },
+        {
+            "edgeId": "E10",
+            "sequenceId": 9,
+            "released": true,
+            "startNodeId": "N10",
+            "endNodeId": "N14",
+            "actions": []
+        },
+        {
+            "edgeId": "E15",
+            "sequenceId": 11,
+            "released": false,
+            "startNodeId": "N14",
+            "endNodeId": "N6",
+            "actions": []
+        }
+    ]
+}{
+    "headerId": 8,
+    "timestamp": "2026-06-24T13:32:40.229944Z",
+    "version": "2.0.0",
+    "manufacturer": "IMRL",
+    "serialNumber": "mouse001",
+    "orderId": "3",
+    "orderUpdateId": 5,
+    "nodes": [
+        {
+            "nodeId": "N10",
+            "sequenceId": 8,
+            "released": true,
+            "nodePosition": {
+                "x": 4.83,
+                "y": 3.6,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N14",
+            "sequenceId": 10,
+            "released": true,
+            "nodePosition": {
+                "x": 5.82,
+                "y": 2.2,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N6",
+            "sequenceId": 12,
+            "released": true,
+            "nodePosition": {
+                "x": 7.9,
+                "y": 2.25,
+                "mapId": "Map_1"
+            },
+            "actions": [
+                {
+                    "actionType": "process",
+                    "actionId": "f10666be-7c74-4d20-b297-0e1137ac8460",
+                    "blockingType": "HARD",
+                    "processingTime": 2.0,
+                    "actionParameters": []
+                }
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "edgeId": "E10",
+            "sequenceId": 9,
+            "released": true,
+            "startNodeId": "N10",
+            "endNodeId": "N14",
+            "actions": []
+        },
+        {
+            "edgeId": "E15",
+            "sequenceId": 11,
+            "released": true,
+            "startNodeId": "N14",
+            "endNodeId": "N6",
+            "actions": []
+        }
+    ]
+}{
+    "headerId": 9,
+    "timestamp": "2026-06-24T13:32:49.233656Z",
+    "version": "2.0.0",
+    "manufacturer": "IMRL",
+    "serialNumber": "mouse001",
+    "orderId": "3",
+    "orderUpdateId": 6,
+    "nodes": [
+        {
+            "nodeId": "N14",
+            "sequenceId": 10,
+            "released": true,
+            "nodePosition": {
+                "x": 5.82,
+                "y": 2.2,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N6",
+            "sequenceId": 12,
+            "released": true,
+            "nodePosition": {
+                "x": 7.9,
+                "y": 2.25,
+                "mapId": "Map_1"
+            },
+            "actions": [
+                {
+                    "actionType": "process",
+                    "actionId": "f10666be-7c74-4d20-b297-0e1137ac8460",
+                    "blockingType": "HARD",
+                    "processingTime": 2.0,
+                    "actionParameters": []
+                }
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "edgeId": "E15",
+            "sequenceId": 11,
+            "released": true,
+            "startNodeId": "N14",
+            "endNodeId": "N6",
+            "actions": []
+        }
+    ]
+}{
+    "headerId": 10,
+    "timestamp": "2026-06-24T13:33:21.735063Z",
+    "version": "2.0.0",
+    "manufacturer": "IMRL",
+    "serialNumber": "mouse001",
+    "orderId": "4",
+    "orderUpdateId": 0,
+    "nodes": [
+        {
+            "nodeId": "N6",
+            "sequenceId": 0,
+            "released": true,
+            "nodePosition": {
+                "x": 7.9,
+                "y": 2.25,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N15",
+            "sequenceId": 2,
+            "released": false,
+            "nodePosition": {
+                "x": 7.75,
+                "y": 3.6,
+                "mapId": "Map_1"
+            },
+            "actions": [
+                {
+                    "actionType": "init_fine_positioning",
+                    "actionId": "d9fd9d28-aed5-43e9-badf-fb4078256111",
+                    "blockingType": "HARD",
+                    "actionParameters": [
+                        {
+                            "key": "init_fine_pos_name",
+                            "value": "station001_B"
+                        },
+                        {
+                            "key": "init_fine_pos_x",
+                            "value": 6.97
+                        },
+                        {
+                            "key": "init_fine_pos_y",
+                            "value": 4.73
+                        },
+                        {
+                            "key": "fine_pos_control_x",
+                            "value": 0.08
+                        },
+                        {
+                            "key": "fine_pos_control_y",
+                            "value": 0.0
+                        },
+                        {
+                            "key": "fine_pos_control_theta",
+                            "value": -1.57
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "nodeId": "N1B",
+            "sequenceId": 4,
+            "released": false,
+            "nodePosition": {
+                "x": 6.97,
+                "y": 4.73,
+                "mapId": "Map_1",
+                "theta": 1.57
+            },
+            "actions": [
+                {
+                    "actionType": "drop",
+                    "actionId": "0b7a22a3-d177-4ee6-84c8-d9b0dc17a05a",
+                    "blockingType": "HARD",
+                    "actionParameters": []
+                }
+            ]
+        },
+        {
+            "nodeId": "N15",
+            "sequenceId": 6,
+            "released": false,
+            "nodePosition": {
+                "x": 7.75,
+                "y": 3.6,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N6",
+            "sequenceId": 8,
+            "released": false,
+            "nodePosition": {
+                "x": 7.9,
+                "y": 2.25,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N12",
+            "sequenceId": 10,
+            "released": false,
+            "nodePosition": {
+                "x": 7.5,
+                "y": 0.94,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        }
+    ],
+    "edges": [
+        {
+            "edgeId": "E16",
+            "sequenceId": 1,
+            "released": false,
+            "startNodeId": "N6",
+            "endNodeId": "N15",
+            "actions": []
+        },
+        {
+            "edgeId": "E17",
+            "sequenceId": 3,
+            "released": false,
+            "startNodeId": "N15",
+            "endNodeId": "N1B",
+            "actions": []
+        },
+        {
+            "edgeId": "E17",
+            "sequenceId": 5,
+            "released": false,
+            "startNodeId": "N1B",
+            "endNodeId": "N15",
+            "actions": []
+        },
+        {
+            "edgeId": "E16",
+            "sequenceId": 7,
+            "released": false,
+            "startNodeId": "N15",
+            "endNodeId": "N6",
+            "actions": []
+        },
+        {
+            "edgeId": "E14",
+            "sequenceId": 9,
+            "released": false,
+            "startNodeId": "N6",
+            "endNodeId": "N12",
+            "actions": []
+        }
+    ]
+}{
+    "headerId": 11,
+    "timestamp": "2026-06-24T13:33:21.744443Z",
+    "version": "2.0.0",
+    "manufacturer": "IMRL",
+    "serialNumber": "mouse001",
+    "orderId": "4",
+    "orderUpdateId": 1,
+    "nodes": [
+        {
+            "nodeId": "N6",
+            "sequenceId": 0,
+            "released": true,
+            "nodePosition": {
+                "x": 7.9,
+                "y": 2.25,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N15",
+            "sequenceId": 2,
+            "released": true,
+            "nodePosition": {
+                "x": 7.75,
+                "y": 3.6,
+                "mapId": "Map_1"
+            },
+            "actions": [
+                {
+                    "actionType": "init_fine_positioning",
+                    "actionId": "d9fd9d28-aed5-43e9-badf-fb4078256111",
+                    "blockingType": "HARD",
+                    "actionParameters": [
+                        {
+                            "key": "init_fine_pos_name",
+                            "value": "station001_B"
+                        },
+                        {
+                            "key": "init_fine_pos_x",
+                            "value": 6.97
+                        },
+                        {
+                            "key": "init_fine_pos_y",
+                            "value": 4.73
+                        },
+                        {
+                            "key": "fine_pos_control_x",
+                            "value": 0.08
+                        },
+                        {
+                            "key": "fine_pos_control_y",
+                            "value": 0.0
+                        },
+                        {
+                            "key": "fine_pos_control_theta",
+                            "value": -1.57
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "nodeId": "N1B",
+            "sequenceId": 4,
+            "released": true,
+            "nodePosition": {
+                "x": 6.97,
+                "y": 4.73,
+                "mapId": "Map_1",
+                "theta": 1.57
+            },
+            "actions": [
+                {
+                    "actionType": "drop",
+                    "actionId": "0b7a22a3-d177-4ee6-84c8-d9b0dc17a05a",
+                    "blockingType": "HARD",
+                    "actionParameters": []
+                }
+            ]
+        },
+        {
+            "nodeId": "N15",
+            "sequenceId": 6,
+            "released": false,
+            "nodePosition": {
+                "x": 7.75,
+                "y": 3.6,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N6",
+            "sequenceId": 8,
+            "released": false,
+            "nodePosition": {
+                "x": 7.9,
+                "y": 2.25,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N12",
+            "sequenceId": 10,
+            "released": false,
+            "nodePosition": {
+                "x": 7.5,
+                "y": 0.94,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        }
+    ],
+    "edges": [
+        {
+            "edgeId": "E16",
+            "sequenceId": 1,
+            "released": true,
+            "startNodeId": "N6",
+            "endNodeId": "N15",
+            "actions": []
+        },
+        {
+            "edgeId": "E17",
+            "sequenceId": 3,
+            "released": true,
+            "startNodeId": "N15",
+            "endNodeId": "N1B",
+            "actions": []
+        },
+        {
+            "edgeId": "E17",
+            "sequenceId": 5,
+            "released": false,
+            "startNodeId": "N1B",
+            "endNodeId": "N15",
+            "actions": []
+        },
+        {
+            "edgeId": "E16",
+            "sequenceId": 7,
+            "released": false,
+            "startNodeId": "N15",
+            "endNodeId": "N6",
+            "actions": []
+        },
+        {
+            "edgeId": "E14",
+            "sequenceId": 9,
+            "released": false,
+            "startNodeId": "N6",
+            "endNodeId": "N12",
+            "actions": []
+        }
+    ]
+}{
+    "headerId": 12,
+    "timestamp": "2026-06-24T13:33:30.748469Z",
+    "version": "2.0.0",
+    "manufacturer": "IMRL",
+    "serialNumber": "mouse001",
+    "orderId": "4",
+    "orderUpdateId": 2,
+    "nodes": [
+        {
+            "nodeId": "N15",
+            "sequenceId": 2,
+            "released": true,
+            "nodePosition": {
+                "x": 7.75,
+                "y": 3.6,
+                "mapId": "Map_1"
+            },
+            "actions": [
+                {
+                    "actionType": "init_fine_positioning",
+                    "actionId": "d9fd9d28-aed5-43e9-badf-fb4078256111",
+                    "blockingType": "HARD",
+                    "actionParameters": [
+                        {
+                            "key": "init_fine_pos_name",
+                            "value": "station001_B"
+                        },
+                        {
+                            "key": "init_fine_pos_x",
+                            "value": 6.97
+                        },
+                        {
+                            "key": "init_fine_pos_y",
+                            "value": 4.73
+                        },
+                        {
+                            "key": "fine_pos_control_x",
+                            "value": 0.08
+                        },
+                        {
+                            "key": "fine_pos_control_y",
+                            "value": 0.0
+                        },
+                        {
+                            "key": "fine_pos_control_theta",
+                            "value": -1.57
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "nodeId": "N1B",
+            "sequenceId": 4,
+            "released": true,
+            "nodePosition": {
+                "x": 6.97,
+                "y": 4.73,
+                "mapId": "Map_1",
+                "theta": 1.57
+            },
+            "actions": [
+                {
+                    "actionType": "drop",
+                    "actionId": "0b7a22a3-d177-4ee6-84c8-d9b0dc17a05a",
+                    "blockingType": "HARD",
+                    "actionParameters": []
+                }
+            ]
+        },
+        {
+            "nodeId": "N15",
+            "sequenceId": 6,
+            "released": true,
+            "nodePosition": {
+                "x": 7.75,
+                "y": 3.6,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N6",
+            "sequenceId": 8,
+            "released": false,
+            "nodePosition": {
+                "x": 7.9,
+                "y": 2.25,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N12",
+            "sequenceId": 10,
+            "released": false,
+            "nodePosition": {
+                "x": 7.5,
+                "y": 0.94,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        }
+    ],
+    "edges": [
+        {
+            "edgeId": "E17",
+            "sequenceId": 3,
+            "released": true,
+            "startNodeId": "N15",
+            "endNodeId": "N1B",
+            "actions": []
+        },
+        {
+            "edgeId": "E17",
+            "sequenceId": 5,
+            "released": true,
+            "startNodeId": "N1B",
+            "endNodeId": "N15",
+            "actions": []
+        },
+        {
+            "edgeId": "E16",
+            "sequenceId": 7,
+            "released": false,
+            "startNodeId": "N15",
+            "endNodeId": "N6",
+            "actions": []
+        },
+        {
+            "edgeId": "E14",
+            "sequenceId": 9,
+            "released": false,
+            "startNodeId": "N6",
+            "endNodeId": "N12",
+            "actions": []
+        }
+    ]
+}{
+    "headerId": 13,
+    "timestamp": "2026-06-24T13:33:57.758387Z",
+    "version": "2.0.0",
+    "manufacturer": "IMRL",
+    "serialNumber": "mouse001",
+    "orderId": "4",
+    "orderUpdateId": 3,
+    "nodes": [
+        {
+            "nodeId": "N1B",
+            "sequenceId": 4,
+            "released": true,
+            "nodePosition": {
+                "x": 6.97,
+                "y": 4.73,
+                "mapId": "Map_1",
+                "theta": 1.57
+            },
+            "actions": [
+                {
+                    "actionType": "drop",
+                    "actionId": "0b7a22a3-d177-4ee6-84c8-d9b0dc17a05a",
+                    "blockingType": "HARD",
+                    "actionParameters": []
+                }
+            ]
+        },
+        {
+            "nodeId": "N15",
+            "sequenceId": 6,
+            "released": true,
+            "nodePosition": {
+                "x": 7.75,
+                "y": 3.6,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N6",
+            "sequenceId": 8,
+            "released": true,
+            "nodePosition": {
+                "x": 7.9,
+                "y": 2.25,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N12",
+            "sequenceId": 10,
+            "released": false,
+            "nodePosition": {
+                "x": 7.5,
+                "y": 0.94,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        }
+    ],
+    "edges": [
+        {
+            "edgeId": "E17",
+            "sequenceId": 5,
+            "released": true,
+            "startNodeId": "N1B",
+            "endNodeId": "N15",
+            "actions": []
+        },
+        {
+            "edgeId": "E16",
+            "sequenceId": 7,
+            "released": true,
+            "startNodeId": "N15",
+            "endNodeId": "N6",
+            "actions": []
+        },
+        {
+            "edgeId": "E14",
+            "sequenceId": 9,
+            "released": false,
+            "startNodeId": "N6",
+            "endNodeId": "N12",
+            "actions": []
+        }
+    ]
+}{
+    "headerId": 14,
+    "timestamp": "2026-06-24T13:34:29.770280Z",
+    "version": "2.0.0",
+    "manufacturer": "IMRL",
+    "serialNumber": "mouse001",
+    "orderId": "4",
+    "orderUpdateId": 4,
+    "nodes": [
+        {
+            "nodeId": "N15",
+            "sequenceId": 6,
+            "released": true,
+            "nodePosition": {
+                "x": 7.75,
+                "y": 3.6,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N6",
+            "sequenceId": 8,
+            "released": true,
+            "nodePosition": {
+                "x": 7.9,
+                "y": 2.25,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N12",
+            "sequenceId": 10,
+            "released": true,
+            "nodePosition": {
+                "x": 7.5,
+                "y": 0.94,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        }
+    ],
+    "edges": [
+        {
+            "edgeId": "E16",
+            "sequenceId": 7,
+            "released": true,
+            "startNodeId": "N15",
+            "endNodeId": "N6",
+            "actions": []
+        },
+        {
+            "edgeId": "E14",
+            "sequenceId": 9,
+            "released": true,
+            "startNodeId": "N6",
+            "endNodeId": "N12",
+            "actions": []
+        }
+    ]
+}{
+    "headerId": 15,
+    "timestamp": "2026-06-24T13:34:47.259841Z",
+    "version": "2.0.0",
+    "manufacturer": "IMRL",
+    "serialNumber": "mouse001",
+    "orderId": "5",
+    "orderUpdateId": 0,
+    "nodes": [
+        {
+            "nodeId": "N12",
+            "sequenceId": 0,
+            "released": true,
+            "nodePosition": {
+                "x": 7.5,
+                "y": 0.94,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N14",
+            "sequenceId": 2,
+            "released": false,
+            "nodePosition": {
+                "x": 5.82,
+                "y": 2.2,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N11",
+            "sequenceId": 4,
+            "released": false,
+            "nodePosition": {
+                "x": 4.5,
+                "y": 2.2,
+                "mapId": "Map_1"
+            },
+            "actions": [
+                {
+                    "actionType": "init_fine_positioning",
+                    "actionId": "37d274df-6aac-493d-a665-f9ae12608b9f",
+                    "blockingType": "HARD",
+                    "actionParameters": [
+                        {
+                            "key": "init_fine_pos_name",
+                            "value": "station003_A"
+                        },
+                        {
+                            "key": "init_fine_pos_x",
+                            "value": 5.82
+                        },
+                        {
+                            "key": "init_fine_pos_y",
+                            "value": 0.94
+                        },
+                        {
+                            "key": "fine_pos_control_x",
+                            "value": 0.08
+                        },
+                        {
+                            "key": "fine_pos_control_y",
+                            "value": 0.0
+                        },
+                        {
+                            "key": "fine_pos_control_theta",
+                            "value": 1.57
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "nodeId": "N3",
+            "sequenceId": 6,
+            "released": false,
+            "nodePosition": {
+                "x": 5.82,
+                "y": 0.94,
+                "mapId": "Map_1",
+                "theta": 0.0
+            },
+            "actions": [
+                {
+                    "actionType": "pick",
+                    "actionId": "f0bfa42b-4938-4517-9180-d0bcd11cf55d",
+                    "blockingType": "HARD",
+                    "actionParameters": []
+                }
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "edgeId": "E22",
+            "sequenceId": 1,
+            "released": false,
+            "startNodeId": "N12",
+            "endNodeId": "N14",
+            "actions": []
+        },
+        {
+            "edgeId": "E19",
+            "sequenceId": 3,
+            "released": false,
+            "startNodeId": "N14",
+            "endNodeId": "N11",
+            "actions": []
+        },
+        {
+            "edgeId": "E5",
+            "sequenceId": 5,
+            "released": false,
+            "startNodeId": "N11",
+            "endNodeId": "N3",
+            "actions": []
+        }
+    ]
+}{
+    "headerId": 16,
+    "timestamp": "2026-06-24T13:34:47.276212Z",
+    "version": "2.0.0",
+    "manufacturer": "IMRL",
+    "serialNumber": "mouse001",
+    "orderId": "5",
+    "orderUpdateId": 1,
+    "nodes": [
+        {
+            "nodeId": "N12",
+            "sequenceId": 0,
+            "released": true,
+            "nodePosition": {
+                "x": 7.5,
+                "y": 0.94,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N14",
+            "sequenceId": 2,
+            "released": true,
+            "nodePosition": {
+                "x": 5.82,
+                "y": 2.2,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N11",
+            "sequenceId": 4,
+            "released": true,
+            "nodePosition": {
+                "x": 4.5,
+                "y": 2.2,
+                "mapId": "Map_1"
+            },
+            "actions": [
+                {
+                    "actionType": "init_fine_positioning",
+                    "actionId": "37d274df-6aac-493d-a665-f9ae12608b9f",
+                    "blockingType": "HARD",
+                    "actionParameters": [
+                        {
+                            "key": "init_fine_pos_name",
+                            "value": "station003_A"
+                        },
+                        {
+                            "key": "init_fine_pos_x",
+                            "value": 5.82
+                        },
+                        {
+                            "key": "init_fine_pos_y",
+                            "value": 0.94
+                        },
+                        {
+                            "key": "fine_pos_control_x",
+                            "value": 0.08
+                        },
+                        {
+                            "key": "fine_pos_control_y",
+                            "value": 0.0
+                        },
+                        {
+                            "key": "fine_pos_control_theta",
+                            "value": 1.57
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "nodeId": "N3",
+            "sequenceId": 6,
+            "released": false,
+            "nodePosition": {
+                "x": 5.82,
+                "y": 0.94,
+                "mapId": "Map_1",
+                "theta": 0.0
+            },
+            "actions": [
+                {
+                    "actionType": "pick",
+                    "actionId": "f0bfa42b-4938-4517-9180-d0bcd11cf55d",
+                    "blockingType": "HARD",
+                    "actionParameters": []
+                }
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "edgeId": "E22",
+            "sequenceId": 1,
+            "released": true,
+            "startNodeId": "N12",
+            "endNodeId": "N14",
+            "actions": []
+        },
+        {
+            "edgeId": "E19",
+            "sequenceId": 3,
+            "released": true,
+            "startNodeId": "N14",
+            "endNodeId": "N11",
+            "actions": []
+        },
+        {
+            "edgeId": "E5",
+            "sequenceId": 5,
+            "released": false,
+            "startNodeId": "N11",
+            "endNodeId": "N3",
+            "actions": []
+        }
+    ]
+}{
+    "headerId": 17,
+    "timestamp": "2026-06-24T13:35:00.781683Z",
+    "version": "2.0.0",
+    "manufacturer": "IMRL",
+    "serialNumber": "mouse001",
+    "orderId": "5",
+    "orderUpdateId": 2,
+    "nodes": [
+        {
+            "nodeId": "N14",
+            "sequenceId": 2,
+            "released": true,
+            "nodePosition": {
+                "x": 5.82,
+                "y": 2.2,
+                "mapId": "Map_1"
+            },
+            "actions": []
+        },
+        {
+            "nodeId": "N11",
+            "sequenceId": 4,
+            "released": true,
+            "nodePosition": {
+                "x": 4.5,
+                "y": 2.2,
+                "mapId": "Map_1"
+            },
+            "actions": [
+                {
+                    "actionType": "init_fine_positioning",
+                    "actionId": "37d274df-6aac-493d-a665-f9ae12608b9f",
+                    "blockingType": "HARD",
+                    "actionParameters": [
+                        {
+                            "key": "init_fine_pos_name",
+                            "value": "station003_A"
+                        },
+                        {
+                            "key": "init_fine_pos_x",
+                            "value": 5.82
+                        },
+                        {
+                            "key": "init_fine_pos_y",
+                            "value": 0.94
+                        },
+                        {
+                            "key": "fine_pos_control_x",
+                            "value": 0.08
+                        },
+                        {
+                            "key": "fine_pos_control_y",
+                            "value": 0.0
+                        },
+                        {
+                            "key": "fine_pos_control_theta",
+                            "value": 1.57
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "nodeId": "N3",
+            "sequenceId": 6,
+            "released": true,
+            "nodePosition": {
+                "x": 5.82,
+                "y": 0.94,
+                "mapId": "Map_1",
+                "theta": 0.0
+            },
+            "actions": [
+                {
+                    "actionType": "pick",
+                    "actionId": "f0bfa42b-4938-4517-9180-d0bcd11cf55d",
+                    "blockingType": "HARD",
+                    "actionParameters": []
+                }
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "edgeId": "E19",
+            "sequenceId": 3,
+            "released": true,
+            "startNodeId": "N14",
+            "endNodeId": "N11",
+            "actions": []
+        },
+        {
+            "edgeId": "E5",
+            "sequenceId": 5,
+            "released": true,
+            "startNodeId": "N11",
+            "endNodeId": "N3",
+            "actions": []
+        }
+    ]
 }
