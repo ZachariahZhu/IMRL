@@ -220,5 +220,4 @@ class Agent:
                     self.current_task['task_completed'] = True
                 self.current_task = None
             self.agent_state = 'IDLE'
-            self.agent_state = 'IDLE'
             

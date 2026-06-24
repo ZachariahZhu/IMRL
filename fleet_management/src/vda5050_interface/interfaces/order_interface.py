@@ -64,8 +64,9 @@ class OrderInterface:
             "edges": edges_msg
         }
         #4.发布消息
-        with open("orderMessages.txt", "a") as f:
-            f.write(str(order_msg) + "\n")
+        with open("orderMessages.json", "a") as f:
+            json.dump(order_msg, f,indent=4,ensure_ascii=False)
+            #f.write(str(order_msg) + "\n")
         self.mqtt_publisher.publish(order_msg, qos=0)
         #5.更新headerId
         agent.order_header_id += 1

@@ -3,46 +3,107 @@
         {
             "transportationTaskId": "T1",
             "stations": [
-                {"nodeId": "N2", "actionType": "pick"},
-                {"nodeId": "N3", "actionType": "process", "processingTime": 1.0},
-                {"nodeId": "N4", "actionType": "drop"}
+                {
+                    "nodeId": "N1A",
+                    "actionType": "pick"
+                },
+                {
+                    "nodeId": "N4",
+                    "actionType": "process",
+                    "processingTime": 3.0
+                },
+                {
+                    "nodeId": "N2",
+                    "actionType": "drop"
+                }
             ]
         },
         {
             "transportationTaskId": "T2",
             "stations": [
-                {"nodeId": "N4", "actionType": "pick"},
-                {"nodeId": "N3", "actionType": "process", "processingTime": 2.0},
-                {"nodeId": "N1A", "actionType": "process", "processingTime": 1.0},
-                {"nodeId": "N2", "actionType": "drop"}
+                {
+                    "nodeId": "N2",
+                    "actionType": "pick"
+                },
+                {
+                    "nodeId": "N6",
+                    "actionType": "process",
+                    "processingTime": 2.0
+                },
+                {
+                    "nodeId": "N1B",
+                    "actionType": "drop"
+                }
             ]
         },
         {
             "transportationTaskId": "T3",
             "stations": [
-                {"nodeId": "N2", "actionType": "pick"},
-                {"nodeId": "N1A", "actionType": "process", "processingTime": 2.0},
-                {"nodeId": "N3", "actionType": "process", "processingTime": 1.0},
-                {"nodeId": "N1A", "actionType": "process", "processingTime": 2.0},
-                {"nodeId": "N2", "actionType": "drop"}
+                {
+                    "nodeId": "N3",
+                    "actionType": "pick"
+                },
+                {
+                    "nodeId": "N6",
+                    "actionType": "process",
+                    "processingTime": 2.0
+                },
+                {
+                    "nodeId": "N5",
+                    "actionType": "process",
+                    "processingTime": 4.0
+                },
+                {
+                    "nodeId": "N6",
+                    "actionType": "process",
+                    "processingTime": 1.0
+                },
+                {
+                    "nodeId": "N1B",
+                    "actionType": "drop"
+                }
             ]
         },
         {
             "transportationTaskId": "T4",
             "stations": [
-                {"nodeId": "N4", "actionType": "pick"},
-                {"nodeId": "N3", "actionType": "process", "processingTime": 2.0},
-                {"nodeId": "N1A", "actionType": "process", "processingTime": 1.0},
-                {"nodeId": "N2", "actionType": "drop"}
+                {
+                    "nodeId": "N1B",
+                    "actionType": "pick"
+                },
+                {
+                    "nodeId": "N6",
+                    "actionType": "process",
+                    "processingTime": 2.0
+                },
+                {
+                    "nodeId": "N4",
+                    "actionType": "process",
+                    "processingTime": 3.0
+                },
+                {
+                    "nodeId": "N1A",
+                    "actionType": "drop"
+                }
             ]
         },
         {
             "transportationTaskId": "T5",
             "stations": [
-                {"nodeId": "N2", "actionType": "pick"},
-                {"nodeId": "N4", "actionType": "drop"}
+                {
+                    "nodeId": "N1A",
+                    "actionType": "pick"
+                },
+                {
+                    "nodeId": "N6",
+                    "actionType": "process",
+                    "processingTime": 2.0
+                },
+                {
+                    "nodeId": "N1B",
+                    "actionType": "drop"
+                }
             ]
         }
     ]
 }
-

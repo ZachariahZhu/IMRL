@@ -175,7 +175,7 @@ class FleetManagement:
                 if task['task_assigned']:
                     continue
                     
-                assigned_agent_sn = task.get('assigned_agent')
+                assigned_agent_sn = task.get('agent_id')
                 suitable_agent = None
                 
                 for a in idle_agents:
@@ -263,13 +263,13 @@ class FleetManagement:
                 agent.agent_state = 'EXECUTING'
                 
                 # Pin the task to this agent
-                task['assigned_agent'] = agent.agentId
+                task['agent_id'] = agent.agentId
                 self.agents.order_header_id += 1
                 task_assigned_this_cycle = True
                 break # Break out of task loop, process next idle agent in next while loop iteration
             
-        if not task_assigned_this_cycle:
-            time.sleep(0.5)
+            if not task_assigned_this_cycle:
+                time.sleep(0.5)
     def build_path_for_task(self, task: dict, start_node: str,
                             vehicle_type_id: str, append_homing: bool = True) -> tuple:
         """
