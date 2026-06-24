@@ -1,8 +1,184 @@
 [
     {
+        "edgeId": "E22",
+        "sequenceId": 1,
+        "released": true,
+        "startNodeId": "N12",
+        "endNodeId": "N14",
+        "actions": []
+    },
+    {
+        "edgeId": "E10",
+        "sequenceId": 3,
+        "released": true,
+        "startNodeId": "N14",
+        "endNodeId": "N10",
+        "actions": []
+    },
+    {
+        "edgeId": "E4",
+        "sequenceId": 5,
+        "released": false,
+        "startNodeId": "N10",
+        "endNodeId": "N13",
+        "actions": []
+    },
+    {
+        "edgeId": "E3",
+        "sequenceId": 7,
+        "released": false,
+        "startNodeId": "N13",
+        "endNodeId": "N9",
+        "actions": []
+    },
+    {
+        "edgeId": "E7",
+        "sequenceId": 9,
+        "released": false,
+        "startNodeId": "N9",
+        "endNodeId": "N8",
+        "actions": []
+    },
+    {
+        "edgeId": "E18",
+        "sequenceId": 11,
+        "released": false,
+        "startNodeId": "N8",
+        "endNodeId": "N4",
+        "actions": []
+    },
+    {
+        "edgeId": "E18",
+        "sequenceId": 13,
+        "released": false,
+        "startNodeId": "N4",
+        "endNodeId": "N8",
+        "actions": []
+    },
+    {
+        "edgeId": "E7",
+        "sequenceId": 15,
+        "released": false,
+        "startNodeId": "N8",
+        "endNodeId": "N9",
+        "actions": []
+    },
+    {
+        "edgeId": "E3",
+        "sequenceId": 17,
+        "released": false,
+        "startNodeId": "N9",
+        "endNodeId": "N13",
+        "actions": []
+    },
+    {
+        "edgeId": "E4",
+        "sequenceId": 19,
+        "released": false,
+        "startNodeId": "N13",
+        "endNodeId": "N10",
+        "actions": []
+    },
+    {
+        "edgeId": "E10",
+        "sequenceId": 21,
+        "released": false,
+        "startNodeId": "N10",
+        "endNodeId": "N14",
+        "actions": []
+    },
+    {
+        "edgeId": "E21",
+        "sequenceId": 23,
+        "released": false,
+        "startNodeId": "N14",
+        "endNodeId": "N3",
+        "actions": []
+    },
+    {
+        "edgeId": "E21",
+        "sequenceId": 25,
+        "released": false,
+        "startNodeId": "N3",
+        "endNodeId": "N14",
+        "actions": []
+    },
+    {
+        "edgeId": "E10",
+        "sequenceId": 27,
+        "released": false,
+        "startNodeId": "N14",
+        "endNodeId": "N10",
+        "actions": []
+    },
+    {
+        "edgeId": "E11",
+        "sequenceId": 29,
+        "released": false,
+        "startNodeId": "N10",
+        "endNodeId": "N1A",
+        "actions": []
+    },
+    {
+        "edgeId": "E11",
+        "sequenceId": 31,
+        "released": false,
+        "startNodeId": "N1A",
+        "endNodeId": "N10",
+        "actions": []
+    },
+    {
+        "edgeId": "E4",
+        "sequenceId": 33,
+        "released": false,
+        "startNodeId": "N10",
+        "endNodeId": "N13",
+        "actions": []
+    },
+    {
+        "edgeId": "E3",
+        "sequenceId": 35,
+        "released": false,
+        "startNodeId": "N13",
+        "endNodeId": "N9",
+        "actions": []
+    },
+    {
+        "edgeId": "E1",
+        "sequenceId": 37,
+        "released": false,
+        "startNodeId": "N9",
+        "endNodeId": "N2",
+        "actions": []
+    },
+    {
+        "edgeId": "E1",
+        "sequenceId": 39,
+        "released": false,
+        "startNodeId": "N2",
+        "endNodeId": "N9",
+        "actions": []
+    },
+    {
+        "edgeId": "E3",
+        "sequenceId": 41,
+        "released": false,
+        "startNodeId": "N9",
+        "endNodeId": "N13",
+        "actions": []
+    },
+    {
+        "edgeId": "E4",
+        "sequenceId": 43,
+        "released": false,
+        "startNodeId": "N13",
+        "endNodeId": "N10",
+        "actions": []
+    },
+    {
         "edgeId": "E10",
         "sequenceId": 45,
-        "released": true,
+        "released": false,
         "startNodeId": "N10",
         "endNodeId": "N14",
         "actions": []
@@ -10,7 +186,7 @@
     {
         "edgeId": "E22",
         "sequenceId": 47,
-        "released": true,
+        "released": false,
         "startNodeId": "N14",
         "endNodeId": "N12",
         "actions": []

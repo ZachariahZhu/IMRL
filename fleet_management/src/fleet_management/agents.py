@@ -191,7 +191,7 @@ class Agent:
                         json.dump(self.current_path_nodes_full, fdf2, indent=4, ensure_ascii=False)
                     with open("cat001e.json", "w", encoding="utf-8") as fdfd2:
                         json.dump(self.current_path_edges_full, fdfd2, indent=4, ensure_ascii=False)
-            other = None
+            """other = None
             if "mouse001" ==self.agentId:
                 with open("cat001.json", "r", encoding="utf-8") as f:
                     other = json.load(f)
@@ -200,17 +200,45 @@ class Agent:
                     other = json.load(f2)
             othere =None
             if "mouse001" ==self.agentId:
-                with open("cat001.json", "r", encoding="utf-8") as e:
+                with open("cat001e.json", "r", encoding="utf-8") as e:
                     othere = json.load(e)
             if "cat001" == self.agentId:
-                with open("mouse001.json", "r", encoding="utf-8") as e2:
-                    othere = json.load(e2)            
-        FleetManagement.test()
-
+                with open("mouse001e.json", "r", encoding="utf-8") as e2:
+                    othere = json.load(e2)     
+        """       
+        #FleetManagement.test()
+        if self.agentId == "cat001" and False:
+            with open("result2.txt","w") as res2:
+                    #print(FleetManagement.fuzzyfy(self=self,inputMatrix=FleetManagement.getOccupancyMatrix(self=self,pNodes=self.current_path_nodes_full,pEdges=self.current_path_edges_full,stepSize=0.2),grace=1,stepSize=0.2,initialWidth=1,witdhIncreasePerSecond=0.05),file=res2)
+                    print("Nodes", file=res2)
+                    print(other,file=res2)
+                    print("Edges",file=res2)
+                    print(othere,file=res2)
+                    print("Done",file=res2)
         #combine=self.multiplyMatrixes(self.fuzzyfy(self.getOccupancyMatrix(nodes,edges,0.2),10,0.2,1,0.05),last_matrix)
-            
+        #combine=FleetManagement.multiplyMatrixes(FleetManagement.fuzzyfy(FleetManagement.getOccupancyMatrix(self,self.current_path_nodes_full,self.current_path_edges_full,0.2),10,0.2,1,0.05),FleetManagement.fuzzyfy(FleetManagement.getOccupancyMatrix(other,othere,0.2),10,0.2,1,0.05)) 
+        """
+        with open("result.txt","w") as res:
+            if combine != None:
+                print(combine,file=res)
+                for row in combine:
+                    for item in row:
+                        print(item,end=" ",file=res)
+                    print(file=res)
         if self.current_node:
             self.current_path_nodes.append(self.current_node)
+        """ 
+        """if (other !=None and othere !=None) or True:
+            with open("result.txt","w") as res:
+                
+                #print(FleetManagement.fuzzyfy(self=self,inputMatrix=FleetManagement.getOccupancyMatrix(self=self,pNodes=self.current_path_nodes_full,pEdges=self.current_path_edges_full,stepSize=0.2),grace=1,stepSize=0.2,initialWidth=1,witdhIncreasePerSecond=0.05),file=res)
+                print(FleetManagement.fuzzyfy(self=self,inputMatrix=FleetManagement.getOccupancyMatrix(self=self,pNodes=other,pEdges=othere,stepSize=0.2),grace=1,stepSize=0.2,initialWidth=1,witdhIncreasePerSecond=0.05),file=res)
+                pass
+                """
+            #with open("result2.txt","w") as res2:
+                #print(FleetManagement.fuzzyfy(self=self,inputMatrix=FleetManagement.getOccupancyMatrix(self=self,pNodes=self.current_path_nodes_full,pEdges=self.current_path_edges_full,stepSize=0.2),grace=1,stepSize=0.2,initialWidth=1,witdhIncreasePerSecond=0.05),file=res2)
+                #print(other,file=res2)
+                #pass
 
         nodes_empty = len(state_msg.get('nodeStates', [])) <= 1
         edges_empty = len(state_msg.get('edgeStates', [])) == 0 #判断是否完成

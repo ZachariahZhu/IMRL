@@ -6,6 +6,7 @@ import logging
 import platform
 import subprocess
 from typing import Dict
+from src.fleet_management.horizon_control import Horizon_control
 
 # Base directory of this script (= fleet_management/). Works regardless of the working directory.
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -128,7 +129,8 @@ def main():
     }
 
     config_manager = ConfigManager(config_paths)
+    h = Horizon_control()
     run_simulation(config_manager, logging)
-
+   
 if __name__ == "__main__":
     main()

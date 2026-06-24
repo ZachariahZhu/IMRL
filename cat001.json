@@ -1,8 +1,291 @@
 [
     {
         "nodeId": "N14",
-        "sequenceId": 46,
+        "sequenceId": 2,
         "released": true,
+        "nodePosition": {
+            "x": 5.82,
+            "y": 2.2,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N10",
+        "sequenceId": 4,
+        "released": true,
+        "nodePosition": {
+            "x": 4.83,
+            "y": 3.6,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N13",
+        "sequenceId": 6,
+        "released": false,
+        "nodePosition": {
+            "x": 3.58,
+            "y": 3.45,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N9",
+        "sequenceId": 8,
+        "released": false,
+        "nodePosition": {
+            "x": 2.33,
+            "y": 3.45,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N8",
+        "sequenceId": 10,
+        "released": false,
+        "nodePosition": {
+            "x": 1.0,
+            "y": 3.45,
+            "mapId": "Map_1"
+        },
+        "actions": [
+            {
+                "actionType": "init_fine_positioning",
+                "actionId": "bbf9a68c-7599-41d1-bc2d-ddc9b1b21d94",
+                "blockingType": "HARD"
+            }
+        ]
+    },
+    {
+        "nodeId": "N4",
+        "sequenceId": 12,
+        "released": false,
+        "nodePosition": {
+            "x": 0.75,
+            "y": 0.75,
+            "mapId": "Map_1"
+        },
+        "actions": [
+            {
+                "actionType": "pick",
+                "actionId": "4851ac7b-782a-4fe2-baaf-513b8c8dc725",
+                "blockingType": "HARD"
+            }
+        ]
+    },
+    {
+        "nodeId": "N8",
+        "sequenceId": 14,
+        "released": false,
+        "nodePosition": {
+            "x": 1.0,
+            "y": 3.45,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N9",
+        "sequenceId": 16,
+        "released": false,
+        "nodePosition": {
+            "x": 2.33,
+            "y": 3.45,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N13",
+        "sequenceId": 18,
+        "released": false,
+        "nodePosition": {
+            "x": 3.58,
+            "y": 3.45,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N10",
+        "sequenceId": 20,
+        "released": false,
+        "nodePosition": {
+            "x": 4.83,
+            "y": 3.6,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N14",
+        "sequenceId": 22,
+        "released": false,
+        "nodePosition": {
+            "x": 5.82,
+            "y": 2.2,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N3",
+        "sequenceId": 24,
+        "released": false,
+        "nodePosition": {
+            "x": 5.82,
+            "y": 0.94,
+            "mapId": "Map_1",
+            "theta": -1.57
+        },
+        "actions": [
+            {
+                "actionType": "process",
+                "actionId": "158b6f20-3e37-476d-8450-e7e6bd544b9f",
+                "blockingType": "HARD",
+                "processingTime": 2.0
+            }
+        ]
+    },
+    {
+        "nodeId": "N14",
+        "sequenceId": 26,
+        "released": false,
+        "nodePosition": {
+            "x": 5.82,
+            "y": 2.2,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N10",
+        "sequenceId": 28,
+        "released": false,
+        "nodePosition": {
+            "x": 4.83,
+            "y": 3.6,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N1A",
+        "sequenceId": 30,
+        "released": false,
+        "nodePosition": {
+            "x": 5.61,
+            "y": 4.73,
+            "mapId": "Map_1",
+            "theta": 0.0
+        },
+        "actions": [
+            {
+                "actionType": "process",
+                "actionId": "e8776057-7a25-4e22-af1b-eb7c97e3bc47",
+                "blockingType": "HARD",
+                "processingTime": 1.0
+            }
+        ]
+    },
+    {
+        "nodeId": "N10",
+        "sequenceId": 32,
+        "released": false,
+        "nodePosition": {
+            "x": 4.83,
+            "y": 3.6,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N13",
+        "sequenceId": 34,
+        "released": false,
+        "nodePosition": {
+            "x": 3.58,
+            "y": 3.45,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N9",
+        "sequenceId": 36,
+        "released": false,
+        "nodePosition": {
+            "x": 2.33,
+            "y": 3.45,
+            "mapId": "Map_1"
+        },
+        "actions": [
+            {
+                "actionType": "init_fine_positioning",
+                "actionId": "8753c2b1-f42b-4dac-88ef-837f3105875a",
+                "blockingType": "HARD"
+            }
+        ]
+    },
+    {
+        "nodeId": "N2",
+        "sequenceId": 38,
+        "released": false,
+        "nodePosition": {
+            "x": 2.33,
+            "y": 1.42,
+            "mapId": "Map_1",
+            "theta": -1.57
+        },
+        "actions": [
+            {
+                "actionType": "drop",
+                "actionId": "a9f56d6c-a26b-4526-9282-f66d5c27e6ef",
+                "blockingType": "HARD"
+            }
+        ]
+    },
+    {
+        "nodeId": "N9",
+        "sequenceId": 40,
+        "released": false,
+        "nodePosition": {
+            "x": 2.33,
+            "y": 3.45,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N13",
+        "sequenceId": 42,
+        "released": false,
+        "nodePosition": {
+            "x": 3.58,
+            "y": 3.45,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N10",
+        "sequenceId": 44,
+        "released": false,
+        "nodePosition": {
+            "x": 4.83,
+            "y": 3.6,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N14",
+        "sequenceId": 46,
+        "released": false,
         "nodePosition": {
             "x": 5.82,
             "y": 2.2,
@@ -13,7 +296,7 @@
     {
         "nodeId": "N12",
         "sequenceId": 48,
-        "released": true,
+        "released": false,
         "nodePosition": {
             "x": 7.5,
             "y": 0.94,

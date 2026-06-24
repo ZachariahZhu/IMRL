@@ -5,6 +5,7 @@ import threading
 import heapq
 import json
 from fleet_management.traffic_controller import TrafficController
+from fleet_management.horizon_control import Horizon_control
 
 
 import tkinter as tk
@@ -94,9 +95,10 @@ class FleetManagement:
         self.path_planning = PathPlanning(config_data=self.config_data,
                                          graph=self.graph)
         self.traffic_controller = TrafficController(self)
+        self.horizon_control = Horizon_control(self)
         threading.Thread(target=self.fleet_manager, daemon=True).start()
         
-
+    @staticmethod
     def getOccupancyMatrix(self,pNodes,pEdges,stepSize):
         edgeList = []
         nodeList = []
@@ -172,6 +174,7 @@ class FleetManagement:
             with open("test.txt","w") as w:
                 print("test",file=w)
         pass
+    @staticmethod
     def fuzzyfy(self,inputMatrix,grace,stepSize,initialWidth,witdhIncreasePerSecond):
         """Fuzzyfy matrix edges with a trapezoidal transition around 0/1 boundaries.
 
@@ -245,8 +248,8 @@ class FleetManagement:
                     fuzzy_matrix[r][col] = max(fuzzy_matrix[r][col], round(fuzzy_value,2))
 
         return fuzzy_matrix
-    
-    def create_color_visualizer(self, color_vector, zeitschritt_ms):
+    @staticmethod
+    def create_color_visualizer( color_vector, zeitschritt_ms):
         """
         Visualisiert einen Farbvektor ohne Schrift.
         :param color_vector: Liste von Hex-Farbcodes
@@ -289,8 +292,8 @@ class FleetManagement:
         root.after(zeitschritt_ms, layout_anpassen)
 
         root.mainloop()
-
-    def multiplyMatrixes(self,matrix1,matrix2):
+    @staticmethod
+    def multiplyMatrixes(matrix1,matrix2):
         """Multiply two matrices over their overlapping region.
 
         If one matrix is shorter in rows or columns, the result includes only
@@ -319,8 +322,8 @@ class FleetManagement:
             result.append([row1[c] * row2[c] for c in range(cols)])
 
         return result
-    
-    def vectorize(self, matrix):
+    @staticmethod
+    def vectorize(matrix):
         """Sum all elements of each row into a vector.
         
         Args:
@@ -333,8 +336,8 @@ class FleetManagement:
             return []
         
         return [float(sum(row)) for row in matrix]
-        
-    def limsumVec(self,vec):
+    @staticmethod   
+    def limsumVec(vec):
         rV = []
         for v in vec:
             if float(v) < 1.:
@@ -345,6 +348,7 @@ class FleetManagement:
 
 
         return rV
+    @staticmethod
     def visualizeVector(self, vec, timestep):
         """Visualize a vector as colors from white (0) to red (1).
 
