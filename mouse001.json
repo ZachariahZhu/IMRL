@@ -1,16 +1,174 @@
 [
-    "N1A",
-    "N10",
-    "N11",
-    "N3",
-    "N11",
-    "N10",
-    "N1A",
-    "N10",
-    "N13",
-    "N9",
-    "N8",
-    "N2",
-    "N8",
-    "N7"
+    {
+        "nodeId": "N10",
+        "sequenceId": 16,
+        "released": false,
+        "nodePosition": {
+            "x": 4.83,
+            "y": 3.6,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N11",
+        "sequenceId": 18,
+        "released": false,
+        "nodePosition": {
+            "x": 4.5,
+            "y": 2.2,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N3",
+        "sequenceId": 20,
+        "released": false,
+        "nodePosition": {
+            "x": 5.82,
+            "y": 0.94,
+            "mapId": "Map_1",
+            "theta": 0.0
+        },
+        "actions": [
+            {
+                "actionType": "process",
+                "actionId": "52cf1e73-f95a-43fb-a863-e8c5f3635aea",
+                "blockingType": "HARD",
+                "processingTime": 1.0
+            }
+        ]
+    },
+    {
+        "nodeId": "N11",
+        "sequenceId": 22,
+        "released": false,
+        "nodePosition": {
+            "x": 4.5,
+            "y": 2.2,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N10",
+        "sequenceId": 24,
+        "released": false,
+        "nodePosition": {
+            "x": 4.83,
+            "y": 3.6,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N1A",
+        "sequenceId": 26,
+        "released": false,
+        "nodePosition": {
+            "x": 5.61,
+            "y": 4.73,
+            "mapId": "Map_1",
+            "theta": 1.57
+        },
+        "actions": [
+            {
+                "actionType": "process",
+                "actionId": "763854d5-bbad-4a5f-8710-d8349d56b48f",
+                "blockingType": "HARD",
+                "processingTime": 2.0
+            }
+        ]
+    },
+    {
+        "nodeId": "N10",
+        "sequenceId": 28,
+        "released": false,
+        "nodePosition": {
+            "x": 4.83,
+            "y": 3.6,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N13",
+        "sequenceId": 30,
+        "released": false,
+        "nodePosition": {
+            "x": 3.58,
+            "y": 3.45,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N9",
+        "sequenceId": 32,
+        "released": false,
+        "nodePosition": {
+            "x": 2.33,
+            "y": 3.45,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N8",
+        "sequenceId": 34,
+        "released": false,
+        "nodePosition": {
+            "x": 1.0,
+            "y": 3.45,
+            "mapId": "Map_1"
+        },
+        "actions": [
+            {
+                "actionType": "init_fine_positioning",
+                "actionId": "79efc887-9e9b-4ba7-8b9d-aaeb353b12a2",
+                "blockingType": "HARD"
+            }
+        ]
+    },
+    {
+        "nodeId": "N2",
+        "sequenceId": 36,
+        "released": false,
+        "nodePosition": {
+            "x": 2.33,
+            "y": 1.42,
+            "mapId": "Map_1",
+            "theta": 0.0
+        },
+        "actions": [
+            {
+                "actionType": "drop",
+                "actionId": "5b8e0e9d-d5e7-45cb-ae73-8f6241867e23",
+                "blockingType": "HARD"
+            }
+        ]
+    },
+    {
+        "nodeId": "N8",
+        "sequenceId": 38,
+        "released": false,
+        "nodePosition": {
+            "x": 1.0,
+            "y": 3.45,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N7",
+        "sequenceId": 40,
+        "released": false,
+        "nodePosition": {
+            "x": 1.0,
+            "y": 4.71,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    }
 ]

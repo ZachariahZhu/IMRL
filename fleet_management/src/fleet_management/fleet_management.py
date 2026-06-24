@@ -166,8 +166,12 @@ class FleetManagement:
             step += stepSize
 
         return matrix
-
-
+    @staticmethod
+    def test():
+        if True:
+            with open("test.txt","w") as w:
+                print("test",file=w)
+        pass
     def fuzzyfy(self,inputMatrix,grace,stepSize,initialWidth,witdhIncreasePerSecond):
         """Fuzzyfy matrix edges with a trapezoidal transition around 0/1 boundaries.
 
@@ -794,6 +798,7 @@ class FleetManagement:
                     for item in row:
                         print(item,end=" ",file=f)
                     print(file=f) """
+            """
             with open("output2.txt","w") as fff:
                 print (self.getOccupancyMatrix(nodes,edges,0.2),file=fff)
                 for row in self.getOccupancyMatrix(nodes,edges,0.2):
@@ -831,7 +836,7 @@ class FleetManagement:
             temp= self.visualizeVector(self.vectorize(combine),0.2)
             if combine != None:
                 self.create_color_visualizer(color_vector=temp, zeitschritt_ms=200)
-            
+            """
             task['task_assigned'] = True
             agent.agent_state = 'EXECUTING'
             agent.current_task = task

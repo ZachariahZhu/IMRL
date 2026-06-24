@@ -1,0 +1,106 @@
+[
+    {
+        "edgeId": "E11",
+        "sequenceId": 15,
+        "released": false,
+        "startNodeId": "N1A",
+        "endNodeId": "N10",
+        "actions": []
+    },
+    {
+        "edgeId": "E6",
+        "sequenceId": 17,
+        "released": false,
+        "startNodeId": "N10",
+        "endNodeId": "N11",
+        "actions": []
+    },
+    {
+        "edgeId": "E5",
+        "sequenceId": 19,
+        "released": false,
+        "startNodeId": "N11",
+        "endNodeId": "N3",
+        "actions": []
+    },
+    {
+        "edgeId": "E5",
+        "sequenceId": 21,
+        "released": false,
+        "startNodeId": "N3",
+        "endNodeId": "N11",
+        "actions": []
+    },
+    {
+        "edgeId": "E6",
+        "sequenceId": 23,
+        "released": false,
+        "startNodeId": "N11",
+        "endNodeId": "N10",
+        "actions": []
+    },
+    {
+        "edgeId": "E11",
+        "sequenceId": 25,
+        "released": false,
+        "startNodeId": "N10",
+        "endNodeId": "N1A",
+        "actions": []
+    },
+    {
+        "edgeId": "E11",
+        "sequenceId": 27,
+        "released": false,
+        "startNodeId": "N1A",
+        "endNodeId": "N10",
+        "actions": []
+    },
+    {
+        "edgeId": "E4",
+        "sequenceId": 29,
+        "released": false,
+        "startNodeId": "N10",
+        "endNodeId": "N13",
+        "actions": []
+    },
+    {
+        "edgeId": "E3",
+        "sequenceId": 31,
+        "released": false,
+        "startNodeId": "N13",
+        "endNodeId": "N9",
+        "actions": []
+    },
+    {
+        "edgeId": "E7",
+        "sequenceId": 33,
+        "released": false,
+        "startNodeId": "N9",
+        "endNodeId": "N8",
+        "actions": []
+    },
+    {
+        "edgeId": "E8",
+        "sequenceId": 35,
+        "released": false,
+        "startNodeId": "N8",
+        "endNodeId": "N2",
+        "actions": []
+    },
+    {
+        "edgeId": "E8",
+        "sequenceId": 37,
+        "released": false,
+        "startNodeId": "N2",
+        "endNodeId": "N8",
+        "actions": []
+    },
+    {
+        "edgeId": "E12",
+        "sequenceId": 39,
+        "released": false,
+        "startNodeId": "N8",
+        "endNodeId": "N7",
+        "actions": []
+    }
+]

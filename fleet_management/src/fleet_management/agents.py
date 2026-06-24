@@ -2,7 +2,7 @@ import json
 from vda5050_interface.mqtt_clients.mqtt_subscriber import MQTTSubscriber
 from vda5050_interface.interfaces.order_interface import OrderInterface
 import math
-
+from fleet_management.fleet_management import FleetManagement
 
 class Agents:
     """
@@ -173,16 +173,42 @@ class Agent:
         # Task 4 Collision Avoidance: Track the remaining path nodes
         
         self.current_path_nodes = [n['nodeId'] for n in state_msg.get('nodeStates', [])]
+        self.current_path_nodes_full =[n for n in state_msg.get('nodeStates', [])]
+        self.current_path_edges_full =[n for n in state_msg.get('edgeStates', [])]
+
         if True:
-            if self.current_path_nodes!=[]:
+            if self.current_path_nodes_full!=[]:
                 if "mouse001" ==self.agentId:
                         with open("mouse001.json","w", encoding="utf-8") as fdf:
                         
-                            json.dump(self.current_path_nodes, fdf, indent=4, ensure_ascii=False)
+                            json.dump(self.current_path_nodes_full, fdf, indent=4, ensure_ascii=False)
+                        with open("mouse001e.json", "w", encoding="utf-8") as fdfd:
+                             json.dump(self.current_path_edges_full, fdfd, indent=4, ensure_ascii=False)
                 if "cat001" == self.agentId:
                     with open("cat001.json","w", encoding="utf-8") as fdf2:
                         
-                        json.dump(self.current_path_nodes, fdf2, indent=4, ensure_ascii=False)
+                    
+                        json.dump(self.current_path_nodes_full, fdf2, indent=4, ensure_ascii=False)
+                    with open("cat001e.json", "w", encoding="utf-8") as fdfd2:
+                        json.dump(self.current_path_edges_full, fdfd2, indent=4, ensure_ascii=False)
+            other = None
+            if "mouse001" ==self.agentId:
+                with open("cat001.json", "r", encoding="utf-8") as f:
+                    other = json.load(f)
+            if "cat001" == self.agentId:
+                with open("mouse001.json", "r", encoding="utf-8") as f2:
+                    other = json.load(f2)
+            othere =None
+            if "mouse001" ==self.agentId:
+                with open("cat001.json", "r", encoding="utf-8") as e:
+                    othere = json.load(e)
+            if "cat001" == self.agentId:
+                with open("mouse001.json", "r", encoding="utf-8") as e2:
+                    othere = json.load(e2)            
+        FleetManagement.test()
+
+        #combine=self.multiplyMatrixes(self.fuzzyfy(self.getOccupancyMatrix(nodes,edges,0.2),10,0.2,1,0.05),last_matrix)
+            
         if self.current_node:
             self.current_path_nodes.append(self.current_node)
 

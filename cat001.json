@@ -1,25 +1,24 @@
 [
-    "N10",
-    "N13",
-    "N9",
-    "N8",
-    "N4",
-    "N8",
-    "N9",
-    "N13",
-    "N10",
-    "N14",
-    "N3",
-    "N14",
-    "N10",
-    "N1A",
-    "N10",
-    "N13",
-    "N9",
-    "N2",
-    "N9",
-    "N13",
-    "N10",
-    "N14",
-    "N12"
+    {
+        "nodeId": "N14",
+        "sequenceId": 46,
+        "released": true,
+        "nodePosition": {
+            "x": 5.82,
+            "y": 2.2,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    },
+    {
+        "nodeId": "N12",
+        "sequenceId": 48,
+        "released": true,
+        "nodePosition": {
+            "x": 7.5,
+            "y": 0.94,
+            "mapId": "Map_1"
+        },
+        "actions": []
+    }
 ]

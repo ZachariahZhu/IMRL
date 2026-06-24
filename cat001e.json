@@ -1,0 +1,18 @@
+[
+    {
+        "edgeId": "E10",
+        "sequenceId": 45,
+        "released": true,
+        "startNodeId": "N10",
+        "endNodeId": "N14",
+        "actions": []
+    },
+    {
+        "edgeId": "E22",
+        "sequenceId": 47,
+        "released": true,
+        "startNodeId": "N14",
+        "endNodeId": "N12",
+        "actions": []
+    }
+]
