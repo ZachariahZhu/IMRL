@@ -1,4 +1,7 @@
 New run
+<<<<<<< HEAD
 [('N6', [{'actionType': 'init_fine_positioning', 'actionId': 'a443be08-e5dd-4f32-b3c9-7b1cb62d6a72', 'blockingType': 'HARD'}], 1), ('N2', [{'actionType': 'pick', 'actionId': 'd6f6390f-a8d5-4252-9a87-222479e542cd', 'blockingType': 'HARD'}], 2), ('N12', [{'actionType': 'init_fine_positioning', 'actionId': 'de2779c4-4fae-4a57-9296-8a04fa54cd61', 'blockingType': 'HARD'}], 5), ('N4', [{'actionType': 'drop', 'actionId': '90e8d2c8-df28-49c5-9dad-52b777f1ab78', 'blockingType': 'HARD'}], 6)]
 ['E20', 'E15', 'E2', 'E3', 'E13', 'E19', 'E18', 'E16']
 [4, 5, 4, 5, 3.8, 3, 5, 3]
+=======
+>>>>>>> collision_loss
