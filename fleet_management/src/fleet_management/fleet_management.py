@@ -244,6 +244,7 @@ class FleetManagement:
                 edges=agent.full_edges
             )
             self.agents.order_header_id += 1
+            """
             if "mouse001" ==agent.agentId:
                 with open("mouse001.json","w", encoding="utf-8") as fdf:
                 
@@ -255,7 +256,8 @@ class FleetManagement:
                     json.dump(nodes, fdf2, indent=4, ensure_ascii=False)
             print("SUCESS")
             other = None
-            #"""
+            """
+            """
             with open("out.txt", "a") as fd:
                 print("0",file=fd)
             if "mouse001" ==agent.agentId:
@@ -276,7 +278,8 @@ class FleetManagement:
                     for node in nodes:
                         print(node.get("nodeId"), file=fd)
                     print("++++++", file=fd)
-            #"""
+            
+            """
             time.sleep(0.5)
 
     def build_path_for_task(self, task: dict, start_node: str,

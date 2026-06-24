@@ -1,82 +1,16 @@
 [
-    {
-        "nodeId": "N7",
-        "x": 1.0,
-        "y": 4.71,
-        "theta": null,
-        "actions": [],
-        "released": true
-    },
-    {
-        "nodeId": "N8",
-        "x": 1.0,
-        "y": 3.45,
-        "theta": null,
-        "actions": [
-            {
-                "actionType": "init_fine_positioning",
-                "actionId": "78369c09-5a04-4035-b4f4-75e3063820ab",
-                "blockingType": "HARD"
-            }
-        ],
-        "released": false
-    },
-    {
-        "nodeId": "N2",
-        "x": 2.33,
-        "y": 1.42,
-        "theta": 0.0,
-        "actions": [
-            {
-                "actionType": "pick",
-                "actionId": "04ff6759-d6f3-4623-9572-185e6b6691c5",
-                "blockingType": "HARD"
-            }
-        ],
-        "released": false
-    },
-    {
-        "nodeId": "N8",
-        "x": 1.0,
-        "y": 3.45,
-        "theta": null,
-        "actions": [
-            {
-                "actionType": "init_fine_positioning",
-                "actionId": "4bf51f15-d5ba-46e7-8f94-356377898af9",
-                "blockingType": "HARD"
-            }
-        ],
-        "released": false
-    },
-    {
-        "nodeId": "N4",
-        "x": 0.75,
-        "y": 0.75,
-        "theta": null,
-        "actions": [
-            {
-                "actionType": "drop",
-                "actionId": "3c28d54e-3a7e-4455-86c2-15f7eb71eb25",
-                "blockingType": "HARD"
-            }
-        ],
-        "released": false
-    },
-    {
-        "nodeId": "N8",
-        "x": 1.0,
-        "y": 3.45,
-        "theta": null,
-        "actions": [],
-        "released": false
-    },
-    {
-        "nodeId": "N7",
-        "x": 1.0,
-        "y": 4.71,
-        "theta": null,
-        "actions": [],
-        "released": false
-    }
+    "N1A",
+    "N10",
+    "N11",
+    "N3",
+    "N11",
+    "N10",
+    "N1A",
+    "N10",
+    "N13",
+    "N9",
+    "N8",
+    "N2",
+    "N8",
+    "N7"
 ]

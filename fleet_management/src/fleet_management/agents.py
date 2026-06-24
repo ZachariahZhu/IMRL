@@ -171,7 +171,18 @@ class Agent:
         self.driving = state_msg.get('driving', False)
 
         # Task 4 Collision Avoidance: Track the remaining path nodes
+        
         self.current_path_nodes = [n['nodeId'] for n in state_msg.get('nodeStates', [])]
+        if True:
+            if self.current_path_nodes!=[]:
+                if "mouse001" ==self.agentId:
+                        with open("mouse001.json","w", encoding="utf-8") as fdf:
+                        
+                            json.dump(self.current_path_nodes, fdf, indent=4, ensure_ascii=False)
+                if "cat001" == self.agentId:
+                    with open("cat001.json","w", encoding="utf-8") as fdf2:
+                        
+                        json.dump(self.current_path_nodes, fdf2, indent=4, ensure_ascii=False)
         if self.current_node:
             self.current_path_nodes.append(self.current_node)
 
