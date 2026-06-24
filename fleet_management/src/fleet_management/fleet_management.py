@@ -3,6 +3,7 @@ import uuid
 import time
 import threading
 import heapq
+import json
 from fleet_management.traffic_controller import TrafficController
 
             
@@ -243,6 +244,39 @@ class FleetManagement:
                 edges=agent.full_edges
             )
             self.agents.order_header_id += 1
+            if "mouse001" ==agent.agentId:
+                with open("mouse001.json","w", encoding="utf-8") as fdf:
+                
+                    json.dump(nodes, fdf, indent=4, ensure_ascii=False)
+            print("SUCESS0")
+            if "cat001" == agent.agentId:
+                with open("cat001.json","w", encoding="utf-8") as fdf2:
+                
+                    json.dump(nodes, fdf2, indent=4, ensure_ascii=False)
+            print("SUCESS")
+            other = None
+            #"""
+            with open("out.txt", "a") as fd:
+                print("0",file=fd)
+            if "mouse001" ==agent.agentId:
+                with open("cat001.json", "r", encoding="utf-8") as f:
+                    other = json.load(f)
+            with open("out.txt","a") as fd:
+                print("1",file=fd)
+            if "cat001" == agent.agentId:
+                with open("mouse001.json", "r", encoding="utf-8") as f2:
+                    other = json.load(f2)
+            with open("out.txt","a") as fd:
+                print("2",file=fd)
+            if other != None:
+                with open("out.txt","a") as fd:
+                    for node in other:
+                            print(node.get("nodeId"), file=fd)
+                    print("-------",file=fd)
+                    for node in nodes:
+                        print(node.get("nodeId"), file=fd)
+                    print("++++++", file=fd)
+            #"""
             time.sleep(0.5)
 
     def build_path_for_task(self, task: dict, start_node: str,
