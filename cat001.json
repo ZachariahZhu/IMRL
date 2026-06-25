@@ -11,7 +11,7 @@
         "actions": [
             {
                 "actionType": "init_fine_positioning",
-                "actionId": "bbf9a68c-7599-41d1-bc2d-ddc9b1b21d94",
+                "actionId": "3afdaf65-b65c-4985-9ba0-d2d69a3077a5",
                 "blockingType": "HARD"
             }
         ]
@@ -28,7 +28,7 @@
         "actions": [
             {
                 "actionType": "pick",
-                "actionId": "4851ac7b-782a-4fe2-baaf-513b8c8dc725",
+                "actionId": "94b8a996-e858-4319-9425-ecd1f5611b76",
                 "blockingType": "HARD"
             }
         ]
@@ -101,7 +101,7 @@
         "actions": [
             {
                 "actionType": "process",
-                "actionId": "158b6f20-3e37-476d-8450-e7e6bd544b9f",
+                "actionId": "2620906d-32d8-47ec-b147-754cfc70db02",
                 "blockingType": "HARD",
                 "processingTime": 2.0
             }
@@ -142,7 +142,7 @@
         "actions": [
             {
                 "actionType": "process",
-                "actionId": "e8776057-7a25-4e22-af1b-eb7c97e3bc47",
+                "actionId": "16076742-c29a-4b56-8063-f01858cdf74d",
                 "blockingType": "HARD",
                 "processingTime": 1.0
             }
@@ -182,7 +182,7 @@
         "actions": [
             {
                 "actionType": "init_fine_positioning",
-                "actionId": "8753c2b1-f42b-4dac-88ef-837f3105875a",
+                "actionId": "479bd170-afd4-4c3e-9a88-ab7e4f3015fc",
                 "blockingType": "HARD"
             }
         ]
@@ -200,7 +200,7 @@
         "actions": [
             {
                 "actionType": "drop",
-                "actionId": "a9f56d6c-a26b-4526-9282-f66d5c27e6ef",
+                "actionId": "06047f98-4d34-429d-9265-3523b7a9413b",
                 "blockingType": "HARD"
             }
         ]

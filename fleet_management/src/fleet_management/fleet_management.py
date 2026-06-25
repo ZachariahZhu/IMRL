@@ -95,7 +95,7 @@ class FleetManagement:
         self.path_planning = PathPlanning(config_data=self.config_data,
                                          graph=self.graph)
         self.traffic_controller = TrafficController(self)
-        self.horizon_control = Horizon_control(self)
+        #self.horizon_control = Horizon_control(self)
         threading.Thread(target=self.fleet_manager, daemon=True).start()
         
     @staticmethod

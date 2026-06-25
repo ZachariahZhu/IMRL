@@ -4,9 +4,12 @@ import time
 import json
 import logging
 import platform
+import threading
 import subprocess
 from typing import Dict
 from src.fleet_management.horizon_control import Horizon_control
+from src.fleet_management.visual import RunIt
+from src.fleet_management.visual2 import ColorVisualizer
 
 # Base directory of this script (= fleet_management/). Works regardless of the working directory.
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -118,6 +121,7 @@ def run_simulation(config_manager: ConfigManager, logging: logging.Logger):
             proc.kill()
 
 
+
 def main():
     logging = setup_logging(os.path.join(_SCRIPT_DIR, "data", "output_files", "logging_file.log"))
 
@@ -130,6 +134,7 @@ def main():
 
     config_manager = ConfigManager(config_paths)
     h = Horizon_control()
+
     run_simulation(config_manager, logging)
    
 if __name__ == "__main__":

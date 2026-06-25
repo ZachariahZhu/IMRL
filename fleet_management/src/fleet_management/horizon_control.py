@@ -33,6 +33,7 @@ edgeCosts = {
     "E19": 3,
     "E20":4,
     "E21":5,
+    "E22": 7
 }
 actionCosts = {
     "init_fine_positioning": 5,
@@ -67,12 +68,53 @@ nodeCosts = {
     "N24": 0.5,
     "N25": 0.5
 }
+class ColorVisualizer:
+    def __init__(self):
+        self.root = tk.Tk()
+        self.root.title("Farbvisualisator - Threaded Loop")
+        self.root.geometry("600x200") 
+        self.root.configure(bg="#1a1a1a")
 
-class Horizon_control:
-    def __init__(self) -> None:
+        self.container = tk.Frame(self.root, bg="#1a1a1a")
+        self.container.pack(fill=tk.BOTH, expand=True, padx=0, pady=0)
+
+    def update_colors(self, color_vector):
+        """Aktualisiert die Farbflächen im Fenster sicher aus dem Thread heraus."""
+        # Alte Blöcke löschen
+        for widget in self.container.winfo_children():
+            widget.destroy()
+
+        num_colors = len(color_vector)
         
-        threading.Thread(target=self.intmain, daemon=True).start()
+        # Grid konfigurieren
+        for i in range(max(num_colors, self.container.grid_size()[0])):
+            self.container.columnconfigure(i, weight=1 if i < num_colors else 0)
+        self.container.rowconfigure(0, weight=1)
 
+        # Farbblöcke zeichnen
+        for index, color in enumerate(color_vector):
+            try:
+                color_block = tk.Frame(self.container, bg=color, relief=tk.FLAT)
+                color_block.grid(row=0, column=index, sticky="nsew", padx=2, pady=2)
+            except tk.TclError:
+                color_block = tk.Frame(self.container, bg="#000000", relief=tk.FLAT)
+                color_block.grid(row=0, column=index, sticky="nsew", padx=2, pady=2)
+
+    def start(self):
+        # Öffnet das Fenster und hält es aktiv
+        self.root.mainloop()
+class Horizon_control:
+    
+    def __init__(self) -> None:
+        #self.visualizer = ColorVisualizer()
+        threading.Thread(target=self.intmain, daemon=True).start()
+        #app = ColorVisualizer()
+
+        # 2. Deine While-Schleife in einem Hintergrund-Thread starten
+         # daemon=True sorgt dafür, dass der Thread stoppt, wenn du das Fenster schließt
+        #thread = threading.Thread(target=self.intmain, args=(app,), daemon=True)
+        #thread.start()
+        #app.start()
 
 
 
@@ -85,8 +127,18 @@ class Horizon_control:
         edgeCostsList = []
         nodeName = []
         nodesAndActions = []
-        with open("output.txt", "w") as f: 
-           print("New run", file=f)
+        with open("fff.txt", "a") as tf:
+            print("at least it runs ", file=tf)
+        for i in range(len(pEdges)):
+            with open("output.txt", "a") as f: 
+                print("New run", file=f)
+                print(pEdges[i],file=f)
+            if pEdges[i] == "edge_to_start_node":
+                return[]
+                
+        #with open("output.txt", "w") as f: 
+        #   print("New run", file=f)
+           #print(pEdges,file=f)
         for i in range(len(pNodes)):
             nodeName.append(pNodes[i].get("nodeId"))
             #actionList.append(nodes[i].get("actions"))
@@ -228,7 +280,7 @@ class Horizon_control:
                     fuzzy_matrix[r][col] = max(fuzzy_matrix[r][col], round(fuzzy_value,2))
 
         return fuzzy_matrix
-    def create_color_visualizer( color_vector, zeitschritt_ms):
+    def create_color_visualizer(self, color_vector, zeitschritt_ms):
         """
         Visualisiert einen Farbvektor ohne Schrift.
         :param color_vector: Liste von Hex-Farbcodes
@@ -270,9 +322,16 @@ class Horizon_control:
         # Die Skalierung/Das Zeichnen wird erst nach dem gewünschten Zeitschritt getriggert
         root.after(zeitschritt_ms, layout_anpassen)
 
-        root.mainloop()
+        if not hasattr(self, '_loop_started'):
+            self._loop_started = True
+            self.root.mainloop()
+        else:
+            self.root.update()
 
-    def multiplyMatrixes(matrix1,matrix2):
+
+
+    
+    def multiplyMatrixes(self,matrix1,matrix2):
         """Multiply two matrices over their overlapping region.
 
         If one matrix is shorter in rows or columns, the result includes only
@@ -301,8 +360,7 @@ class Horizon_control:
             result.append([row1[c] * row2[c] for c in range(cols)])
 
         return result
-    @staticmethod
-    def vectorize(matrix):
+    def vectorize(self,matrix):
         """Sum all elements of each row into a vector.
         
         Args:
@@ -388,6 +446,7 @@ class Horizon_control:
 
                 with open("mouse001e.json", "r", encoding="utf-8") as e2:
                     mouseE = json.load(e2) 
+            combine= None
             with open("result3.txt","w") as inter:
                 print("Hello",file=inter)
                 print("catN",file=inter)
@@ -398,9 +457,50 @@ class Horizon_control:
                 print(catE,file=inter)
                 print("mouseE",file=inter)
                 print(mouseE, file=inter)
+                print("occ cat",file=inter)
+                print(self.getOccupancyMatrix(catN,catE,0.2),file=inter)
+                with open("outputftf.txt", "a") as ftf: 
+                    print("File opened", file=ftf)
+                for i in range(len(mouseE)):
+                    with open("output.txt", "a") as f: 
+                        print("New run", file=f)
+                    if mouseE[i] == "edge_to_start_node":
+                        with open("output.txt", "a") as f: 
+                            print("True", file=f)
+                if mouseE != None and mouseN != None:
+                    print("occ mouse",file=inter)
+                    print(self.getOccupancyMatrix(mouseN,mouseE,0.2),file=inter)
+                print("firt mat",file=inter)
+                print(self.fuzzyfy(self.getOccupancyMatrix(catN,catE,0.2),5,0.2,1,0.1),file=inter)
+                fM=self.fuzzyfy(self.getOccupancyMatrix(catN,catE,0.2),5,0.2,1,0.1)
+                print("sec mat",file=inter)
+                print(self.fuzzyfy(self.getOccupancyMatrix(mouseN,mouseE,0.2),5,0.2,1,0.1),file=inter)                
+                sM=self.fuzzyfy(self.getOccupancyMatrix(mouseN,mouseE,0.2),5,0.2,1,0.1)
+                print("combine",file=inter)
+                if fM != None and sM!= None:
+                    combine=self.multiplyMatrixes(fM,sM)
+                    print(combine,file=inter)
+                    #print(self.multiplyMatrixes(self.fuzzyfy(self.getOccupancyMatrix(catN,catE,0.2),5,0.2,1,0.1),self.fuzzyfy(self.getOccupancyMatrix(mouseN,mouseE,0.2),5,0.2,1,0.1)),file=inter)
+                    pass
+            with open("occupancyMatrix.txt","w") as ffff:
+                if combine != None:
+                    print(combine,file=ffff)
+                    for row in combine:
+                            for item in row:
+                                print(item,end=" ",file=ffff)
+                            print(file=ffff)
+                print(self.vectorize(combine),file=ffff)
+                print("Hello",file=ffff)
+                print(self.visualizeVector(self.vectorize(combine),0.2),file=ffff)
+            with open("finalColors.json", "w", encoding="utf-8") as dfd:
+                json.dump(self.visualizeVector(self.vectorize(combine),0.2), dfd, indent=1, ensure_ascii=False)
+            #self.create_color_visualizer(self.visualizeVector(self.vectorize(combine),0.2),200)
 
-                print()
-            time.sleep(0.5)
+            #visualizer.create_color_visualizer2(self.visualizeVector(self.vectorize(combine),0.2),200)
+            #self.visualizer.root.after(0, lambda: self.visualizer.update_colors(self.visualizeVector(self.vectorize(combine),0.2),200))
+        
+
+            time.sleep(5)
                     
 
     

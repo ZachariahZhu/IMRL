@@ -45,7 +45,7 @@
         "actions": [
             {
                 "actionType": "process",
-                "actionId": "6c8b1a45-9165-488d-a487-ff18a64db785",
+                "actionId": "9550f207-d831-412a-9d02-01460d06268e",
                 "blockingType": "HARD",
                 "processingTime": 1.0
             }
@@ -96,7 +96,7 @@
         "actions": [
             {
                 "actionType": "init_fine_positioning",
-                "actionId": "19a7b2b4-6d32-42c0-8999-dc4b4b9ee4e1",
+                "actionId": "8925fcdf-1434-44c8-ba75-7593f94c4279",
                 "blockingType": "HARD"
             }
         ]
@@ -113,7 +113,7 @@
         "actions": [
             {
                 "actionType": "drop",
-                "actionId": "1fd40c57-eba3-43bb-82b9-15d2a678a5ab",
+                "actionId": "bb01a6fc-2573-4a5e-95f8-8165afe8098d",
                 "blockingType": "HARD"
             }
         ]
