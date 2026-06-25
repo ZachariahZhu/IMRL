@@ -1,29 +1,5 @@
 [
     {
-        "edgeId": "E12",
-        "sequenceId": 1,
-        "released": true,
-        "startNodeId": "N7",
-        "endNodeId": "N8",
-        "actions": []
-    },
-    {
-        "edgeId": "E8",
-        "sequenceId": 3,
-        "released": false,
-        "startNodeId": "N8",
-        "endNodeId": "N2",
-        "actions": []
-    },
-    {
-        "edgeId": "E8",
-        "sequenceId": 5,
-        "released": false,
-        "startNodeId": "N2",
-        "endNodeId": "N8",
-        "actions": []
-    },
-    {
         "edgeId": "E7",
         "sequenceId": 7,
         "released": false,

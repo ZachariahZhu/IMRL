@@ -1,51 +1,5 @@
 [
     {
-        "nodeId": "N8",
-        "sequenceId": 2,
-        "released": true,
-        "nodePosition": {
-            "x": 1.0,
-            "y": 3.45,
-            "mapId": "Map_1"
-        },
-        "actions": [
-            {
-                "actionType": "init_fine_positioning",
-                "actionId": "2a721fff-e6ff-4b87-9f5a-7ef553b5ff11",
-                "blockingType": "HARD"
-            }
-        ]
-    },
-    {
-        "nodeId": "N2",
-        "sequenceId": 4,
-        "released": false,
-        "nodePosition": {
-            "x": 2.33,
-            "y": 1.42,
-            "mapId": "Map_1",
-            "theta": 0.0
-        },
-        "actions": [
-            {
-                "actionType": "pick",
-                "actionId": "db374bab-f07a-4e99-935b-465391a18077",
-                "blockingType": "HARD"
-            }
-        ]
-    },
-    {
-        "nodeId": "N8",
-        "sequenceId": 6,
-        "released": false,
-        "nodePosition": {
-            "x": 1.0,
-            "y": 3.45,
-            "mapId": "Map_1"
-        },
-        "actions": []
-    },
-    {
         "nodeId": "N9",
         "sequenceId": 8,
         "released": false,

@@ -374,8 +374,8 @@ class Horizon_control:
 
     def intmain(self) -> None:
         while True:
-            catN=mouseN=catN=mouseE=None
-            if False:
+            catN=mouseN=catE=mouseE=None
+            if True:
                 with open("cat001.json", "r", encoding="utf-8") as f:
                     catN = json.load(f)
 
@@ -384,12 +384,22 @@ class Horizon_control:
 
 
                 with open("cat001e.json", "r", encoding="utf-8") as e:
-                    catN = json.load(e)
+                    catE = json.load(e)
 
                 with open("mouse001e.json", "r", encoding="utf-8") as e2:
                     mouseE = json.load(e2) 
-            with open("result3.txt","a") as inter:
+            with open("result3.txt","w") as inter:
                 print("Hello",file=inter)
+                print("catN",file=inter)
+                print(catN,file=inter)
+                print("mouseN",file=inter)
+                print(mouseN, file=inter)
+                print("catE",file=inter)
+                print(catE,file=inter)
+                print("mouseE",file=inter)
+                print(mouseE, file=inter)
+
+                print()
             time.sleep(0.5)
                     
 

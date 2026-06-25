@@ -1,49 +1,5 @@
 [
     {
-        "nodeId": "N14",
-        "sequenceId": 2,
-        "released": true,
-        "nodePosition": {
-            "x": 5.82,
-            "y": 2.2,
-            "mapId": "Map_1"
-        },
-        "actions": []
-    },
-    {
-        "nodeId": "N10",
-        "sequenceId": 4,
-        "released": true,
-        "nodePosition": {
-            "x": 4.83,
-            "y": 3.6,
-            "mapId": "Map_1"
-        },
-        "actions": []
-    },
-    {
-        "nodeId": "N13",
-        "sequenceId": 6,
-        "released": false,
-        "nodePosition": {
-            "x": 3.58,
-            "y": 3.45,
-            "mapId": "Map_1"
-        },
-        "actions": []
-    },
-    {
-        "nodeId": "N9",
-        "sequenceId": 8,
-        "released": false,
-        "nodePosition": {
-            "x": 2.33,
-            "y": 3.45,
-            "mapId": "Map_1"
-        },
-        "actions": []
-    },
-    {
         "nodeId": "N8",
         "sequenceId": 10,
         "released": false,

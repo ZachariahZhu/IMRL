@@ -1,37 +1,5 @@
 [
     {
-        "edgeId": "E22",
-        "sequenceId": 1,
-        "released": true,
-        "startNodeId": "N12",
-        "endNodeId": "N14",
-        "actions": []
-    },
-    {
-        "edgeId": "E10",
-        "sequenceId": 3,
-        "released": true,
-        "startNodeId": "N14",
-        "endNodeId": "N10",
-        "actions": []
-    },
-    {
-        "edgeId": "E4",
-        "sequenceId": 5,
-        "released": false,
-        "startNodeId": "N10",
-        "endNodeId": "N13",
-        "actions": []
-    },
-    {
-        "edgeId": "E3",
-        "sequenceId": 7,
-        "released": false,
-        "startNodeId": "N13",
-        "endNodeId": "N9",
-        "actions": []
-    },
-    {
         "edgeId": "E7",
         "sequenceId": 9,
         "released": false,
